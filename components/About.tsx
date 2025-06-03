@@ -17,8 +17,7 @@ const About: React.FC = () => {
             viewport={{ once: true }}
             className="text-4xl md:text-5xl font-bold text-neutral-900 mb-6"
           >
-            <span className="text-gradient">Más de 37 años de experiencia</span> en{' '}
-            <span className="block">psicología clínica</span>
+            <span className="text-gradient">Más de 37 años de experiencia</span> en psicología clínica
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
