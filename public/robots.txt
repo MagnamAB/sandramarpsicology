@@ -1,0 +1,16 @@
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://drasandravargas.com/sitemap.xml
+
+# Directrices específicas
+Allow: /blog/
+Allow: /servicios/
+Allow: /sobre-mi/
+Allow: /contacto/
+
+# Evitar indexar archivos técnicos
+Disallow: /api/
+Disallow: /_next/
+Disallow: /admin/ 
