@@ -140,7 +140,7 @@ const TerapiaIndividualAdultos: React.FC = () => {
               >
                 <div className="inline-flex items-center gap-2 bg-gradient-to-r from-primary-100 to-secondary-100 text-primary-700 px-6 py-3 rounded-full text-sm font-bold mb-6">
                   <FaUser className="w-4 h-4" />
-                  Especialista en Enfoque Integrativo Holístico
+                  Terapia Individual Especializada
                 </div>
                 
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-neutral-900 leading-tight mb-6">
@@ -154,7 +154,7 @@ const TerapiaIndividualAdultos: React.FC = () => {
                 <p className="text-xl text-neutral-600 mb-8 leading-relaxed">
                   <strong>Supera ansiedad, desarrolla autoestima y encuentra tu propósito de vida</strong> con{' '}
                   <strong>terapia individual que integra Gestalt, sistémico y transpersonal</strong>.{' '}
-                  <strong>Enfoque integrativo holístico</strong> para acompañamiento terapéutico profundo.{' '}
+                  <strong>Metodología integral personalizada</strong> para acompañamiento terapéutico profundo.{' '}
                   <strong>Atención online en español</strong> para todo el mundo y{' '}
                   <strong>sesiones presenciales en consultorio privado Bogotá</strong>.
                 </p>
@@ -169,7 +169,7 @@ const TerapiaIndividualAdultos: React.FC = () => {
                   </Link>
                   
                   <a
-                    href={generateWhatsAppLink("Hola Sandra, me interesa la terapia individual para adultos. Tengo algunas dificultades emocionales y me gustaría conocer tu enfoque integrativo holístico que combina Gestalt, sistémico y transpersonal.")}
+                    href={generateWhatsAppLink("Hola Sandra, me interesa la terapia individual para adultos. Tengo algunas dificultades emocionales y me gustaría conocer tu metodología que combina Gestalt, sistémico y transpersonal.")}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="btn-secondary text-lg px-8 py-4 inline-flex items-center justify-center group"
@@ -238,8 +238,8 @@ const TerapiaIndividualAdultos: React.FC = () => {
                 ¿Te sientes <span className="text-red-600">identificado</span> con alguna de estas situaciones?
               </h2>
               <p className="text-xl text-neutral-600 max-w-3xl mx-auto">
-                Si experimentas alguna de estas dificultades, mi enfoque especializado en{' '}
-                <strong>terapia individual para adultos</strong> puede ayudarte a encontrar soluciones profundas y duraderas.
+                Si experimentas alguna de estas dificultades, mi{' '}
+                <strong>metodología especializada en terapia individual para adultos</strong> puede ayudarte a encontrar soluciones profundas y duraderas.
               </p>
             </div>
 
@@ -283,7 +283,7 @@ const TerapiaIndividualAdultos: React.FC = () => {
           <div className="container-responsive">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold text-neutral-900 mb-6">
-                Beneficios del <span className="text-gradient">Enfoque Integrativo Holístico</span>
+                Beneficios del <span className="text-gradient">Proceso Integrativo</span>
               </h2>
               <p className="text-xl text-neutral-600 max-w-3xl mx-auto">
                 Con mi <strong>metodología que integra Gestalt, sistémico y transpersonal</strong>, estos son los{' '}
@@ -319,7 +319,7 @@ const TerapiaIndividualAdultos: React.FC = () => {
                 ¿Cómo es el <span className="text-gradient">Proceso Terapéutico</span>?
               </h2>
               <p className="text-xl text-neutral-600 max-w-3xl mx-auto">
-                Mi <strong>enfoque integrativo holístico</strong> combina{' '}
+                Mi <strong>trabajo integrativo</strong> combina{' '}
                 <strong>Gestalt, sistémico y transpersonal</strong>{' '}
                 de manera personalizada según tus necesidades específicas.
               </p>
@@ -361,7 +361,7 @@ const TerapiaIndividualAdultos: React.FC = () => {
               Inicia tu Proceso de Transformación Personal
             </h2>
             <p className="text-xl opacity-90 mb-8 max-w-3xl mx-auto">
-              Con mi <strong>enfoque integrativo holístico</strong> que combina Gestalt, sistémico y transpersonal, te acompaño en tu{' '}
+              Con mi <strong>metodología integrativa</strong> que combina Gestalt, sistémico y transpersonal, te acompaño en tu{' '}
               camino hacia el <strong>autoconocimiento, bienestar emocional y crecimiento personal</strong>.
             </p>
             

@@ -140,7 +140,7 @@ const TerapiaDePareja: React.FC = () => {
               >
                 <div className="inline-flex items-center gap-2 bg-gradient-to-r from-secondary-100 to-primary-100 text-secondary-700 px-6 py-3 rounded-full text-sm font-bold mb-6">
                   <FaHeart className="w-4 h-4" />
-                  Especialista en Enfoque Integrativo Holístico
+                  Terapia de Pareja Especializada
                 </div>
                 
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-neutral-900 leading-tight mb-6">
@@ -154,7 +154,7 @@ const TerapiaDePareja: React.FC = () => {
                 <p className="text-xl text-neutral-600 mb-8 leading-relaxed">
                   <strong>Supera problemas de comunicación, infidelidad y celos</strong> con{' '}
                   <strong>terapia de pareja que integra Gestalt, sistémico y transpersonal</strong>.{' '}
-                  <strong>Enfoque integrativo holístico</strong> ayudando parejas a sanar heridas emocionales y{' '}
+                  <strong>Metodología integral especializada</strong> ayudando parejas a sanar heridas emocionales y{' '}
                   fortalecer vínculos amorosos. <strong>Atención online en español</strong> para parejas{' '}
                   de todo el mundo y <strong>consultorio privado en Bogotá</strong>.
                 </p>
@@ -169,7 +169,7 @@ const TerapiaDePareja: React.FC = () => {
                   </Link>
                   
                   <a
-                    href={generateWhatsAppLink("Hola Sandra, mi pareja y yo estamos atravesando dificultades en nuestra relación. Nos interesa la terapia de pareja con tu enfoque integrativo holístico que combina Gestalt, sistémico y transpersonal. ¿Podrías contarnos cómo trabajas?")}
+                    href={generateWhatsAppLink("Hola Sandra, mi pareja y yo estamos atravesando dificultades en nuestra relación. Nos interesa la terapia de pareja con tu metodología que combina Gestalt, sistémico y transpersonal. ¿Podrías contarnos cómo trabajas?")}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="btn-primary text-lg px-8 py-4 inline-flex items-center justify-center group"
@@ -239,7 +239,7 @@ const TerapiaDePareja: React.FC = () => {
               </h2>
               <p className="text-xl text-neutral-600 max-w-3xl mx-auto">
                 Si como pareja experimentan alguna de estas situaciones, mi{' '}
-                <strong>enfoque integrativo holístico especializado en terapia de pareja</strong> puede ayudarlos a sanar y fortalecer su vínculo.
+                <strong>metodología integrativa especializada en terapia de pareja</strong> puede ayudarlos a sanar y fortalecer su vínculo.
               </p>
             </div>
 
@@ -283,7 +283,7 @@ const TerapiaDePareja: React.FC = () => {
           <div className="container-responsive">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold text-neutral-900 mb-6">
-                Beneficios del <span className="text-gradient">Enfoque Integrativo Holístico</span>
+                Beneficios del <span className="text-gradient">Trabajo Integrativo</span>
               </h2>
               <p className="text-xl text-neutral-600 max-w-3xl mx-auto">
                 Con mi <strong>metodología que integra Gestalt, sistémico y transpersonal</strong>, estos son los{' '}
@@ -360,7 +360,7 @@ const TerapiaDePareja: React.FC = () => {
               Fortalezcan su Relación de Pareja
             </h2>
             <p className="text-xl opacity-90 mb-8 max-w-3xl mx-auto">
-              Con mi <strong>enfoque sistémico especializado</strong>, los acompaño en el{' '}
+              Con mi <strong>metodología sistémica especializada</strong>, los acompaño en el{' '}
               camino hacia una <strong>relación más sana, comunicativa y amorosa</strong>.
             </p>
             
@@ -374,7 +374,7 @@ const TerapiaDePareja: React.FC = () => {
               </Link>
               
               <a
-                href={generateWhatsAppLink("Hola Sandra, mi pareja y yo queremos fortalecer nuestra relación. Después de leer sobre tu enfoque sistémico en terapia de pareja, nos gustaría iniciar un proceso terapéutico. ¿Podemos conversar?")}
+                href={generateWhatsAppLink("Hola Sandra, mi pareja y yo queremos fortalecer nuestra relación. Después de leer sobre tu trabajo sistémico en terapia de pareja, nos gustaría iniciar un proceso terapéutico. ¿Podemos conversar?")}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-green-500 text-white px-8 py-4 rounded-full font-semibold hover:bg-green-600 transition-colors"
