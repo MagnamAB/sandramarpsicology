@@ -1,30 +1,33 @@
 import { GetServerSideProps } from 'next'
 
-function Sitemap() {
-  // getServerSideProps will handle the rendering
-}
+const Sitemap = () => {
+  return null;
+};
 
 export const getServerSideProps: GetServerSideProps = async ({ res }) => {
-  const baseUrl = 'https://drasandravargas.com'
+  const baseUrl = 'https://sandravargas.co'
   
   const staticPages = [
     '',
     '/sobre-mi',
     '/servicios', 
-    '/contacto',
-    '/blog'
+    '/terapia-individual-adultos',
+    '/terapia-de-pareja',
+    '/blog',
+    '/testimonios',
+    '/preguntas-frecuentes'
   ]
 
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   ${staticPages
     .map(
-      (url) => `
+      (page) => `
     <url>
-      <loc>${baseUrl}${url}</loc>
+      <loc>${baseUrl}${page}</loc>
       <lastmod>${new Date().toISOString()}</lastmod>
-      <changefreq>weekly</changefreq>
-      <priority>${url === '' ? '1.0' : '0.8'}</priority>
+      <changefreq>${page === '' ? 'weekly' : 'monthly'}</changefreq>
+      <priority>${page === '' ? '1.0' : '0.8'}</priority>
     </url>
   `
     )

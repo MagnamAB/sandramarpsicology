@@ -1,16 +1,20 @@
 User-agent: *
 Allow: /
 
-# Sitemaps
-Sitemap: https://drasandravargas.com/sitemap.xml
+# Sitemap
+Sitemap: https://sandravargas.co/sitemap.xml
 
-# Directrices específicas
-Allow: /blog/
-Allow: /servicios/
-Allow: /sobre-mi/
-Allow: /contacto/
-
-# Evitar indexar archivos técnicos
-Disallow: /api/
+# Disallow admin pages (if any in the future)
+Disallow: /admin/
 Disallow: /_next/
-Disallow: /admin/ 
+Disallow: /api/
+
+# Allow important pages
+Allow: /
+Allow: /sobre-mi
+Allow: /servicios
+Allow: /terapia-individual-adultos
+Allow: /terapia-de-pareja
+Allow: /blog
+Allow: /testimonios
+Allow: /preguntas-frecuentes 

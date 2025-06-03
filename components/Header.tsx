@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FaBars, FaTimes, FaWhatsapp, FaCalendarAlt, FaChevronDown, FaUser, FaHeart, FaUsers } from 'react-icons/fa'
 import { generateWhatsAppLink } from '../lib/api'
+import { trackWhatsAppClick, trackScheduleClick } from '../lib/analytics'
 
 interface DropdownItem {
   name: string
@@ -303,6 +304,7 @@ const Header: React.FC = () => {
             rel="noopener noreferrer"
             className="group relative bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-4 py-2.5 rounded-full font-medium text-sm transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center space-x-2"
             aria-label="Contactar por WhatsApp a Sandra Vargas"
+            onClick={() => trackWhatsAppClick('header_desktop')}
           >
             <div className="absolute inset-0 bg-gradient-to-r from-green-400 to-green-500 rounded-full opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
             <FaWhatsapp className="w-4 h-4 relative z-10" />
@@ -312,7 +314,10 @@ const Header: React.FC = () => {
           <Link
             href="/#contacto"
             className="btn-primary flex items-center space-x-2 text-sm"
-            onClick={(e) => handleNavigationClick(e, '/#contacto')}
+            onClick={(e) => {
+              handleNavigationClick(e, '/#contacto')
+              trackScheduleClick('header_desktop')
+            }}
           >
             <FaCalendarAlt className="w-4 h-4" />
             <span>Agendar Cita</span>
@@ -465,6 +470,7 @@ const Header: React.FC = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group relative bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white w-full py-3 rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] flex items-center justify-center space-x-3"
+                  onClick={() => trackWhatsAppClick('header_mobile')}
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-green-400 to-green-500 rounded-xl opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
                   <FaWhatsapp className="w-5 h-5 relative z-10" />
@@ -474,7 +480,10 @@ const Header: React.FC = () => {
                 <Link
                   href="/#contacto"
                   className="btn-primary flex items-center justify-center space-x-2 w-full"
-                  onClick={(e) => handleNavigationClick(e, '/#contacto')}
+                  onClick={(e) => {
+                    handleNavigationClick(e, '/#contacto')
+                    trackScheduleClick('header_mobile')
+                  }}
                 >
                   <FaCalendarAlt className="w-4 h-4" />
                   <span>Agendar Cita</span>

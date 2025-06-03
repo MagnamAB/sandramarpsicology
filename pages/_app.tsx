@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import '../styles/globals.css'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import { Inter, Merriweather } from 'next/font/google'
+import { useRouter } from 'next/router'
+import GoogleAnalytics from '../components/GoogleAnalytics'
+import { pageview } from '../lib/analytics'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -18,8 +21,22 @@ const merriweather = Merriweather({
 })
 
 export default function App({ Component, pageProps }: AppProps) {
+  const router = useRouter();
+
+  useEffect(() => {
+    const handleRouteChange = (url: string) => {
+      pageview(url);
+    };
+
+    router.events.on('routeChangeComplete', handleRouteChange);
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [router.events]);
+
   return (
     <>
+      <GoogleAnalytics />
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
