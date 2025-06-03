@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FaCalendarAlt, FaClock, FaUser, FaEnvelope, FaPhone, FaChevronLeft, FaChevronRight, FaCheck } from 'react-icons/fa'
 import { submitAppointment, isValidEmail, isValidColombianPhone, formatPhone, type AppointmentData } from '../lib/api'
@@ -25,6 +25,9 @@ const AppointmentScheduler: React.FC = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date())
   const [isLoading, setIsLoading] = useState(false)
   const [appointment, setAppointment] = useState<SelectedAppointment | null>(null)
+
+  // Referencia para el formulario de confirmación
+  const formSectionRef = useRef<HTMLDivElement>(null)
 
   // Datos del formulario
   const [formData, setFormData] = useState({
@@ -53,9 +56,7 @@ const AppointmentScheduler: React.FC = () => {
 
   const services = [
     { id: 'individual', name: 'Terapia Individual', duration: '75 min' },
-    { id: 'parejas', name: 'Terapia de Parejas', duration: '120 min' },
-    { id: 'familiar', name: 'Terapia Familiar', duration: '120 min' },
-    { id: 'desarrollo', name: 'Desarrollo Personal', duration: '75 min' },
+    { id: 'parejas', name: 'Terapia de Parejas', duration: '120 min' }
   ]
 
   // Generar días del calendario
@@ -134,6 +135,38 @@ const AppointmentScheduler: React.FC = () => {
     }
   }
 
+  // useEffect para manejar el scroll cuando cambia al formulario
+  useEffect(() => {
+    if (currentStep === 'form') {
+      // Delay para asegurar que la animación termine
+      setTimeout(() => {
+        // Buscar el elemento del AppointmentScheduler
+        const schedulerElement = document.getElementById('appointment-scheduler');
+        
+        if (schedulerElement) {
+          // Scroll al inicio del scheduler con offset
+          const yOffset = -50;
+          const y = schedulerElement.getBoundingClientRect().top + window.pageYOffset + yOffset;
+          
+          window.scrollTo({
+            top: y,
+            behavior: 'smooth'
+          });
+          
+          console.log('Scroll ejecutado hacia AppointmentScheduler'); // Debug
+        } else {
+          console.log('No se encontró el elemento appointment-scheduler'); // Debug
+          
+          // Fallback: scroll hacia arriba un poco para asegurar visibilidad
+          window.scrollBy({
+            top: -200,
+            behavior: 'smooth'
+          });
+        }
+      }, 600); // Más tiempo para la animación
+    }
+  }, [currentStep])
+
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!appointment) return
@@ -206,7 +239,7 @@ const AppointmentScheduler: React.FC = () => {
   const dayNames = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb']
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-4xl mx-auto" id="appointment-scheduler">
       <AnimatePresence mode="wait">
         {currentStep === 'calendar' && (
           <motion.div
@@ -390,6 +423,7 @@ const AppointmentScheduler: React.FC = () => {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
             className="card"
+            ref={formSectionRef}
           >
             <div className="text-center mb-8">
               <h3 className="text-2xl font-bold text-neutral-900 mb-2">
