@@ -34,7 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         isBooked: slot.isBooked,
         nombre: slot.nombre
       })),
-      allDates: [...new Set(allSlots.map(slot => slot.date))].sort()
+      allDates: Array.from(new Set(allSlots.map(slot => slot.date))).sort()
     })
     
   } catch (error) {
