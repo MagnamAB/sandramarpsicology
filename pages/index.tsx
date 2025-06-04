@@ -194,7 +194,7 @@ const HomePage: React.FC = () => {
                     "areaServed": ["Global", "Internacional", "Latinoamérica"]
                   },
                   {
-                    "@type": "Offer",
+                    "@type": "Offer", 
                     "itemOffered": {
                       "@type": "Service",
                       "name": "Terapia de Pareja Online Internacional",
@@ -202,14 +202,14 @@ const HomePage: React.FC = () => {
                       "provider": {
                         "@type": "Psychologist",
                         "name": "Sandra Margarita Vargas"
-                      }
+                    }
                     },
                     "areaServed": ["Bogotá", "Colombia", "Internacional"]
                   },
                   {
-                    "@type": "Offer", 
+                    "@type": "Offer",
                     "itemOffered": {
-                      "@type": "Service",
+                      "@type": "Service", 
                       "name": "Consultorio Privado Bogotá",
                       "description": "Sesiones presenciales en ambiente privado y discreto para mayor confidencialidad. 37 años de experiencia en acompañamiento terapéutico integral.",
                       "provider": {
@@ -275,17 +275,17 @@ const HomePage: React.FC = () => {
           }}
         />
       </Head>
-      <Header />
+        <Header />
       <main>
-        <Hero />
-        <About />
-        <Services />
-        <OnlineTherapy />
-        <Experience />
-        <Contact />
-      </main>
-      <Footer />
-      <WhatsAppBubble />
+          <Hero />
+          <About />
+          <Services />
+          <OnlineTherapy />
+          <Experience />
+          <Contact />
+        </main>
+        <Footer />
+        <WhatsAppBubble />
     </>
   )
 }

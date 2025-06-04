@@ -554,27 +554,27 @@ const AppointmentScheduler: React.FC = () => {
                     ) : availableTimeSlots.length > 0 ? (
                       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
                         {availableTimeSlots.map((slot) => (
-                          <button
-                            key={slot.id}
-                            onClick={() => handleTimeSelect(slot.time)}
-                            disabled={!slot.available}
-                            className={`p-3 border-2 rounded-lg text-center transition-all duration-200 ${
-                              selectedTime === slot.time
-                                ? 'border-primary-500 bg-primary-50 text-primary-700'
-                                : slot.available
+                        <button
+                          key={slot.id}
+                          onClick={() => handleTimeSelect(slot.time)}
+                          disabled={!slot.available}
+                          className={`p-3 border-2 rounded-lg text-center transition-all duration-200 ${
+                            selectedTime === slot.time
+                              ? 'border-primary-500 bg-primary-50 text-primary-700'
+                              : slot.available
                                 ? 'border-neutral-200 hover:border-primary-300 text-neutral-700 hover:bg-neutral-50'
                                 : 'border-neutral-100 bg-neutral-50 text-neutral-400 cursor-not-allowed opacity-60'
-                            }`}
-                          >
-                            <FaClock className="w-4 h-4 mx-auto mb-1" />
+                          }`}
+                        >
+                          <FaClock className="w-4 h-4 mx-auto mb-1" />
                             <div className="font-semibold">{slot.time}</div>
                             <div className="text-xs opacity-75">a {slot.endTime}</div>
                             {!slot.available && (
                               <div className="text-xs text-red-500 mt-1">Ocupado</div>
                             )}
-                          </button>
-                        ))}
-                      </div>
+                        </button>
+                      ))}
+                    </div>
                     ) : (
                       <div className="text-center py-8">
                         <div className="text-neutral-500">
