@@ -150,9 +150,16 @@ export default async function handler(
         const existingEndMinutes = timeToMinutes(existingSlot.endTime)
         
         // LÓGICA DE SOLAPAMIENTO CORREGIDA: 
-        // Una nueva cita se solapa si su FINAL es DESPUÉS del INICIO de la cita existente
-        // Y su INICIO es ANTES del FINAL de la cita existente
+        // Hay solapamiento REAL solo si:
+        // 1. El FINAL de la nueva cita es DESPUÉS del INICIO de la existente, Y
+        // 2. El INICIO de la nueva cita es ANTES del FINAL de la existente
+        // PERO: Si una termina exactamente cuando empieza la otra, NO hay solapamiento
         const wouldOverlap = potentialEndMinutes > existingStartMinutes && currentMinutes < existingEndMinutes
+        
+        console.log(`      Evaluando slot ${slotStartTime}-${potentialEndTime} vs cita ${existingSlot.startTime}-${existingSlot.endTime}:`)
+        console.log(`      - ¿Final nueva (${potentialEndMinutes}) > Inicio existente (${existingStartMinutes})? ${potentialEndMinutes > existingStartMinutes}`)
+        console.log(`      - ¿Inicio nueva (${currentMinutes}) < Final existente (${existingEndMinutes})? ${currentMinutes < existingEndMinutes}`)
+        console.log(`      - ¿Se solapa? ${wouldOverlap}`)
         
         if (wouldOverlap) {
           // No duplicar slots que ya están bloqueados

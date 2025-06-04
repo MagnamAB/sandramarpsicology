@@ -240,30 +240,17 @@ const AppointmentScheduler: React.FC = () => {
       console.log('DEBUG - Slots bloqueados recibidos:', blockedSlots)
       console.log('DEBUG - Slots teóricos generados:', theoreticalSlots.map(s => ({ bogotaTime: s.bogotaTime, bogotaEndTime: s.bogotaEndTime })))
       
-      // Marcar como no disponibles los slots que tienen conflictos
+      // Marcar como no disponibles solo los slots que están específicamente bloqueados
       const finalSlots = theoreticalSlots.map(slot => {
-        // Verificar si CUALQUIER slot de 15 minutos dentro de la duración del servicio está bloqueado
-        const startMinutes = timeToMinutes(slot.bogotaTime)
-        const endMinutes = timeToMinutes(slot.bogotaEndTime)
-        
-        // Generar todos los slots de 15 minutos que cubre este servicio
-        const serviceSlots: string[] = []
-        for (let minutes = startMinutes; minutes < endMinutes; minutes += 15) {
-          serviceSlots.push(minutesToTime(minutes))
-        }
-        
-        // Verificar si alguno de los slots de 15 min está bloqueado
-        const isBlocked = serviceSlots.some(serviceSlot => 
-          blockedSlots.some((blockedSlot: any) => 
-            blockedSlot.startTime === serviceSlot
-          )
+        // El backend YA calcula correctamente todos los solapamientos
+        // Solo necesitamos verificar si el startTime del slot está en la lista de bloqueados
+        const isBlocked = blockedSlots.some((blockedSlot: any) => 
+          blockedSlot.startTime === slot.bogotaTime
         )
         
         if (isBlocked) {
-          const conflictingSlots = serviceSlots.filter(serviceSlot => 
-            blockedSlots.some((blockedSlot: any) => blockedSlot.startTime === serviceSlot)
-          )
-          console.log(`DEBUG - Slot ${slot.bogotaTime}-${slot.bogotaEndTime} está BLOQUEADO por conflictos en: ${conflictingSlots.join(', ')}`)
+          const reason = blockedSlots.find((blockedSlot: any) => blockedSlot.startTime === slot.bogotaTime)?.reason || 'unknown'
+          console.log(`DEBUG - Slot ${slot.bogotaTime}-${slot.bogotaEndTime} está BLOQUEADO (${reason})`)
         }
         
         return {
