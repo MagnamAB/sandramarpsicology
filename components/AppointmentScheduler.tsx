@@ -1,12 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FaCalendarAlt, FaClock, FaUser, FaEnvelope, FaPhone, FaChevronLeft, FaChevronRight, FaCheck } from 'react-icons/fa'
-import { submitAppointment, isValidEmail, isValidColombianPhone, formatPhone, type AppointmentData } from '../lib/api'
+import { 
+  submitAppointmentWithAvailability, 
+  getAvailableSlots,
+  isValidEmail, 
+  isValidColombianPhone, 
+  formatPhone, 
+  type AppointmentData 
+} from '../lib/api'
 
 interface TimeSlot {
   time: string
   available: boolean
   id: string
+  endTime: string
 }
 
 interface SelectedAppointment {
@@ -14,6 +22,24 @@ interface SelectedAppointment {
   time: string
   service: string
   modalidad: string
+}
+
+// Configuración de horarios de la psicóloga por día de la semana
+interface DaySchedule {
+  startTime: string // En formato HH:MM
+  endTime: string   // En formato HH:MM
+  available: boolean
+}
+
+// Configuración de la psicóloga - Actualizar según necesidades
+const PSICOLOGA_SCHEDULE: Record<number, DaySchedule> = {
+  0: { startTime: '07:30', endTime: '00:00', available: false }, // Domingo - No disponible
+  1: { startTime: '07:30', endTime: '20:00', available: true },  // Lunes
+  2: { startTime: '07:30', endTime: '20:00', available: true },  // Martes  
+  3: { startTime: '07:30', endTime: '12:00', available: true },  // Miércoles
+  4: { startTime: '07:30', endTime: '20:00', available: true },  // Jueves
+  5: { startTime: '07:30', endTime: '20:00', available: true },  // Viernes
+  6: { startTime: '07:30', endTime: '12:00', available: true },  // Sábado
 }
 
 const AppointmentScheduler: React.FC = () => {
@@ -25,6 +51,8 @@ const AppointmentScheduler: React.FC = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date())
   const [isLoading, setIsLoading] = useState(false)
   const [appointment, setAppointment] = useState<SelectedAppointment | null>(null)
+  const [availableTimeSlots, setAvailableTimeSlots] = useState<TimeSlot[]>([])
+  const [loadingSlots, setLoadingSlots] = useState(false)
 
   // Referencia para el formulario de confirmación
   const formSectionRef = useRef<HTMLDivElement>(null)
@@ -42,22 +70,126 @@ const AppointmentScheduler: React.FC = () => {
     message: string
   }>({ type: null, message: '' })
 
-  // Horarios disponibles (esto podría venir de una API)
-  const timeSlots: TimeSlot[] = [
-    { time: '08:00', available: true, id: '1' },
-    { time: '09:00', available: true, id: '2' },
-    { time: '10:00', available: false, id: '3' },
-    { time: '11:00', available: true, id: '4' },
-    { time: '14:00', available: true, id: '5' },
-    { time: '15:00', available: true, id: '6' },
-    { time: '16:00', available: false, id: '7' },
-    { time: '17:00', available: true, id: '8' },
+  const services = [
+    { id: 'individual', name: 'Terapia Individual', duration: '75 min', durationMinutes: 75 },
+    { id: 'parejas', name: 'Terapia de Parejas', duration: '120 min', durationMinutes: 120 }
   ]
 
-  const services = [
-    { id: 'individual', name: 'Terapia Individual', duration: '75 min' },
-    { id: 'parejas', name: 'Terapia de Parejas', duration: '120 min' }
-  ]
+  // Función para convertir tiempo HH:MM a minutos desde medianoche
+  const timeToMinutes = (time: string): number => {
+    const [hours, minutes] = time.split(':').map(Number)
+    return hours * 60 + minutes
+  }
+
+  // Función para convertir minutos desde medianoche a formato HH:MM
+  const minutesToTime = (minutes: number): string => {
+    const hours = Math.floor(minutes / 60)
+    const mins = minutes % 60
+    return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`
+  }
+
+  // Función para generar slots de tiempo disponibles para una fecha específica
+  const generateTimeSlots = async (date: Date, serviceDuration: number): Promise<TimeSlot[]> => {
+    const dayOfWeek = date.getDay()
+    const schedule = PSICOLOGA_SCHEDULE[dayOfWeek]
+    
+    // Si no hay horario disponible para ese día
+    if (!schedule.available) {
+      return []
+    }
+
+    // Primero generar slots teóricos basados en horarios
+    const theoreticalSlots: TimeSlot[] = []
+    const startMinutes = timeToMinutes(schedule.startTime)
+    const endMinutes = timeToMinutes(schedule.endTime)
+    
+    // Últimas horas según el tipo de cita y el día de la semana
+    let lastAppointmentMinutes: number
+    
+    // Para miércoles y sábado que terminan a las 12:00 PM
+    if (dayOfWeek === 3 || dayOfWeek === 6) { // Miércoles o Sábado
+      // La última cita debe terminar antes de las 12:00 PM
+      lastAppointmentMinutes = timeToMinutes('12:00') - serviceDuration
+    } else {
+      // Para días normales, usar las restricciones regulares
+      if (serviceDuration === 75) { // Individual
+        lastAppointmentMinutes = timeToMinutes('18:45') // 6:45 PM
+      } else { // Pareja
+        lastAppointmentMinutes = timeToMinutes('18:00') // 6:00 PM  
+      }
+    }
+    
+    // Generar slots cada 15 minutos
+    for (let currentMinutes = startMinutes; currentMinutes <= lastAppointmentMinutes; currentMinutes += 15) {
+      const slotEndMinutes = currentMinutes + serviceDuration
+      
+      // Verificar que la cita completa quepa en el horario del día
+      if (slotEndMinutes <= endMinutes) {
+        const startTime = minutesToTime(currentMinutes)
+        const endTime = minutesToTime(slotEndMinutes)
+        
+        theoreticalSlots.push({
+          time: startTime,
+          endTime: endTime,
+          available: true, // Se verificará contra la base de datos
+          id: `${startTime}-${endTime}`
+        })
+      }
+    }
+
+    // Verificar disponibilidad real consultando el API
+    try {
+      const serviceType = serviceDuration === 75 ? 'individual' : 'parejas'
+      const dateString = date.toISOString().split('T')[0]
+      const availableFromAPI = await getAvailableSlots(dateString, serviceType)
+      
+      // Marcar como no disponibles los slots que están ocupados
+      const finalSlots = theoreticalSlots.map(slot => {
+        const isAvailableInAPI = availableFromAPI.some(apiSlot => 
+          apiSlot.startTime === slot.time && apiSlot.endTime === slot.endTime
+        )
+        
+        return {
+          ...slot,
+          available: isAvailableInAPI
+        }
+      })
+
+      return finalSlots
+    } catch (error) {
+      console.error('Error obteniendo disponibilidad real:', error)
+      // En caso de error, retornar slots teóricos (fallback)
+      return theoreticalSlots
+    }
+  }
+
+  // Efecto para generar horarios cuando cambia la fecha o servicio seleccionado
+  useEffect(() => {
+    const loadTimeSlots = async () => {
+      if (selectedDate && selectedService) {
+        const service = services.find(s => s.id === selectedService)
+        if (service) {
+          setLoadingSlots(true)
+          setAvailableTimeSlots([]) // Limpiar mientras carga
+          try {
+            const slots = await generateTimeSlots(selectedDate, service.durationMinutes)
+            setAvailableTimeSlots(slots)
+            setSelectedTime('') // Limpiar hora seleccionada al cambiar fecha/servicio
+          } catch (error) {
+            console.error('Error cargando horarios:', error)
+            setAvailableTimeSlots([])
+          } finally {
+            setLoadingSlots(false)
+          }
+        }
+      } else {
+        setAvailableTimeSlots([])
+        setLoadingSlots(false)
+      }
+    }
+
+    loadTimeSlots()
+  }, [selectedDate, selectedService])
 
   // Generar días del calendario
   const generateCalendarDays = () => {
@@ -85,15 +217,16 @@ const AppointmentScheduler: React.FC = () => {
       
       const isCurrentMonth = date.getMonth() === month
       const isPast = date < today
-      const isWeekend = date.getDay() === 0 || date.getDay() === 6
-      const isAvailable = isCurrentMonth && !isPast && !isWeekend
+      const dayOfWeek = date.getDay()
+      const scheduleForDay = PSICOLOGA_SCHEDULE[dayOfWeek]
+      const isAvailable = isCurrentMonth && !isPast && scheduleForDay.available
 
       days.push({
         date,
         isCurrentMonth,
         isAvailable,
         isPast,
-        isWeekend,
+        isWeekend: dayOfWeek === 0, // Solo domingo es considerado no disponible
         isSelected: selectedDate ? 
           date.getDate() === selectedDate.getDate() &&
           date.getMonth() === selectedDate.getMonth() &&
@@ -105,7 +238,10 @@ const AppointmentScheduler: React.FC = () => {
   }
 
   const handleDateSelect = (date: Date) => {
-    if (date >= new Date() && date.getDay() !== 0 && date.getDay() !== 6) {
+    const dayOfWeek = date.getDay()
+    const schedule = PSICOLOGA_SCHEDULE[dayOfWeek]
+    
+    if (date >= new Date() && schedule.available) {
       setSelectedDate(date)
       setSelectedTime('')
     }
@@ -117,6 +253,8 @@ const AppointmentScheduler: React.FC = () => {
 
   const handleServiceSelect = (serviceId: string) => {
     setSelectedService(serviceId)
+    // Limpiar hora seleccionada al cambiar servicio
+    setSelectedTime('')
   }
 
   const handleModalidadSelect = (modalidad: string) => {
@@ -204,7 +342,7 @@ const AppointmentScheduler: React.FC = () => {
         modalidad: appointment.modalidad
       }
 
-      const result = await submitAppointment(appointmentData)
+      const result = await submitAppointmentWithAvailability(appointmentData)
 
       if (result.success) {
         setCurrentStep('confirmation')
@@ -377,26 +515,77 @@ const AppointmentScheduler: React.FC = () => {
                 {/* Horarios */}
                 {selectedDate && (
                   <div className="mb-8">
-                    <h4 className="text-lg font-semibold text-neutral-900 mb-4">4. Horario</h4>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                      {timeSlots.map((slot) => (
-                        <button
-                          key={slot.id}
-                          onClick={() => handleTimeSelect(slot.time)}
-                          disabled={!slot.available}
-                          className={`p-3 border-2 rounded-lg text-center transition-all duration-200 ${
-                            selectedTime === slot.time
-                              ? 'border-primary-500 bg-primary-50 text-primary-700'
-                              : slot.available
-                              ? 'border-neutral-200 hover:border-primary-300 text-neutral-700'
-                              : 'border-neutral-100 bg-neutral-50 text-neutral-400 cursor-not-allowed'
-                          }`}
-                        >
-                          <FaClock className="w-4 h-4 mx-auto mb-1" />
-                          {slot.time}
-                        </button>
-                      ))}
-                    </div>
+                    <h4 className="text-lg font-semibold text-neutral-900 mb-4">
+                      4. Horario
+                      {selectedService && (
+                        <span className="text-sm font-normal text-neutral-600 ml-2">
+                          (Duración: {services.find(s => s.id === selectedService)?.duration})
+                        </span>
+                      )}
+                    </h4>
+                    
+                    {/* Información del día */}
+                    {selectedDate && (
+                      <div className="mb-4 p-3 bg-blue-50 rounded-lg">
+                        <p className="text-sm text-blue-800">
+                          <strong>
+                            {selectedDate.toLocaleDateString('es-CO', { weekday: 'long', day: 'numeric', month: 'long' })}
+                          </strong>
+                          {(() => {
+                            const dayOfWeek = selectedDate.getDay()
+                            const schedule = PSICOLOGA_SCHEDULE[dayOfWeek]
+                            return schedule.available ? (
+                              <span className="ml-2">
+                                • Horarios disponibles: {schedule.startTime} - {schedule.endTime}
+                              </span>
+                            ) : null
+                          })()}
+                        </p>
+                      </div>
+                    )}
+
+                    {loadingSlots ? (
+                      <div className="text-center py-8">
+                        <div className="inline-flex items-center gap-2 text-neutral-600">
+                          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-primary-600"></div>
+                          Cargando horarios disponibles...
+                        </div>
+                      </div>
+                    ) : availableTimeSlots.length > 0 ? (
+                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                        {availableTimeSlots.map((slot) => (
+                          <button
+                            key={slot.id}
+                            onClick={() => handleTimeSelect(slot.time)}
+                            disabled={!slot.available}
+                            className={`p-3 border-2 rounded-lg text-center transition-all duration-200 ${
+                              selectedTime === slot.time
+                                ? 'border-primary-500 bg-primary-50 text-primary-700'
+                                : slot.available
+                                ? 'border-neutral-200 hover:border-primary-300 text-neutral-700 hover:bg-neutral-50'
+                                : 'border-neutral-100 bg-neutral-50 text-neutral-400 cursor-not-allowed opacity-60'
+                            }`}
+                          >
+                            <FaClock className="w-4 h-4 mx-auto mb-1" />
+                            <div className="font-semibold">{slot.time}</div>
+                            <div className="text-xs opacity-75">a {slot.endTime}</div>
+                            {!slot.available && (
+                              <div className="text-xs text-red-500 mt-1">Ocupado</div>
+                            )}
+                          </button>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-center py-8">
+                        <div className="text-neutral-500">
+                          {selectedDate && !PSICOLOGA_SCHEDULE[selectedDate.getDay()].available 
+                            ? 'No hay horarios disponibles para este día' 
+                            : selectedDate && selectedService
+                            ? 'No hay horarios disponibles para esta fecha. Por favor selecciona otro día.'
+                            : 'Selecciona un tipo de sesión para ver horarios disponibles'}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
 
@@ -436,7 +625,20 @@ const AppointmentScheduler: React.FC = () => {
                     {appointment.modalidad === 'presencial' ? '🏢' : '💻'}
                     <span className="capitalize">{appointment.modalidad}</span>
                   </span><br />
-                  {appointment.date.toLocaleDateString('es-CO', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })} a las {appointment.time}
+                  {appointment.date.toLocaleDateString('es-CO', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })} 
+                  <br />
+                  <strong>Horario:</strong> {appointment.time} - {(() => {
+                    const service = services.find(s => s.id === appointment.service)
+                    if (service) {
+                      const startMinutes = timeToMinutes(appointment.time)
+                      const endMinutes = startMinutes + service.durationMinutes
+                      return minutesToTime(endMinutes)
+                    }
+                    return ''
+                  })()}
+                  <span className="text-sm opacity-75 ml-1">
+                    ({services.find(s => s.id === appointment.service)?.duration})
+                  </span>
                 </p>
               </div>
             </div>
@@ -576,7 +778,20 @@ const AppointmentScheduler: React.FC = () => {
                   year: 'numeric', 
                   month: 'long', 
                   day: 'numeric' 
-                })} a las {appointment.time}
+                })} 
+                <br />
+                <strong>Horario:</strong> {appointment.time} - {(() => {
+                  const service = services.find(s => s.id === appointment.service)
+                  if (service) {
+                    const startMinutes = timeToMinutes(appointment.time)
+                    const endMinutes = startMinutes + service.durationMinutes
+                    return minutesToTime(endMinutes)
+                  }
+                  return ''
+                })()}
+                <span className="text-sm opacity-75 ml-1">
+                  ({services.find(s => s.id === appointment.service)?.duration})
+                </span>
               </p>
             </div>
 

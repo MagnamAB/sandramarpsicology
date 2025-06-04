@@ -20,6 +20,35 @@ export interface AppointmentData {
   mensaje?: string
 }
 
+// Nueva interfaz para gestión de disponibilidad
+export interface TimeSlotData {
+  date: string
+  startTime: string
+  endTime: string
+  serviceType: 'individual' | 'parejas'
+  isBooked: boolean
+  appointmentId?: string
+  reservedUntil?: string // Para reservas temporales
+  createdAt: string
+  updatedAt?: string
+}
+
+// Nueva interfaz para reservas temporales
+export interface SlotReservation {
+  id: string
+  date: string
+  startTime: string
+  endTime: string
+  serviceType: 'individual' | 'parejas'
+  clientData: {
+    nombre: string
+    email: string
+    telefono: string
+  }
+  expiresAt: string
+  status: 'pending' | 'confirmed' | 'expired'
+}
+
 export interface ApiResponse {
   success: boolean
   message: string
@@ -230,4 +259,269 @@ export const formatPhone = (phone: string): string => {
   }
   
   return phone
+}
+
+// =============================================================================
+// SISTEMA DE GESTIÓN DE DISPONIBILIDAD DE CITAS
+// =============================================================================
+
+// Base URL del API de disponibilidad (solo para operaciones de escritura)
+const AVAILABILITY_API_BASE = process.env.NEXT_PUBLIC_AVAILABILITY_API || 'https://n8n.srv795474.hstgr.cloud/webhook-test'
+
+// URLs internas de Next.js para consultas directas a MongoDB
+const MONGODB_API_INTERNAL = '/api/mongodb'
+
+// =============================================================================
+// CONSULTAS DIRECTAS A MONGODB (VIA API ROUTES DE NEXT.JS)
+// =============================================================================
+
+// Función para obtener slots disponibles directamente desde MongoDB
+export const getAvailableSlots = async (
+  date: string,
+  serviceType: 'individual' | 'parejas'
+): Promise<Array<{ startTime: string; endTime: string; id: string }>> => {
+  try {
+    const response = await axios.post(`${MONGODB_API_INTERNAL}/get-slots`, {
+      date,
+      serviceType,
+      timestamp: new Date().toISOString()
+    }, {
+      timeout: 3000 // Reducido para consultas rápidas
+    })
+
+    return response.data.slots || []
+  } catch (error) {
+    console.error('Error obteniendo slots disponibles:', error)
+    // En caso de error, retornamos array vacío para evitar mostrar horarios incorrectos
+    return []
+  }
+}
+
+// Función para verificar disponibilidad específica directamente en MongoDB
+export const checkSlotAvailability = async (
+  date: string, 
+  startTime: string, 
+  serviceType: 'individual' | 'parejas'
+): Promise<{ available: boolean; reason?: string }> => {
+  try {
+    const response = await axios.post(`${MONGODB_API_INTERNAL}/check-slot`, {
+      date,
+      startTime,
+      serviceType,
+      timestamp: new Date().toISOString()
+    }, {
+      timeout: 2000 // Muy rápido para verificaciones
+    })
+
+    return {
+      available: response.data.available || false,
+      reason: response.data.reason
+    }
+  } catch (error) {
+    console.error('Error verificando disponibilidad:', error)
+    // En caso de error, asumimos que está disponible (fallback)
+    return { available: true, reason: 'Error de verificación - asumiendo disponible' }
+  }
+}
+
+// =============================================================================
+// OPERACIONES DE ESCRITURA VÍA N8N (LÓGICA DE NEGOCIO)
+// =============================================================================
+
+// Función para reservar temporalmente un slot (5-10 minutos)
+export const reserveSlotTemporarily = async (
+  date: string,
+  startTime: string,
+  endTime: string,
+  serviceType: 'individual' | 'parejas',
+  clientData: { nombre: string; email: string; telefono: string }
+): Promise<{ success: boolean; reservationId?: string; expiresAt?: string; message?: string }> => {
+  try {
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString() // 10 minutos
+
+    const response = await axios.post(`${AVAILABILITY_API_BASE}/reserve-slot`, {
+      date,
+      startTime,
+      endTime,
+      serviceType,
+      clientData,
+      expiresAt,
+      timestamp: new Date().toISOString()
+    }, {
+      timeout: 5000
+    })
+
+    return {
+      success: true,
+      reservationId: response.data.reservationId,
+      expiresAt,
+      message: response.data.message
+    }
+  } catch (error) {
+    console.error('Error reservando slot:', error)
+    
+    if (axios.isAxiosError(error) && error.response?.status === 409) {
+      return {
+        success: false,
+        message: 'Este horario ya no está disponible. Por favor selecciona otro.'
+      }
+    }
+    
+    return {
+      success: false,
+      message: 'Error al reservar el horario. Por favor intenta nuevamente.'
+    }
+  }
+}
+
+// Función para confirmar una reserva (convertir en cita definitiva)
+export const confirmSlotReservation = async (
+  reservationId: string,
+  appointmentData: AppointmentData
+): Promise<{ success: boolean; appointmentId?: string; message?: string }> => {
+  try {
+    const response = await axios.post(`${AVAILABILITY_API_BASE}/confirm-reservation`, {
+      reservationId,
+      appointmentData,
+      timestamp: new Date().toISOString()
+    }, {
+      timeout: 10000
+    })
+
+    return {
+      success: true,
+      appointmentId: response.data.appointmentId,
+      message: response.data.message || 'Cita confirmada exitosamente'
+    }
+  } catch (error) {
+    console.error('Error confirmando reserva:', error)
+    return {
+      success: false,
+      message: 'Error al confirmar la cita. Por favor contacta por WhatsApp.'
+    }
+  }
+}
+
+// Función para liberar una reserva temporal (en caso de cancelación)
+export const releaseSlotReservation = async (reservationId: string): Promise<void> => {
+  try {
+    await axios.post(`${AVAILABILITY_API_BASE}/release-reservation`, {
+      reservationId,
+      timestamp: new Date().toISOString()
+    }, {
+      timeout: 3000
+    })
+  } catch (error) {
+    console.error('Error liberando reserva:', error)
+    // No es crítico si falla, la reserva expirará automáticamente
+  }
+}
+
+// Función simplificada para agendar citas - Solo usa webhook principal
+export const submitAppointmentWithAvailability = async (appointmentData: AppointmentData): Promise<ApiResponse> => {
+  try {
+    // Verificar disponibilidad antes de enviar
+    const availability = await checkSlotAvailability(
+      appointmentData.fecha,
+      appointmentData.hora,
+      appointmentData.servicio as 'individual' | 'parejas'
+    )
+
+    if (!availability.available) {
+      return {
+        success: false,
+        message: `Lo sentimos, este horario ya no está disponible. ${availability.reason || 'Por favor selecciona otro horario.'}`
+      }
+    }
+
+    // Enviar directamente al webhook principal que maneja todo
+    const webhookUrl = process.env.NEXT_PUBLIC_WEBHOOK_AGENDAR_CITAS || 
+                      'https://n8n.srv795474.hstgr.cloud/webhook-test/agendar-citas-sandramar'
+
+    // Preparar datos optimizados para n8n
+    const payload = {
+      // Datos principales de la cita
+      nombre: appointmentData.nombre,
+      email: appointmentData.email,
+      telefono: appointmentData.telefono,
+      servicio: appointmentData.servicio,
+      fecha: appointmentData.fecha,
+      hora: appointmentData.hora,
+      duracion: appointmentData.duracion,
+      modalidad: appointmentData.modalidad,
+      mensaje: appointmentData.mensaje || '',
+      
+      // Metadatos para procesamiento en n8n
+      timestamp: new Date().toISOString(),
+      fechaCompleta: new Date(appointmentData.fecha + 'T' + appointmentData.hora).toISOString(),
+      source: 'website_scheduler',
+      type: 'appointment',
+      action: 'create',
+      status: 'pending_confirmation',
+      
+      // Información adicional del sistema
+      userAgent: typeof window !== 'undefined' ? window.navigator.userAgent : 'server',
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      
+      // Información para el procesamiento
+      servicioDetalle: getServiceDetails(appointmentData.servicio),
+      modalidadDetalle: appointmentData.modalidad === 'presencial' ? {
+        tipo: 'presencial',
+        ubicacion: 'Carrera 13 Nº 122 – 34, Santa Bárbara, Bogotá',
+        indicaciones: 'Consulta presencial en el consultorio'
+      } : {
+        tipo: 'virtual',
+        plataforma: 'videollamada',
+        indicaciones: 'Se enviará enlace de videollamada 30 minutos antes'
+      }
+    }
+
+    const response = await axios.post(webhookUrl, payload, {
+      headers: {
+        'Content-Type': 'application/json',
+        'User-Agent': 'DraVarigsWebsite/1.0',
+        'X-Webhook-Source': 'appointment-scheduler'
+      },
+      timeout: 15000 // 15 segundos de timeout
+    })
+
+    // Verificar si la respuesta de n8n indica éxito
+    if (response.status === 200 || response.status === 201) {
+      return {
+        success: true,
+        message: 'Cita agendada exitosamente. Te contactaré para confirmar.',
+        data: response.data
+      }
+    } else {
+      throw new Error(`Error en webhook: ${response.status}`)
+    }
+
+  } catch (error) {
+    console.error('Error agendando cita:', error)
+    
+    // Manejo específico de errores
+    if (axios.isAxiosError(error)) {
+      if (error.code === 'ECONNABORTED') {
+        return {
+          success: false,
+          message: 'Tiempo de espera agotado. Por favor intenta nuevamente o contacta por WhatsApp.',
+        }
+      } else if (error.response && error.response.status === 404) {
+        return {
+          success: false,
+          message: 'Servicio de agendamiento temporalmente no disponible. Contacta por WhatsApp.',
+        }
+      } else if (error.response && error.response.status >= 500) {
+        return {
+          success: false,
+          message: 'Error interno del servidor. Por favor contacta por WhatsApp.',
+        }
+      }
+    }
+    
+    return {
+      success: false,
+      message: 'Error al agendar la cita. Por favor contacta directamente por WhatsApp al +57 310 698 3385.',
+    }
+  }
 } 

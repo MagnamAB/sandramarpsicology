@@ -88,11 +88,13 @@ const Contact: React.FC = () => {
               <p className="text-neutral-600 text-sm font-medium">Lun, Mar, Jue, Vie: 7:30 AM - 8:00 PM</p>
               <p className="text-neutral-600 text-sm font-medium">Mié, Sáb: 7:30 AM - 12:00 PM</p>
               <p className="text-neutral-600 text-sm">
-                <strong>Última cita pareja:</strong> 6:00 PM<br />
-                <strong>Última cita individual:</strong> 6:45 PM
+                <strong>Horarios de citas:</strong><br />
+                • Individual (75 min): Última cita 6:45 PM<br />
+                • Pareja (120 min): Última cita 6:00 PM<br />
+                • Mié/Sáb: Citas deben terminar antes 12:00 PM
               </p>
               <p className="text-neutral-600 text-sm">
-                <strong>Horarios flexibles para consultas internacionales</strong>
+                <strong>Consultas internacionales:</strong> Horarios flexibles
               </p>
             </div>
           </div>
