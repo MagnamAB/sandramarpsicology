@@ -102,47 +102,75 @@ export default async function handler(
 
     console.log(`DEBUG - Calculando solapamientos para servicio ${serviceType} (${serviceDuration} min)`)
 
-         // Para cada slot de 15 minutos del día
-     for (let currentMinutes = timeToMinutes('07:30'); currentMinutes <= timeToMinutes('18:30'); currentMinutes += 15) {
-       const slotStartTime = minutesToTime(currentMinutes)
-       const potentialEndMinutes = currentMinutes + serviceDuration
-       
-       console.log(`DEBUG - Evaluando slot ${slotStartTime} (nueva cita iría de ${slotStartTime} a ${minutesToTime(potentialEndMinutes)})`)
-       
-       // Verificar solapamiento con cada cita existente
-       for (const existingSlot of blockedSlots) {
-         const existingStartMinutes = timeToMinutes(existingSlot.startTime)
-         const existingEndMinutes = timeToMinutes(existingSlot.endTime)
-         
-         console.log(`  - Comparando con cita existente ${existingSlot.startTime}-${existingSlot.endTime}`)
-         
-         // LÓGICA DE SOLAPAMIENTO CORREGIDA:
-         // Dos intervalos se solapan si: max(start1, start2) < min(end1, end2)
-         // O más simple: start1 < end2 && start2 < end1
-         const wouldOverlap = currentMinutes < existingEndMinutes && existingStartMinutes < potentialEndMinutes
-         
-         console.log(`  - ¿Se solapa? ${wouldOverlap} (${currentMinutes} < ${existingEndMinutes} && ${existingStartMinutes} < ${potentialEndMinutes})`)
-         
-         if (wouldOverlap) {
-           // No duplicar slots que ya están en exactBlockedSlots
-           const isAlreadyBlocked = exactBlockedSlots.some(blocked => blocked.startTime === slotStartTime)
-           
-           if (!isAlreadyBlocked && !overlapBlockedSlots.some(blocked => blocked.startTime === slotStartTime)) {
-             overlapBlockedSlots.push({
-               startTime: slotStartTime,
-               endTime: minutesToTime(currentMinutes + 15),
-               reason: `overlap_with_${existingSlot.startTime}`
-             })
-             console.log(`  ✅ BLOQUEADO: Slot ${slotStartTime} bloqueado por solapamiento con cita ${existingSlot.startTime}-${existingSlot.endTime}`)
-           } else {
-             console.log(`  - Ya estaba bloqueado: ${slotStartTime}`)
-           }
-           break
-         } else {
-           console.log(`  - No hay solapamiento para ${slotStartTime}`)
-         }
-       }
-     }
+    // PASO 2A: Bloquear todos los slots que caen DENTRO de citas existentes
+    console.log('DEBUG - PASO 2A: Bloqueando slots dentro de citas existentes')
+    for (const existingSlot of blockedSlots) {
+      const existingStartMinutes = timeToMinutes(existingSlot.startTime)
+      const existingEndMinutes = timeToMinutes(existingSlot.endTime)
+      
+      console.log(`  - Procesando cita existente ${existingSlot.startTime}-${existingSlot.endTime}`)
+      
+      // Bloquear todos los slots de 15 min que caen dentro de esta cita
+      for (let slotMinutes = timeToMinutes('07:30'); slotMinutes <= timeToMinutes('18:30'); slotMinutes += 15) {
+        const slotStartTime = minutesToTime(slotMinutes)
+        
+        // Un slot está dentro de una cita si su inicio está entre el inicio y fin de la cita (sin incluir el final)
+        if (slotMinutes >= existingStartMinutes && slotMinutes < existingEndMinutes) {
+          // No duplicar slots que ya están en exactBlockedSlots
+          const isAlreadyBlocked = exactBlockedSlots.some(blocked => blocked.startTime === slotStartTime) ||
+                                  overlapBlockedSlots.some(blocked => blocked.startTime === slotStartTime)
+          
+          if (!isAlreadyBlocked) {
+            overlapBlockedSlots.push({
+              startTime: slotStartTime,
+              endTime: minutesToTime(slotMinutes + 15),
+              reason: `during_appointment_${existingSlot.startTime}`
+            })
+            console.log(`    ✅ BLOQUEADO: Slot ${slotStartTime} está durante la cita ${existingSlot.startTime}-${existingSlot.endTime}`)
+          }
+        }
+      }
+    }
+
+    // PASO 2B: Bloquear slots que se solaparían con nuevas citas (SOLO horarios de inicio válidos)
+    console.log('DEBUG - PASO 2B: Bloqueando slots que se solaparían con nuevas citas')
+    for (let currentMinutes = timeToMinutes('07:30'); currentMinutes <= timeToMinutes('18:30'); currentMinutes += 15) {
+      const slotStartTime = minutesToTime(currentMinutes)
+      const potentialEndMinutes = currentMinutes + serviceDuration
+      const potentialEndTime = minutesToTime(potentialEndMinutes)
+      
+      // Solo considerar si el slot terminaría dentro del horario de atención (máximo 22:00)
+      if (potentialEndMinutes > timeToMinutes('22:00')) {
+        continue
+      }
+      
+      // Verificar solapamiento con cada cita existente
+      for (const existingSlot of blockedSlots) {
+        const existingStartMinutes = timeToMinutes(existingSlot.startTime)
+        const existingEndMinutes = timeToMinutes(existingSlot.endTime)
+        
+        // LÓGICA DE SOLAPAMIENTO CORREGIDA: 
+        // Una nueva cita se solapa si su FINAL es DESPUÉS del INICIO de la cita existente
+        // Y su INICIO es ANTES del FINAL de la cita existente
+        const wouldOverlap = potentialEndMinutes > existingStartMinutes && currentMinutes < existingEndMinutes
+        
+        if (wouldOverlap) {
+          // No duplicar slots que ya están bloqueados
+          const isAlreadyBlocked = exactBlockedSlots.some(blocked => blocked.startTime === slotStartTime) ||
+                                  overlapBlockedSlots.some(blocked => blocked.startTime === slotStartTime)
+          
+          if (!isAlreadyBlocked) {
+            overlapBlockedSlots.push({
+              startTime: slotStartTime,
+              endTime: potentialEndTime, // ✅ CORREGIDO: usar duración completa del servicio
+              reason: `overlap_with_${existingSlot.startTime}`
+            })
+            console.log(`    ✅ BLOQUEADO: Slot ${slotStartTime}-${potentialEndTime} se solaparía con cita ${existingSlot.startTime}-${existingSlot.endTime}`)
+          }
+          break
+        }
+      }
+    }
 
     // COMBINAR todos los slots bloqueados
     const allBlockedSlots = [

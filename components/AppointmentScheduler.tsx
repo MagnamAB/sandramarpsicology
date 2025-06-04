@@ -240,16 +240,30 @@ const AppointmentScheduler: React.FC = () => {
       console.log('DEBUG - Slots bloqueados recibidos:', blockedSlots)
       console.log('DEBUG - Slots teóricos generados:', theoreticalSlots.map(s => ({ bogotaTime: s.bogotaTime, bogotaEndTime: s.bogotaEndTime })))
       
-      // Marcar como no disponibles solo los slots que están específicamente bloqueados
+      // Marcar como no disponibles los slots que tienen conflictos
       const finalSlots = theoreticalSlots.map(slot => {
-        // CORREGIDO: Solo comparar startTime, no endTime
-        // La API devuelve slots de solapamiento de 15 min, pero los slots del frontend son de duración completa
-        const isBlocked = blockedSlots.some((blockedSlot: any) => 
-          blockedSlot.startTime === slot.bogotaTime
+        // Verificar si CUALQUIER slot de 15 minutos dentro de la duración del servicio está bloqueado
+        const startMinutes = timeToMinutes(slot.bogotaTime)
+        const endMinutes = timeToMinutes(slot.bogotaEndTime)
+        
+        // Generar todos los slots de 15 minutos que cubre este servicio
+        const serviceSlots: string[] = []
+        for (let minutes = startMinutes; minutes < endMinutes; minutes += 15) {
+          serviceSlots.push(minutesToTime(minutes))
+        }
+        
+        // Verificar si alguno de los slots de 15 min está bloqueado
+        const isBlocked = serviceSlots.some(serviceSlot => 
+          blockedSlots.some((blockedSlot: any) => 
+            blockedSlot.startTime === serviceSlot
+          )
         )
         
         if (isBlocked) {
-          console.log(`DEBUG - Slot ${slot.bogotaTime}-${slot.bogotaEndTime} está BLOQUEADO (coincide con ${blockedSlots.find((b: any) => b.startTime === slot.bogotaTime)?.reason})`)
+          const conflictingSlots = serviceSlots.filter(serviceSlot => 
+            blockedSlots.some((blockedSlot: any) => blockedSlot.startTime === serviceSlot)
+          )
+          console.log(`DEBUG - Slot ${slot.bogotaTime}-${slot.bogotaEndTime} está BLOQUEADO por conflictos en: ${conflictingSlots.join(', ')}`)
         }
         
         return {
