@@ -266,18 +266,18 @@ const Header: React.FC = () => {
                       ) : (
                         // Dropdown simple para Recursos
                         <div className="space-y-2">
-                          {item.dropdown.map((subItem) => (
-                            <Link
-                              key={subItem.name}
-                              href={subItem.href}
+                        {item.dropdown.map((subItem) => (
+                          <Link
+                            key={subItem.name}
+                            href={subItem.href}
                               className="block p-2 rounded-lg hover:bg-neutral-50 transition-colors text-neutral-700 hover:text-primary-600"
                               onClick={(e) => handleNavigationClick(e, subItem.href)}
-                            >
-                              {subItem.name}
-                            </Link>
-                          ))}
+                          >
+                            {subItem.name}
+                          </Link>
+                        ))}
                         </div>
-                      )}
+                    )}
                     </div>
                   </div>
                 </div>
@@ -366,16 +366,16 @@ const Header: React.FC = () => {
                           >
                             {item.name}
                           </Link>
-                          <button
+                        <button
                             className="text-neutral-700 hover:text-primary-600 font-medium py-2 transition-colors ml-2"
-                            onClick={() => handleDropdownToggle(item.name)}
-                          >
-                            <FaChevronDown 
-                              className={`w-3 h-3 transform transition-transform ${
-                                openDropdown === item.name ? 'rotate-180' : ''
-                              }`} 
-                            />
-                          </button>
+                          onClick={() => handleDropdownToggle(item.name)}
+                        >
+                          <FaChevronDown 
+                            className={`w-3 h-3 transform transition-transform ${
+                              openDropdown === item.name ? 'rotate-180' : ''
+                            }`} 
+                          />
+                        </button>
                         </div>
                         
                         <AnimatePresence>
@@ -433,14 +433,14 @@ const Header: React.FC = () => {
                               ) : (
                                 // Renderizado para otros dropdowns (Recursos)
                                 item.dropdown.map((subItem) => (
-                                  <Link
-                                    key={subItem.name}
-                                    href={subItem.href}
-                                    className="block text-sm text-neutral-600 hover:text-primary-600 py-1 transition-colors"
+                                <Link
+                                  key={subItem.name}
+                                  href={subItem.href}
+                                  className="block text-sm text-neutral-600 hover:text-primary-600 py-1 transition-colors"
                                     onClick={(e) => handleNavigationClick(e, subItem.href)}
-                                  >
-                                    {subItem.name}
-                                  </Link>
+                                >
+                                  {subItem.name}
+                                </Link>
                                 ))
                               )}
                             </motion.div>

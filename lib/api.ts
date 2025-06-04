@@ -98,8 +98,8 @@ export const submitContactForm = async (formData: ContactFormData): Promise<ApiR
 // Función para agendar citas - Envío a webhook n8n específico
 export const submitAppointment = async (appointmentData: AppointmentData): Promise<ApiResponse> => {
   try {
-    // URL específica del webhook de n8n para agendamiento de citas
-    const webhookUrl = 'https://n8n.srv795474.hstgr.cloud/webhook-test/agendar-citas-sandramar'
+      // URL específica del webhook de n8n para agendamiento de citas
+  const webhookUrl = 'https://n8n.srv795474.hstgr.cloud/webhook/agendar-citas-sandramar'
 
     // Preparar datos optimizados para n8n
     const payload = {
@@ -266,7 +266,7 @@ export const formatPhone = (phone: string): string => {
 // =============================================================================
 
 // Base URL del API de disponibilidad (solo para operaciones de escritura)
-const AVAILABILITY_API_BASE = process.env.NEXT_PUBLIC_AVAILABILITY_API || 'https://n8n.srv795474.hstgr.cloud/webhook-test'
+const AVAILABILITY_API_BASE = process.env.NEXT_PUBLIC_AVAILABILITY_API || 'https://n8n.srv795474.hstgr.cloud/webhook'
 
 // URLs internas de Next.js para consultas directas a MongoDB
 const MONGODB_API_INTERNAL = '/api/mongodb'
@@ -304,22 +304,29 @@ export const checkSlotAvailability = async (
   serviceType: 'individual' | 'parejas'
 ): Promise<{ available: boolean; reason?: string }> => {
   try {
-    const response = await axios.post(`${MONGODB_API_INTERNAL}/check-slot`, {
+    // Usar el nuevo endpoint que verifica solo slots BLOQUEADOS
+    const response = await axios.post(`${MONGODB_API_INTERNAL}/check-blocked-slots`, {
       date,
-      startTime,
       serviceType,
       timestamp: new Date().toISOString()
     }, {
       timeout: 2000 // Muy rápido para verificaciones
     })
 
+    const { blockedSlots = [] } = response.data
+    
+    // Verificar si el slot específico está bloqueado
+    const isBlocked = blockedSlots.some((slot: any) => 
+      slot.startTime === startTime
+    )
+
     return {
-      available: response.data.available || false,
-      reason: response.data.reason
+      available: !isBlocked, // Disponible si NO está bloqueado
+      reason: isBlocked ? 'Este horario ya está ocupado' : undefined
     }
   } catch (error) {
     console.error('Error verificando disponibilidad:', error)
-    // En caso de error, asumimos que está disponible (fallback)
+    // En caso de error, asumimos que está disponible (fallback seguro)
     return { available: true, reason: 'Error de verificación - asumiendo disponible' }
   }
 }
@@ -436,7 +443,7 @@ export const submitAppointmentWithAvailability = async (appointmentData: Appoint
 
     // Enviar directamente al webhook principal que maneja todo
     const webhookUrl = process.env.NEXT_PUBLIC_WEBHOOK_AGENDAR_CITAS || 
-                      'https://n8n.srv795474.hstgr.cloud/webhook-test/agendar-citas-sandramar'
+                      'https://n8n.srv795474.hstgr.cloud/webhook/agendar-citas-sandramar'
 
     // Preparar datos optimizados para n8n
     const payload = {

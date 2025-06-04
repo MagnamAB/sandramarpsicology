@@ -123,17 +123,16 @@ const AppointmentScheduler: React.FC = () => {
   const convertUserTimeToBogota = (userTime: string, date: Date): string => {
     const [hours, minutes] = userTime.split(':').map(Number)
     
-    // Crear fecha específica en zona horaria del usuario
+    // Crear fecha completa en la zona horaria del usuario usando Date constructor local
     const year = date.getFullYear()
-    const month = String(date.getMonth() + 1).padStart(2, '0')
-    const day = String(date.getDate()).padStart(2, '0')
-    const timeStr = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`
+    const month = date.getMonth() // 0-11
+    const day = date.getDate()
     
-    // Crear Date en zona horaria del usuario y convertir a UTC
-    const userDate = new Date(`${year}-${month}-${day}T${timeStr}:00`)
+    // Crear fecha en el navegador del usuario (su zona horaria local)
+    const localDate = new Date(year, month, day, hours, minutes)
     
-    // Convertir a zona horaria de Bogotá
-    const bogotaTimeStr = userDate.toLocaleTimeString('en-GB', {
+    // Convertir a zona horaria de Bogotá usando toLocaleString
+    const bogotaTimeStr = localDate.toLocaleString('en-GB', {
       timeZone: 'America/Bogota',
       hour: '2-digit',
       minute: '2-digit',
@@ -214,7 +213,15 @@ const AppointmentScheduler: React.FC = () => {
     // Verificar disponibilidad real consultando el API (usando tiempos de Bogotá)
     try {
       const serviceType = serviceDuration === 75 ? 'individual' : 'parejas'
-      const dateString = date.toISOString().split('T')[0]
+      // Corregir el problema de fecha - usar formato local sin conversión UTC
+      const dateString = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
+      
+      console.log('DEBUG - Parámetros:', { 
+        serviceDuration, 
+        serviceType, 
+        dateString,
+        dateObject: date 
+      })
       
       // Consultar slots bloqueados en la base de datos
       const response = await fetch(`/api/mongodb/check-blocked-slots`, {
@@ -230,11 +237,20 @@ const AppointmentScheduler: React.FC = () => {
       
       const { blockedSlots = [] } = await response.json()
       
+      console.log('DEBUG - Slots bloqueados recibidos:', blockedSlots)
+      console.log('DEBUG - Slots teóricos generados:', theoreticalSlots.map(s => ({ bogotaTime: s.bogotaTime, bogotaEndTime: s.bogotaEndTime })))
+      
       // Marcar como no disponibles solo los slots que están específicamente bloqueados
       const finalSlots = theoreticalSlots.map(slot => {
+        // CORREGIDO: Solo comparar startTime, no endTime
+        // La API devuelve slots de solapamiento de 15 min, pero los slots del frontend son de duración completa
         const isBlocked = blockedSlots.some((blockedSlot: any) => 
-          blockedSlot.startTime === slot.bogotaTime && blockedSlot.endTime === slot.bogotaEndTime
+          blockedSlot.startTime === slot.bogotaTime
         )
+        
+        if (isBlocked) {
+          console.log(`DEBUG - Slot ${slot.bogotaTime}-${slot.bogotaEndTime} está BLOQUEADO (coincide con ${blockedSlots.find((b: any) => b.startTime === slot.bogotaTime)?.reason})`)
+        }
         
         return {
           ...slot,
@@ -255,6 +271,11 @@ const AppointmentScheduler: React.FC = () => {
     const loadTimeSlots = async () => {
       if (selectedDate && selectedService) {
         const service = services.find(s => s.id === selectedService)
+        console.log('DEBUG - Servicio seleccionado:', { 
+          selectedService, 
+          service,
+          durationMinutes: service?.durationMinutes 
+        })
         if (service) {
           setLoadingSlots(true)
           setAvailableTimeSlots([]) // Limpiar mientras carga
@@ -328,6 +349,14 @@ const AppointmentScheduler: React.FC = () => {
     const dayOfWeek = date.getDay()
     const schedule = PSICOLOGA_SCHEDULE[dayOfWeek]
     
+    console.log('DEBUG - Fecha seleccionada:', {
+      fechaCompleta: date,
+      fechaLocal: date.toLocaleDateString(),
+      fechaISO: date.toISOString(),
+      dayOfWeek,
+      dayName: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'][dayOfWeek]
+    })
+    
     if (date >= new Date() && schedule.available) {
       setSelectedDate(date)
       setSelectedTime('')
@@ -353,12 +382,22 @@ const AppointmentScheduler: React.FC = () => {
       // Encontrar el slot seleccionado para obtener el tiempo de Bogotá
       const selectedSlot = availableTimeSlots.find(slot => slot.time === selectedTime)
       
+      // Debug: verificar si el slot tiene bogotaTime
+      console.log('DEBUG - Slot seleccionado:', selectedSlot)
+      console.log('DEBUG - selectedTime:', selectedTime)
+      console.log('DEBUG - bogotaTime del slot:', selectedSlot?.bogotaTime)
+      
+      // Si no hay bogotaTime en el slot, convertir el tiempo del usuario a Bogotá
+      const finalBogotaTime = selectedSlot?.bogotaTime || convertUserTimeToBogota(selectedTime, selectedDate)
+      
+      console.log('DEBUG - Tiempo final para Bogotá:', finalBogotaTime)
+      
       setAppointment({
         date: selectedDate,
         time: selectedTime, // Tiempo mostrado al usuario (en su zona horaria)
         service: selectedService,
         modalidad: selectedModalidad,
-        bogotaTime: selectedSlot?.bogotaTime || selectedTime // Tiempo interno (Bogotá)
+        bogotaTime: finalBogotaTime // Tiempo interno (Bogotá)
       })
       setCurrentStep('form')
     }
@@ -426,12 +465,20 @@ const AppointmentScheduler: React.FC = () => {
       const appointmentData: AppointmentData = {
         ...formData,
         telefono: formatPhone(formData.telefono),
-        fecha: appointment.date.toISOString().split('T')[0],
+        fecha: `${appointment.date.getFullYear()}-${String(appointment.date.getMonth() + 1).padStart(2, '0')}-${String(appointment.date.getDate()).padStart(2, '0')}`,
         hora: appointment.bogotaTime || appointment.time, // Usar tiempo de Bogotá para el backend
         servicio: appointment.service,
         duracion: services.find(s => s.id === appointment.service)?.duration || '75 min',
         modalidad: appointment.modalidad
       }
+
+      // Debug: verificar datos antes de enviar
+      console.log('DEBUG - Datos de la cita a enviar:', {
+        fechaOriginal: appointment.date,
+        fechaEnviada: appointmentData.fecha,
+        horaUsuario: appointment.time,
+        horaBogota: appointmentData.hora
+      })
 
       const result = await submitAppointmentWithAvailability(appointmentData)
 
