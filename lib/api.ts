@@ -98,8 +98,12 @@ export const submitContactForm = async (formData: ContactFormData): Promise<ApiR
 // Función para agendar citas - Envío a webhook n8n específico
 export const submitAppointment = async (appointmentData: AppointmentData): Promise<ApiResponse> => {
   try {
-      // URL específica del webhook de n8n para agendamiento de citas
-  const webhookUrl = 'https://n8n.srv795474.hstgr.cloud/webhook/agendar-citas-sandramar'
+      // URL del webhook desde variables de entorno
+  const webhookUrl = process.env.NEXT_PUBLIC_WEBHOOK_AGENDAR_CITAS
+  
+  if (!webhookUrl) {
+    throw new Error('NEXT_PUBLIC_WEBHOOK_AGENDAR_CITAS no está configurada en las variables de entorno')
+  }
 
     // Preparar datos optimizados para n8n
     const payload = {
@@ -266,7 +270,11 @@ export const formatPhone = (phone: string): string => {
 // =============================================================================
 
 // Base URL del API de disponibilidad (solo para operaciones de escritura)
-const AVAILABILITY_API_BASE = process.env.NEXT_PUBLIC_AVAILABILITY_API || 'https://n8n.srv795474.hstgr.cloud/webhook'
+const AVAILABILITY_API_BASE = process.env.NEXT_PUBLIC_AVAILABILITY_API
+
+if (!AVAILABILITY_API_BASE) {
+  throw new Error('NEXT_PUBLIC_AVAILABILITY_API no está configurada en las variables de entorno')
+}
 
 // URLs internas de Next.js para consultas directas a MongoDB
 const MONGODB_API_INTERNAL = '/api/mongodb'
@@ -442,8 +450,11 @@ export const submitAppointmentWithAvailability = async (appointmentData: Appoint
     }
 
     // Enviar directamente al webhook principal que maneja todo
-    const webhookUrl = process.env.NEXT_PUBLIC_WEBHOOK_AGENDAR_CITAS || 
-                      'https://n8n.srv795474.hstgr.cloud/webhook/agendar-citas-sandramar'
+    const webhookUrl = process.env.NEXT_PUBLIC_WEBHOOK_AGENDAR_CITAS
+    
+    if (!webhookUrl) {
+      throw new Error('NEXT_PUBLIC_WEBHOOK_AGENDAR_CITAS no está configurada en las variables de entorno')
+    }
 
     // Preparar datos optimizados para n8n
     const payload = {
