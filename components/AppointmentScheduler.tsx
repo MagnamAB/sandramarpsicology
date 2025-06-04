@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { FaCalendarAlt, FaClock, FaUser, FaEnvelope, FaPhone, FaChevronLeft, FaChevronRight, FaCheck } from 'react-icons/fa'
+import { FaCalendarAlt, FaClock, FaUser, FaEnvelope, FaPhone, FaChevronLeft, FaChevronRight, FaCheck, FaGlobe } from 'react-icons/fa'
 import { 
   submitAppointmentWithAvailability, 
   getAvailableSlots,
@@ -11,17 +11,20 @@ import {
 } from '../lib/api'
 
 interface TimeSlot {
-  time: string
+  time: string // Tiempo en zona horaria local del usuario
   available: boolean
   id: string
-  endTime: string
+  endTime: string // Tiempo en zona horaria local del usuario
+  bogotaTime: string // Tiempo original en zona horaria de Bogotá
+  bogotaEndTime: string // Tiempo final en zona horaria de Bogotá
 }
 
 interface SelectedAppointment {
   date: Date
-  time: string
+  time: string // Tiempo mostrado al usuario (en su zona horaria)
   service: string
   modalidad: string
+  bogotaTime?: string // Tiempo interno para el backend (zona horaria de Bogotá)
 }
 
 // Configuración de horarios de la psicóloga por día de la semana
@@ -53,6 +56,10 @@ const AppointmentScheduler: React.FC = () => {
   const [appointment, setAppointment] = useState<SelectedAppointment | null>(null)
   const [availableTimeSlots, setAvailableTimeSlots] = useState<TimeSlot[]>([])
   const [loadingSlots, setLoadingSlots] = useState(false)
+  
+  // Estado para información de zona horaria
+  const [userTimezone, setUserTimezone] = useState<string>('')
+  const [timezoneOffset, setTimezoneOffset] = useState<number>(0)
 
   // Referencia para el formulario de confirmación
   const formSectionRef = useRef<HTMLDivElement>(null)
@@ -74,6 +81,67 @@ const AppointmentScheduler: React.FC = () => {
     { id: 'individual', name: 'Terapia Individual', duration: '75 min', durationMinutes: 75 },
     { id: 'parejas', name: 'Terapia de Parejas', duration: '120 min', durationMinutes: 120 }
   ]
+
+  // Detectar zona horaria del usuario al cargar el componente
+  useEffect(() => {
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
+    const now = new Date()
+    const bogotaTime = new Date(now.toLocaleString("en-US", {timeZone: "America/Bogota"}))
+    const userTime = new Date(now.toLocaleString("en-US", {timeZone: timezone}))
+    const offsetHours = (userTime.getTime() - bogotaTime.getTime()) / (1000 * 60 * 60)
+    
+    setUserTimezone(timezone)
+    setTimezoneOffset(offsetHours)
+  }, [])
+
+  // Función para convertir tiempo de Bogotá a zona horaria del usuario
+  const convertBogotaToUserTime = (bogotaTime: string, date: Date): string => {
+    const [hours, minutes] = bogotaTime.split(':').map(Number)
+    
+    // Crear fecha específica en formato ISO con zona horaria de Bogotá
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const day = String(date.getDate()).padStart(2, '0')
+    const timeStr = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`
+    
+    // Crear string ISO para Bogotá (UTC-5)
+    const bogotaISOString = `${year}-${month}-${day}T${timeStr}:00-05:00`
+    const bogotaDate = new Date(bogotaISOString)
+    
+    // Convertir a zona horaria del usuario
+    const userTimeStr = bogotaDate.toLocaleTimeString('en-GB', {
+      timeZone: userTimezone || Intl.DateTimeFormat().resolvedOptions().timeZone,
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    })
+    
+    return userTimeStr
+  }
+
+  // Función para convertir tiempo del usuario a zona horaria de Bogotá (para backend)
+  const convertUserTimeToBogota = (userTime: string, date: Date): string => {
+    const [hours, minutes] = userTime.split(':').map(Number)
+    
+    // Crear fecha específica en zona horaria del usuario
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const day = String(date.getDate()).padStart(2, '0')
+    const timeStr = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`
+    
+    // Crear Date en zona horaria del usuario y convertir a UTC
+    const userDate = new Date(`${year}-${month}-${day}T${timeStr}:00`)
+    
+    // Convertir a zona horaria de Bogotá
+    const bogotaTimeStr = userDate.toLocaleTimeString('en-GB', {
+      timeZone: 'America/Bogota',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    })
+    
+    return bogotaTimeStr
+  }
 
   // Función para convertir tiempo HH:MM a minutos desde medianoche
   const timeToMinutes = (time: string): number => {
@@ -98,7 +166,7 @@ const AppointmentScheduler: React.FC = () => {
       return []
     }
 
-    // Primero generar slots teóricos basados en horarios
+    // Primero generar slots teóricos basados en horarios (en tiempo de Bogotá)
     const theoreticalSlots: TimeSlot[] = []
     const startMinutes = timeToMinutes(schedule.startTime)
     const endMinutes = timeToMinutes(schedule.endTime)
@@ -125,41 +193,60 @@ const AppointmentScheduler: React.FC = () => {
       
       // Verificar que la cita completa quepa en el horario del día
       if (slotEndMinutes <= endMinutes) {
-        const startTime = minutesToTime(currentMinutes)
-        const endTime = minutesToTime(slotEndMinutes)
+        const bogotaStartTime = minutesToTime(currentMinutes)
+        const bogotaEndTime = minutesToTime(slotEndMinutes)
+        
+        // Convertir a zona horaria del usuario para mostrar
+        const userStartTime = convertBogotaToUserTime(bogotaStartTime, date)
+        const userEndTime = convertBogotaToUserTime(bogotaEndTime, date)
         
         theoreticalSlots.push({
-          time: startTime,
-          endTime: endTime,
+          time: userStartTime, // Tiempo mostrado al usuario en su zona horaria
+          endTime: userEndTime, // Tiempo mostrado al usuario en su zona horaria
           available: true, // Se verificará contra la base de datos
-          id: `${startTime}-${endTime}`
+          id: `${bogotaStartTime}-${bogotaEndTime}`,
+          bogotaTime: bogotaStartTime, // Tiempo original en Bogotá
+          bogotaEndTime: bogotaEndTime // Tiempo final en Bogotá
         })
       }
     }
 
-    // Verificar disponibilidad real consultando el API
+    // Verificar disponibilidad real consultando el API (usando tiempos de Bogotá)
     try {
       const serviceType = serviceDuration === 75 ? 'individual' : 'parejas'
       const dateString = date.toISOString().split('T')[0]
-      const availableFromAPI = await getAvailableSlots(dateString, serviceType)
       
-      // Marcar como no disponibles los slots que están ocupados
+      // Consultar slots bloqueados en la base de datos
+      const response = await fetch(`/api/mongodb/check-blocked-slots`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          date: dateString,
+          serviceType: serviceType
+        })
+      })
+      
+      const { blockedSlots = [] } = await response.json()
+      
+      // Marcar como no disponibles solo los slots que están específicamente bloqueados
       const finalSlots = theoreticalSlots.map(slot => {
-        const isAvailableInAPI = availableFromAPI.some(apiSlot => 
-          apiSlot.startTime === slot.time && apiSlot.endTime === slot.endTime
+        const isBlocked = blockedSlots.some((blockedSlot: any) => 
+          blockedSlot.startTime === slot.bogotaTime && blockedSlot.endTime === slot.bogotaEndTime
         )
         
         return {
           ...slot,
-          available: isAvailableInAPI
+          available: !isBlocked // Disponible si NO está bloqueado
         }
       })
 
       return finalSlots
     } catch (error) {
       console.error('Error obteniendo disponibilidad real:', error)
-      // En caso de error, retornar slots teóricos (fallback)
-      return theoreticalSlots
+      // En caso de error, retornar todos los slots como disponibles (fallback seguro)
+      return theoreticalSlots.map(slot => ({ ...slot, available: true }))
     }
   }
 
@@ -263,11 +350,15 @@ const AppointmentScheduler: React.FC = () => {
 
   const proceedToForm = () => {
     if (selectedDate && selectedTime && selectedService && selectedModalidad) {
+      // Encontrar el slot seleccionado para obtener el tiempo de Bogotá
+      const selectedSlot = availableTimeSlots.find(slot => slot.time === selectedTime)
+      
       setAppointment({
         date: selectedDate,
-        time: selectedTime,
+        time: selectedTime, // Tiempo mostrado al usuario (en su zona horaria)
         service: selectedService,
-        modalidad: selectedModalidad
+        modalidad: selectedModalidad,
+        bogotaTime: selectedSlot?.bogotaTime || selectedTime // Tiempo interno (Bogotá)
       })
       setCurrentStep('form')
     }
@@ -336,7 +427,7 @@ const AppointmentScheduler: React.FC = () => {
         ...formData,
         telefono: formatPhone(formData.telefono),
         fecha: appointment.date.toISOString().split('T')[0],
-        hora: appointment.time,
+        hora: appointment.bogotaTime || appointment.time, // Usar tiempo de Bogotá para el backend
         servicio: appointment.service,
         duracion: services.find(s => s.id === appointment.service)?.duration || '75 min',
         modalidad: appointment.modalidad
@@ -524,23 +615,40 @@ const AppointmentScheduler: React.FC = () => {
                       )}
                     </h4>
                     
-                    {/* Información del día */}
+                    {/* Información del día y zona horaria */}
                     {selectedDate && (
-                      <div className="mb-4 p-3 bg-blue-50 rounded-lg">
-                        <p className="text-sm text-blue-800">
-                          <strong>
-                            {selectedDate.toLocaleDateString('es-CO', { weekday: 'long', day: 'numeric', month: 'long' })}
-                          </strong>
-                          {(() => {
-                            const dayOfWeek = selectedDate.getDay()
-                            const schedule = PSICOLOGA_SCHEDULE[dayOfWeek]
-                            return schedule.available ? (
-                              <span className="ml-2">
-                                • Horarios disponibles: {schedule.startTime} - {schedule.endTime}
+                      <div className="mb-4 space-y-2">
+                        <div className="p-3 bg-blue-50 rounded-lg">
+                          <p className="text-sm text-blue-800">
+                            <strong>
+                              {selectedDate.toLocaleDateString('es-CO', { weekday: 'long', day: 'numeric', month: 'long' })}
+                            </strong>
+                            {(() => {
+                              const dayOfWeek = selectedDate.getDay()
+                              const schedule = PSICOLOGA_SCHEDULE[dayOfWeek]
+                              return schedule.available ? (
+                                <span className="ml-2">
+                                  • Horarios disponibles: {schedule.startTime} - {schedule.endTime} (Colombia)
+                                </span>
+                              ) : null
+                            })()}
+                          </p>
+                        </div>
+                        
+                        {userTimezone && userTimezone !== 'America/Bogota' && (
+                          <div className="p-3 bg-green-50 rounded-lg border border-green-200">
+                            <p className="text-sm text-green-700 flex items-center gap-2">
+                              <FaGlobe className="w-4 h-4" />
+                              <span>
+                                <strong>Los horarios se muestran en tu zona horaria:</strong> {userTimezone.replace('_', ' ')}
+                                <br />
+                                <span className="text-xs opacity-75">
+                                  Al agendar, se convertirán automáticamente al horario de Colombia
+                                </span>
                               </span>
-                            ) : null
-                          })()}
-                        </p>
+                            </p>
+                          </div>
+                        )}
                       </div>
                     )}
 
