@@ -5,7 +5,8 @@ import {
   submitAppointmentWithAvailability, 
   getAvailableSlots,
   isValidEmail, 
-  isValidColombianPhone, 
+  isValidColombianPhone,
+  isValidInternationalPhone, 
   formatPhone, 
   type AppointmentData 
 } from '../lib/api'
@@ -37,11 +38,11 @@ interface DaySchedule {
 // Configuración de la psicóloga - Actualizar según necesidades
 const PSICOLOGA_SCHEDULE: Record<number, DaySchedule> = {
   0: { startTime: '07:30', endTime: '00:00', available: false }, // Domingo - No disponible
-  1: { startTime: '07:30', endTime: '20:00', available: true },  // Lunes
-  2: { startTime: '07:30', endTime: '20:00', available: true },  // Martes  
-  3: { startTime: '07:30', endTime: '12:00', available: true },  // Miércoles
-  4: { startTime: '07:30', endTime: '20:00', available: true },  // Jueves
-  5: { startTime: '07:30', endTime: '20:00', available: true },  // Viernes
+  1: { startTime: '07:30', endTime: '19:30', available: true },  // Lunes
+  2: { startTime: '07:30', endTime: '12:00', available: true },  // Martes  
+  3: { startTime: '07:30', endTime: '19:30', available: true },  // Miércoles
+  4: { startTime: '07:30', endTime: '19:30', available: true },  // Jueves
+  5: { startTime: '07:30', endTime: '19:30', available: true },  // Viernes
   6: { startTime: '07:30', endTime: '12:00', available: true },  // Sábado
 }
 
@@ -173,16 +174,16 @@ const AppointmentScheduler: React.FC = () => {
     // Últimas horas según el tipo de cita y el día de la semana
     let lastAppointmentMinutes: number
     
-    // Para miércoles y sábado que terminan a las 12:00 PM
-    if (dayOfWeek === 3 || dayOfWeek === 6) { // Miércoles o Sábado
+    // Para martes y sábado que terminan a las 12:00 PM
+    if (dayOfWeek === 2 || dayOfWeek === 6) { // Martes o Sábado
       // La última cita debe terminar antes de las 12:00 PM
       lastAppointmentMinutes = timeToMinutes('12:00') - serviceDuration
     } else {
-      // Para días normales, usar las restricciones regulares
+      // Para días normales (Lun, Mié, Jue, Vie), usar las restricciones regulares
       if (serviceDuration === 75) { // Individual
-        lastAppointmentMinutes = timeToMinutes('18:45') // 6:45 PM
-      } else { // Pareja
-        lastAppointmentMinutes = timeToMinutes('18:00') // 6:00 PM  
+        lastAppointmentMinutes = timeToMinutes('18:15') // 6:15 PM
+      } else { // Pareja (120 min)
+        lastAppointmentMinutes = timeToMinutes('17:30') // 5:30 PM  
       }
     }
     
@@ -453,13 +454,27 @@ const AppointmentScheduler: React.FC = () => {
       return
     }
 
-    if (!isValidColombianPhone(formData.telefono)) {
-      setSubmitStatus({
-        type: 'error',
-        message: 'Por favor ingresa un número de teléfono colombiano válido'
-      })
-      setIsLoading(false)
-      return
+    // Validar teléfono según modalidad
+    if (appointment.modalidad === 'presencial') {
+      // Para citas presenciales, validar que sea número colombiano
+      if (!isValidColombianPhone(formData.telefono)) {
+        setSubmitStatus({
+          type: 'error',
+          message: 'Por favor ingresa un número de teléfono colombiano válido (ej: +573XXXXXXXXX)'
+        })
+        setIsLoading(false)
+        return
+      }
+    } else {
+      // Para citas virtuales, aceptar números internacionales
+      if (!isValidInternationalPhone(formData.telefono) && !isValidColombianPhone(formData.telefono)) {
+        setSubmitStatus({
+          type: 'error',
+          message: 'Por favor ingresa un número de teléfono válido con indicador internacional (ej: +34XXXXXXXXX)'
+        })
+        setIsLoading(false)
+        return
+      }
     }
 
     try {
@@ -478,7 +493,10 @@ const AppointmentScheduler: React.FC = () => {
         fechaOriginal: appointment.date,
         fechaEnviada: appointmentData.fecha,
         horaUsuario: appointment.time,
-        horaBogota: appointmentData.hora
+        horaBogota: appointmentData.hora,
+        telefonoOriginal: formData.telefono,
+        telefonoFormateado: appointmentData.telefono,
+        modalidad: appointmentData.modalidad
       })
 
       const result = await submitAppointmentWithAvailability(appointmentData)
@@ -856,10 +874,19 @@ const AppointmentScheduler: React.FC = () => {
                   required
                   value={formData.telefono}
                   onChange={handleFormChange}
-                  placeholder="Ej: 310 698 3385"
+                  placeholder={
+                    appointment?.modalidad === 'presencial' 
+                      ? "Ej: +573106983385" 
+                      : "Ej: +34665388685 (con indicador internacional)"
+                  }
                   className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
                   disabled={isLoading}
                 />
+                {appointment?.modalidad === 'virtual' && (
+                  <p className="text-xs text-neutral-500 mt-1">
+                    📱 Para citas virtuales, incluye el indicador de tu país (ej: +34 para España, +52 para México)
+                  </p>
+                )}
               </div>
 
               <div>

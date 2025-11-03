@@ -3,12 +3,13 @@ import { FaHeart, FaUsers, FaUser, FaCompass, FaHandshake, FaStar, FaArrowRight,
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { generateWhatsAppLink } from '../lib/api'
+import { getText } from '../lib/texts'
 
 const Services: React.FC = () => {
   const mainServices = [
     {
       icon: FaUser,
-      title: "Terapia Individual Adultos",
+      title: getText('services.individual.title', 'Terapia individual adultos'),
       duration: "75 minutos",
       modalidad: "Online Global + Presencial Bogotá",
       problemasQueResuelve: [
@@ -18,7 +19,6 @@ const Services: React.FC = () => {
         "Búsqueda de propósito y sentido de vida",
         "Patrones autodestructivos y condicionamientos infantiles"
       ],
-      descripcion: "Psicoterapia con enfoque integrativo para adultos con amplia experiencia clínica. Proceso profundo de autoconocimiento y desarrollo personal desde metodología que integra Gestalt, sistémico y transpersonal. Trabajo especializado en superar ansiedad, desarrollo de autoestima, manejo emocional y búsqueda de propósito vital.",
       beneficios: [
         "Autoconocimiento profundo y desarrollo de consciencia",
         "Gestión efectiva del estrés y la ansiedad",
@@ -27,11 +27,13 @@ const Services: React.FC = () => {
         "Desarrollo de inteligencia emocional y resiliencia"
       ],
       keywords: "terapia individual adultos, psicoterapia integrativa, enfoque integrativo, autoconocimiento desarrollo personal, superar ansiedad adultos",
-      color: "primary"
+      color: "primary",
+      beneficiosTitle: getText('services.individual.solutions.title', 'Beneficios que obtendrás:'),
+      problemasFooter: getText('services.individual.problems.footer', 'Si has experimentado alguna de estas situaciones, el proceso que construiremos juntos puede ayudarte a encontrar soluciones profundas y duraderas.')
     },
     {
       icon: FaHeart,
-      title: "Terapia de Pareja", 
+      title: getText('services.couple.title', 'Terapia de pareja'), 
       duration: "120 minutos",
       modalidad: "Online Internacional + Presencial Bogotá",
       problemasQueResuelve: [
@@ -41,7 +43,6 @@ const Services: React.FC = () => {
         "Pérdida de conexión emocional y sexual",
         "Decisiones sobre separación o reconstrucción del vínculo"
       ],
-      descripcion: "Terapia de pareja sistémica especializada con enfoque integrativo. Sanación de heridas emocionales, mejora comunicación y fortalecimiento de vínculos amorosos. Atención online internacional para parejas de todo el mundo y presencial en Bogotá.",
       beneficios: [
         "Comunicación asertiva y resolución de conflictos",
         "Sanación de heridas emocionales y reconstrucción de confianza",
@@ -50,7 +51,9 @@ const Services: React.FC = () => {
         "Decisiones conscientes sobre el futuro de la relación"
       ],
       keywords: "terapia de pareja online, terapia matrimonial, problemas comunicación pareja, infidelidad celos",
-      color: "secondary"
+      color: "secondary",
+      beneficiosTitle: getText('services.couple.solutions.title', 'Beneficios que obtendrán:'),
+      problemasFooter: getText('services.couple.problems.footer', 'Si has experimentado alguna de estas situaciones, durante el proceso terapéutico se construirán espacios que facilitarán soluciones y decisiones que mejorarán su calidad de vida')
     }
   ]
 
@@ -66,7 +69,7 @@ const Services: React.FC = () => {
             viewport={{ once: true }}
             className="text-4xl md:text-5xl font-bold text-neutral-900 mb-6"
           >
-            Servicios Especializados <span className="text-gradient">para Adultos</span>
+            <span className="text-primary-600">Servicios especializados</span> <span className="text-gradient">para adultos</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -75,10 +78,7 @@ const Services: React.FC = () => {
             viewport={{ once: true }}
             className="text-xl text-neutral-600 max-w-4xl mx-auto mb-8"
           >
-            <strong>Amplia experiencia</strong> en <strong>terapia individual adultos</strong> y{' '}
-            <strong>terapia de pareja</strong> con enfoque <strong>integrativo que combina sistémico y Gestalt</strong>.{' '}
-            <strong>Atención online internacional en español</strong> y{' '}
-            <strong>sesiones presenciales en consultorio privado Bogotá</strong> para máxima confidencialidad.
+            <strong>Amplia experiencia</strong> en <strong>terapia individual adultos</strong> y <strong>terapia de pareja</strong> con enfoque integrativo que combina sistémico y Gestalt. <strong>Atención online internacional en español</strong> y <strong>sesiones presenciales en consultorio privado Bogotá</strong>.
           </motion.p>
 
           {/* Unique Value Propositions */}
@@ -95,7 +95,7 @@ const Services: React.FC = () => {
               <FaHome className="w-8 h-8 text-secondary-600 flex-shrink-0" />
               <div className="text-left">
                 <div className="font-bold text-secondary-800">Consultorio Privado Bogotá</div>
-                <div className="text-sm text-secondary-600">Ambiente discreto para máxima confidencialidad</div>
+                <div className="text-sm text-secondary-600">{getText('services.office.desc', 'Presencial')}</div>
               </div>
             </div>
           </div>
@@ -142,21 +142,13 @@ const Services: React.FC = () => {
                   </ul>
 
                   <div className="text-sm text-neutral-600 bg-white/50 rounded-lg p-4">
-                    <strong>Si has experimentado alguna de estas situaciones</strong>, mi enfoque especializado puede ayudarte a encontrar soluciones profundas y duraderas.
+                    {service.problemasFooter}
                   </div>
                 </div>
 
                 {/* Solutions Section */}
-                <div className="p-8">
-                  <h4 className="text-lg font-bold text-green-700 mb-4">
-                    Mi enfoque para tu transformación:
-                  </h4>
-                  
-                  <p className="text-neutral-600 leading-relaxed mb-6">
-                    {service.descripcion}
-                  </p>
-                  
-                  <h5 className="font-bold text-neutral-900 mb-4">Beneficios que obtendrás:</h5>
+                <div className="pt-16 pb-8 px-8">
+                  <h4 className="text-lg font-bold text-green-700 mb-6">{service.beneficiosTitle}</h4>
                   <ul className="space-y-3 mb-8">
                     {service.beneficios.map((beneficio, idx) => (
                       <li key={idx} className="flex items-start gap-3">

@@ -4,6 +4,7 @@ import { FaGraduationCap, FaHeart, FaUsers, FaAward, FaBookOpen, FaHandshake, Fa
 import Image from 'next/image'
 import Link from 'next/link'
 import { FaCalendarAlt } from 'react-icons/fa'
+import { getText } from '../lib/texts'
 
 const About: React.FC = () => {
   return (
@@ -17,7 +18,7 @@ const About: React.FC = () => {
             viewport={{ once: true }}
             className="text-4xl md:text-5xl font-bold text-neutral-900 mb-6"
           >
-            <span className="text-gradient">Más de 37 años de experiencia</span> en psicología clínica
+            <span className="text-gradient" dangerouslySetInnerHTML={{ __html: getText('about.title', 'Más de 37 años de experiencia en psicología clínica') }} />
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -26,12 +27,7 @@ const About: React.FC = () => {
             viewport={{ once: true }}
             className="text-xl text-neutral-600 max-w-4xl mx-auto"
           >
-            <strong>La terapia no es solo mi profesión, es mi camino de vida</strong>. Durante décadas he vivido{' '}
-            <strong>en primera persona los procesos de transformación profunda</strong> que ahora facilito a mis consultantes.{' '}
-            Mi práctica se fundamenta en <strong>la empatía real que nace de la experiencia vivida</strong>,{' '}
-            el <strong>respeto profundo por tu historia única</strong> y un{' '}
-            <strong>enfoque integrativo que combina sistémico, gestáltico y transpersonal</strong>{' '}
-            en un acompañamiento que <strong>honra todas las dimensiones de tu ser</strong>.
+            La terapia no es sólo mi profesión, es mi <strong>camino de vida</strong>. Durante décadas he experimentado <strong>procesos de transformación profunda</strong>, que ahora entrego a mis consultantes. Mi práctica inició desde <strong>1985</strong> y se fundamenta en la <strong>empatía</strong> que nace de la experiencia vivida, el <strong>respeto profundo</strong> por tu historia única y un <strong>enfoque sistémico</strong> que aborda una mirada integral desde el contexto familiar y social, logrando un acompañamiento que honra todas las dimensiones de tu ser.
           </motion.p>
         </div>
 
@@ -72,7 +68,7 @@ const About: React.FC = () => {
                   <FaHome className="w-6 h-6 text-secondary-600" />
                   <div>
                     <div className="font-semibold text-neutral-900">Consultorio Privado</div>
-                    <div className="text-sm text-neutral-600">Bogotá + Online Global</div>
+                    <div className="text-sm text-neutral-600">{getText('about.badge.location', 'Bogotá + Online Global')}</div>
                   </div>
                 </div>
               </div>
@@ -88,31 +84,14 @@ const About: React.FC = () => {
             className="space-y-6"
           >
             <h3 className="text-3xl font-bold text-neutral-900 mb-6">
-              <span className="text-primary-600">Sandra Margarita Vargas:</span> Un camino de vida dedicado a la transformación humana
+              <span className="text-primary-600">Sandra Margarita Vargas:</span> {getText('about.subtitle.desc', 'Un camino de vida dedicado a la transformación humana')}
             </h3>
             
-            <p className="text-neutral-600 leading-relaxed">
-              Soy <strong>Sandra Vargas, psicóloga clínica especializada</strong> en el{' '}
-              <strong>acompañamiento terapéutico integral a adultos</strong>. Mi formación comenzó en 1986 en la{' '}
-              <strong>Universidad Santo Tomás</strong>, pero mi verdadero aprendizaje ha sido un{' '}
-              <strong>camino de vida de transformación personal y profesional</strong>.
-            </p>
+            <p className="text-neutral-600 leading-relaxed" dangerouslySetInnerHTML={{ __html: 'Durante décadas he sido <strong>participante activa en procesos terapéuticos profundos</strong>, tanto en Colombia como internacionalmente. Ofrezco <strong>terapia individual y de pareja</strong> para hispanohablantes a <strong>nivel global</strong> y presencial en la ciudad de Bogotá.' }} />
 
-            <p className="text-neutral-600 leading-relaxed">
-              Durante décadas he sido <strong>participante activa en procesos terapéuticos profundos</strong>,{' '}
-              tanto en Colombia como internacionalmente. Esta vivencia personal me ha permitido{' '}
-              <strong>desarrollar un enfoque integrativo auténtico</strong> que combina{' '}
-              <strong>Gestalt, sistémico y transpersonal</strong>.{' '}
-              <strong>No solo estudio estas metodologías integradas, las vivo</strong>.
-            </p>
+            <p className="text-neutral-600 leading-relaxed" dangerouslySetInnerHTML={{ __html: 'Mi trayectoria me ha permitido desarrollar un <strong>enfoque integrativo</strong> que combina <strong>Gestalt, Sistémica y Transpersonal</strong>.' }} />
 
-            <p className="text-neutral-600 leading-relaxed">
-              Mi enfoque se <strong>especializa en adultos</strong> con{' '}
-              <strong>metodología integrativa profunda</strong>. Ofrezco <strong>terapia individual para autoconocimiento y desarrollo personal</strong> y{' '}
-              <strong>terapia de pareja con enfoque integrativo sistémico</strong> para{' '}
-              fortalecimiento de vínculos. <strong>Atiendo online a hispanohablantes de todo el mundo</strong> y{' '}
-              presencialmente en mi <strong>consultorio privado en Bogotá</strong> para máxima confidencialidad.
-            </p>
+            <p className="text-neutral-600 leading-relaxed" dangerouslySetInnerHTML={{ __html: 'Esta intervención ha mostrado <strong>resultados a nivel individual</strong> en el camino del <strong>autoconocimiento</strong>, el <strong>desarrollo personal</strong> y el <strong>fortalecimiento de vínculos familiares y de pareja</strong>.' }} />
 
             <div className="bg-gradient-to-r from-primary-50 to-secondary-50 rounded-xl p-6 mt-8">
               <div className="flex items-start gap-4">
@@ -120,12 +99,8 @@ const About: React.FC = () => {
                   <FaHeart className="w-6 h-6 text-primary-600" />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-neutral-900 mb-2">Mi enfoque integrativo</h4>
-                  <p className="text-neutral-600 text-sm leading-relaxed">
-                    <strong>"Mi práctica integrativa combina lo mejor de cada metodología"</strong>. Mi enfoque se basa en{' '}
-                    <strong>la integración consciente de Gestalt, sistémico y transpersonal</strong> con{' '}
-                    <strong>la empatía real y el respeto profundo por la historia de cada persona</strong>.
-                  </p>
+                  <h4 className="font-semibold text-neutral-900 mb-2">{getText('about.approach.title', 'Un enfoque integrativo')}</h4>
+                  <p className="text-neutral-600 text-sm leading-relaxed" dangerouslySetInnerHTML={{ __html: getText('about.approach.desc', 'Integro herramientas de la terapia Gestalt, el enfoque sistémico y el transpersonal adaptándolas a las necesidades y procesos únicos de cada persona') }} />
                 </div>
               </div>
             </div>
@@ -141,18 +116,13 @@ const About: React.FC = () => {
           className="bg-gradient-to-r from-primary-50 to-secondary-50 rounded-2xl p-8 md:p-12 mb-16"
         >
           <h3 className="text-3xl font-bold text-neutral-900 text-center mb-12">
-            Mi <span className="text-gradient">Enfoque Integrativo</span>: Más que técnicas, una metodología de vida
+            <span className="text-gradient">{getText('about.integrative.title', 'Más que técnicas, una metodología de vida')}</span>
           </h3>
 
           <div className="grid lg:grid-cols-2 gap-12 mb-12">
             <div>
-              <h4 className="text-2xl font-bold text-neutral-900 mb-6">¿Qué significa "integrativo"?</h4>
-              <p className="text-neutral-600 leading-relaxed mb-6">
-                Mi <strong>enfoque integrativo</strong> no significa simplemente usar varias técnicas. Es una{' '}
-                <strong>metodología consciente y coherente</strong> que combina lo mejor de{' '}
-                <strong>Gestalt, sistémico y transpersonal</strong> en un proceso unificado que honra{' '}
-                <strong>todas las dimensiones del ser humano</strong>: cuerpo, mente, emociones, vínculos y espiritualidad.
-              </p>
+              <h4 className="text-2xl font-bold text-neutral-900 mb-6">{getText('about.what.integrative.title', '¿Qué es lo que se integra?')}</h4>
+              <p className="text-neutral-600 leading-relaxed mb-6" dangerouslySetInnerHTML={{ __html: getText('about.what.integrative.desc', 'Lo mejor de cada uno de los siguientes enfoques de la psicología:') }} />
               
               <div className="space-y-4">
                 <div className="flex items-start gap-4">
@@ -161,7 +131,7 @@ const About: React.FC = () => {
                   </div>
                   <div>
                     <h5 className="font-semibold text-neutral-900">Gestalt: El aquí y ahora</h5>
-                    <p className="text-sm text-neutral-600">Consciencia presente, contacto auténtico y responsabilidad personal</p>
+                    <p className="text-sm text-neutral-600">{getText('about.gestalt.desc', 'Consciencia presente, contacto auténtico y responsabilidad personal')}</p>
                   </div>
                 </div>
                 
@@ -170,7 +140,7 @@ const About: React.FC = () => {
                     <FaUsers className="w-4 h-4 text-secondary-600" />
                   </div>
                   <div>
-                    <h5 className="font-semibold text-neutral-900">Sistémico: Los vínculos que nos forman</h5>
+                    <h5 className="font-semibold text-neutral-900">{getText('about.systemic.title', 'Sistémica: Los vínculos que nos forman')}</h5>
                     <p className="text-sm text-neutral-600">Patrones familiares, relaciones y dinámicas transgeneracionales</p>
                   </div>
                 </div>
@@ -187,31 +157,9 @@ const About: React.FC = () => {
               </div>
             </div>
 
-            <div>
-              <h4 className="text-2xl font-bold text-neutral-900 mb-6">¿Cómo lo aplico en mi práctica?</h4>
-              <p className="text-neutral-600 leading-relaxed mb-6">
-                En cada sesión, <strong>integramos conscientemente</strong> estos enfoques según lo que necesites en ese momento.{' '}
-                No es ecléctico ni improvisado: es una <strong>metodología coherente</strong> desarrollada a lo largo de{' '}
-                <strong>años de experiencia y formación continua</strong>.
-              </p>
-
-              <div className="bg-white rounded-xl p-6 shadow-lg border border-neutral-100">
-                <h5 className="font-bold text-neutral-900 mb-4">Ejemplo práctico en terapia individual:</h5>
-                <div className="space-y-3 text-sm">
-                  <div className="flex items-start gap-3">
-                    <div className="w-6 h-6 bg-primary-100 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold text-primary-600">1</div>
-                    <p className="text-neutral-600"><strong>Gestalt:</strong> "¿Qué sientes ahora mismo en tu cuerpo mientras hablas de esto?"</p>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <div className="w-6 h-6 bg-secondary-100 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold text-secondary-600">2</div>
-                    <p className="text-neutral-600"><strong>Sistémico:</strong> "¿Cómo aprendiste este patrón en tu familia de origen?"</p>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <div className="w-6 h-6 bg-primary-100 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold text-primary-600">3</div>
-                    <p className="text-neutral-600"><strong>Transpersonal:</strong> "¿Qué quiere emerger en ti a través de esta experiencia?"</p>
-                  </div>
-                </div>
-              </div>
+            <div className="pt-8 md:pt-12">
+              <h4 className="text-2xl font-bold text-neutral-900 mb-6">{getText('about.how.apply.title', '¿Cómo lo aplico en mi práctica?')}</h4>
+              <p className="text-neutral-600 leading-relaxed mb-6" dangerouslySetInnerHTML={{ __html: getText('about.how.apply.desc', 'En cada sesión, integramos conscientemente estos enfoques según lo que necesites en ese momento. No es ecléctico ni improvisado: es una metodología coherente desarrollada a lo largo de años de experiencia y formación continua.') }} />
             </div>
           </div>
 
@@ -219,8 +167,7 @@ const About: React.FC = () => {
             <div className="bg-gradient-to-r from-primary-600 to-secondary-600 text-white rounded-xl p-6 max-w-4xl mx-auto">
               <h4 className="text-xl font-bold mb-3">El resultado: Transformación integral y duradera</h4>
               <p className="opacity-90">
-                <strong>No solo alivio de síntomas, sino evolución consciente</strong>. Mi enfoque integrativo te acompaña{' '}
-                no solo a resolver problemas, sino a <strong>despertar tu potencial completo</strong> como ser humano integral.
+                {getText('about.result.desc', 'No es sólo alivio de síntomas, es una evolución consciente; el despertar de tu potencial como ser humano integral')}
               </p>
             </div>
           </div>
@@ -240,6 +187,13 @@ const About: React.FC = () => {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
+              {
+                icon: FaGraduationCap,
+                title: "Psicóloga - Universidad Santo Tomás",
+                description: "Formación profesional en Psicología con énfasis en psicología clínica y educativa",
+                highlight: "Psicóloga profesional",
+                year: "1986 - Grado profesional"
+              },
               {
                 icon: FaUserGraduate,
                 title: "Programa SAT - Claudio Naranjo",
@@ -274,13 +228,6 @@ const About: React.FC = () => {
                 description: "Enfoque integral que incluye las dimensiones espirituales y transpersonales del desarrollo humano",
                 highlight: "Psicología transpersonal",
                 year: "2003 - Formación"
-              },
-              {
-                icon: FaLightbulb,
-                title: "Enfoque Integrativo Holístico",
-                description: "Metodología integrativa que combina Gestalt, sistémico y transpersonal para adultos y parejas",
-                highlight: "Enfoque integrativo",
-                year: "Especialización continua"
               }
             ].map((training, index) => (
               <motion.div
@@ -341,7 +288,7 @@ const About: React.FC = () => {
               Agenda tu Primera Sesión Transformadora
             </Link>
             <div className="text-white/80 text-sm mt-4">
-              Online internacional • Presencial en Bogotá • Confidencialidad absoluta
+              {getText('about.cta.footer', 'Online internacional • Presencial en Bogotá •')}
             </div>
           </div>
         </motion.div>

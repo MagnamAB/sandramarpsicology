@@ -9,6 +9,7 @@ import { FaHeart, FaUsers, FaComments, FaHandshake, FaCalendarAlt, FaWhatsapp, F
 import Image from 'next/image'
 import Link from 'next/link'
 import { generateWhatsAppLink } from '../lib/api'
+import { getText } from '../lib/texts'
 
 const TerapiaDePareja: React.FC = () => {
   const seoConfig = {
@@ -88,12 +89,12 @@ const TerapiaDePareja: React.FC = () => {
     {
       paso: "3",
       titulo: "Comunicación y Vínculo",
-      descripcion: "Trabajamos activamente en mejorar la comunicación, resolver conflictos específicos y fortalecer la conexión emocional entre ambos."
+      descripcion: getText('terapiaPareja.process.2.description', "Trabajamos de forma activa en mejorar la comunicación, resolver conflictos específicos y fortalecer la conexión emocional entre ambos.")
     },
     {
       paso: "4",
       titulo: "Consolidación",
-      descripcion: "Integramos los aprendizajes, desarrollan herramientas para el mantenimiento de la relación y planifican su futuro juntos."
+      descripcion: getText('terapiaPareja.process.3.description', "Integramos los aprendizajes, se desarrollan herramientas para el mantenimiento de la relación y planifican su futuro juntos.")
     }
   ]
 
@@ -144,19 +145,20 @@ const TerapiaDePareja: React.FC = () => {
                 </div>
                 
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-neutral-900 leading-tight mb-6">
-                  <span className="block">Terapia de Pareja</span>
-                  <span className="text-gradient block">Enfoque Integrativo Holístico</span>
+                  <span className="block">Terapia</span>
+                  <span className="text-gradient block">de Parejas</span>
                   <span className="text-lg md:text-xl font-medium text-neutral-600 block mt-4">
                     Online Internacional • Consultorio Privado Bogotá
                   </span>
                 </h1>
                 
                 <p className="text-xl text-neutral-600 mb-8 leading-relaxed">
-                  <strong>Supera problemas de comunicación, infidelidad y celos</strong> con{' '}
-                  <strong>terapia de pareja que integra Gestalt, sistémico y transpersonal</strong>.{' '}
-                  <strong>Metodología integral especializada</strong> ayudando parejas a sanar heridas emocionales y{' '}
-                  fortalecer vínculos amorosos. <strong>Atención online en español</strong> para parejas{' '}
-                  de todo el mundo y <strong>consultorio privado en Bogotá</strong>.
+                  Superar dificultades que obstaculizan un relacionamiento armónico con{' '}
+                  <strong>terapia de pareja que integra Gestalt, Sistémica y Transpersonal</strong>. Esta{' '}
+                  <strong>metodología especializada en apoyar parejas</strong> a sanar heridas emocionales, fortalecer vínculos amorosos y encontrar{' '}
+                  <strong>herramientas de comunicación</strong> que fortalezcan el transitar las diferentes situaciones por las que atraviesa una relación.{' '}
+                  <strong>Atención online en español</strong> para parejas de todo el mundo y{' '}
+                  <strong>consultorio privado en Bogotá</strong>.
                 </p>
                 
                 <div className="flex flex-col sm:flex-row gap-4 mb-8">
@@ -192,7 +194,7 @@ const TerapiaDePareja: React.FC = () => {
                     <FaHome className="w-5 h-5 text-secondary-600" />
                     <div>
                       <div className="font-semibold text-secondary-800 text-sm">Consultorio Privado</div>
-                      <div className="text-xs text-secondary-600">Bogotá - Confidencial</div>
+                      <div className="text-xs text-secondary-600">{getText('terapiaPareja.office.desc', 'Bogotá')}</div>
                     </div>
                   </div>
                 </div>
@@ -267,7 +269,7 @@ const TerapiaDePareja: React.FC = () => {
                   </p>
                   
                   <div className="bg-green-50 border-l-4 border-green-500 p-4 rounded">
-                    <h4 className="font-semibold text-green-800 mb-2">Mi enfoque para ayudarlos:</h4>
+                    <h4 className="font-semibold text-green-800 mb-2">{getText(`terapiaPareja.problem.${index}.solution.title`, 'Mi enfoque para apoyarlos:')}</h4>
                     <p className="text-green-700 text-sm leading-relaxed">
                       {problema.solucion}
                     </p>
@@ -286,8 +288,7 @@ const TerapiaDePareja: React.FC = () => {
                 Beneficios del <span className="text-gradient">Trabajo Integrativo</span>
               </h2>
               <p className="text-xl text-neutral-600 max-w-3xl mx-auto">
-                Con mi <strong>metodología que integra Gestalt, sistémico y transpersonal</strong>, estos son los{' '}
-                <strong>resultados concretos</strong> que pueden esperar como pareja:
+                Con mi <strong>metodología</strong>, estos son los <strong>resultados concretos</strong> que pueden esperar como pareja:
               </p>
             </div>
 

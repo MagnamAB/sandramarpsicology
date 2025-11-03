@@ -9,6 +9,7 @@ import { FaUser, FaHeart, FaBrain, FaLightbulb, FaCalendarAlt, FaWhatsapp, FaChe
 import Image from 'next/image'
 import Link from 'next/link'
 import { generateWhatsAppLink } from '../lib/api'
+import { getText } from '../lib/texts'
 
 const TerapiaIndividualAdultos: React.FC = () => {
   const seoConfig = {
@@ -145,9 +146,9 @@ const TerapiaIndividualAdultos: React.FC = () => {
                 
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-neutral-900 leading-tight mb-6">
                   <span className="block">Terapia Individual</span>
-                  <span className="text-gradient block">para Adultos</span>
+                  <span className="text-gradient block">{getText('terapiaIndividual.title.2', 'para Adultos')}</span>
                   <span className="text-lg md:text-xl font-medium text-neutral-600 block mt-4">
-                    Enfoque Integrativo Holístico • Online Global • Presencial Bogotá
+                    {getText('terapiaIndividual.subtitle', 'Enfoque Integrativo • Online Global • Presencial Bogotá')}
                   </span>
                 </h1>
                 
@@ -192,7 +193,7 @@ const TerapiaIndividualAdultos: React.FC = () => {
                     <FaHome className="w-5 h-5 text-secondary-600" />
                     <div>
                       <div className="font-semibold text-secondary-800 text-sm">Consultorio Privado</div>
-                      <div className="text-xs text-secondary-600">Máxima confidencialidad</div>
+                      <div className="text-xs text-secondary-600">{getText('terapiaIndividual.office.desc', 'Ambiente cómodo y privado')}</div>
                     </div>
                   </div>
                 </div>
@@ -219,9 +220,9 @@ const TerapiaIndividualAdultos: React.FC = () => {
                   
                   <div className="absolute -bottom-4 -right-4 bg-gradient-to-br from-primary-600 to-primary-700 text-white rounded-xl shadow-lg p-4">
                     <div className="text-center">
-                      <div className="text-2xl font-bold">37+</div>
-                      <div className="text-xs opacity-90">Años</div>
-                      <div className="text-xs opacity-75">Experiencia</div>
+                      <div className="text-2xl font-bold">{getText('terapiaIndividual.badge.years', '19')}</div>
+                      <div className="text-xs opacity-90">{getText('terapiaIndividual.badge.years.label', 'Años')}</div>
+                      <div className="text-xs opacity-75">{getText('terapiaIndividual.badge.years.sublabel', 'en adelante')}</div>
                     </div>
                   </div>
                 </div>
@@ -267,7 +268,7 @@ const TerapiaIndividualAdultos: React.FC = () => {
                   </p>
                   
                   <div className="bg-green-50 border-l-4 border-green-500 p-4 rounded">
-                    <h4 className="font-semibold text-green-800 mb-2">Mi enfoque para ayudarte:</h4>
+                    <h4 className="font-semibold text-green-800 mb-2">{getText(`terapiaIndividual.problem.${index}.solution.title`, 'Mi enfoque para apoyarte:')}</h4>
                     <p className="text-green-700 text-sm leading-relaxed">
                       {problema.solucion}
                     </p>
@@ -283,11 +284,10 @@ const TerapiaIndividualAdultos: React.FC = () => {
           <div className="container-responsive">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold text-neutral-900 mb-6">
-                Beneficios del <span className="text-gradient">Proceso Integrativo</span>
+                {getText('terapiaIndividual.benefits.title', 'Beneficios del')} <span className="text-gradient">Proceso Integrativo</span>
               </h2>
               <p className="text-xl text-neutral-600 max-w-3xl mx-auto">
-                Con mi <strong>metodología que integra Gestalt, sistémico y transpersonal</strong>, estos son los{' '}
-                <strong>resultados concretos</strong> que puedes esperar de nuestro proceso terapéutico:
+                Con mi <strong>metodología</strong>, estos son los <strong>resultados concretos</strong> que puedes esperar de nuestro proceso terapéutico:
               </p>
             </div>
 
@@ -320,8 +320,8 @@ const TerapiaIndividualAdultos: React.FC = () => {
               </h2>
               <p className="text-xl text-neutral-600 max-w-3xl mx-auto">
                 Mi <strong>trabajo integrativo</strong> combina{' '}
-                <strong>Gestalt, sistémico y transpersonal</strong>{' '}
-                de manera personalizada según tus necesidades específicas.
+                <strong>técnicas y herramientas</strong>{' '}
+                de manera personalizada según tus <strong>necesidades específicas</strong>.
               </p>
             </div>
 
@@ -361,8 +361,8 @@ const TerapiaIndividualAdultos: React.FC = () => {
               Inicia tu Proceso de Transformación Personal
             </h2>
             <p className="text-xl opacity-90 mb-8 max-w-3xl mx-auto">
-              Con mi <strong>metodología integrativa</strong> que combina Gestalt, sistémico y transpersonal, te acompaño en tu{' '}
-              camino hacia el <strong>autoconocimiento, bienestar emocional y crecimiento personal</strong>.
+              Con mi <strong>metodología</strong>, te acompaño en tu camino hacia el{' '}
+              <strong>autoconocimiento, bienestar emocional y crecimiento personal</strong>.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">

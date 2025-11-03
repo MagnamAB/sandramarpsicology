@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { FaCalendarAlt, FaBuilding, FaGraduationCap, FaUsers, FaGlobe, FaChevronDown, FaChevronUp, FaAward, FaBriefcase, FaLightbulb, FaHeart } from 'react-icons/fa'
+import { getText } from '../lib/texts'
 
 const Experience: React.FC = () => {
   const [expandedCard, setExpandedCard] = useState<number | null>(null)
@@ -12,17 +13,17 @@ const Experience: React.FC = () => {
       description: "Transformando vidas profesionalmente"
     },
     {
-      number: "+25",
+      number: getText('experience.stats.countries.number', '+25'),
       label: "Países Atendidos",
       description: "Terapia online internacional"
     },
     {
-      number: "+15",
+      number: getText('experience.stats.facilitating.number', '+30'),
       label: "Años Facilitando",
-      description: "Talleres propios desde 2009"
+      description: getText('experience.stats.facilitating.description', 'Talleres propios desde 2000')
     },
     {
-      number: "+10",
+      number: getText('experience.stats.institutions.number', '+10'),
       label: "Instituciones",
       description: "Empresas y organizaciones atendidas"
     }
@@ -34,11 +35,11 @@ const Experience: React.FC = () => {
       title: "Facilitadora Internacional",
       period: "2003 - Actual",
       organization: "Academia CreSiendo Omnilife",
-      description: "Desarrollo personal con mujeres y hombres en empresa multinacional México-Colombia",
+      description: getText('experience.highlight.facilitator.description', 'Desarrollo personal con mujeres y hombres en empresa multinacional México y América'),
       achievements: [
-        "Programas de desarrollo personal multinacionales",
-        "Facilitación en México y Colombia",
-        "Más de 15 años de experiencia internacional"
+        getText('experience.highlight.facilitator.achievement.1', 'Programas de desarrollo personal y liderazgo'),
+        getText('experience.highlight.facilitator.achievement.2', 'Facilitación en México, Colombia, Estados Unidos, Lationamérica'),
+        getText('experience.highlight.facilitator.achievement.3', 'Más de 20 años de experiencia internacional')
       ]
     },
     {
@@ -81,13 +82,13 @@ const Experience: React.FC = () => {
 
   const timeline = [
     {
-      year: "2017 - Actual",
-      title: "Facilitadora Internacional Omnilife",
-      description: "Retorno a Academia CreSiendo para programas de desarrollo personal multinacionales"
+      year: getText('experience.timeline.2017.year', '1998 - Actual'),
+      title: getText('experience.timeline.2017.title', 'Terapeuta integrativa'),
+      description: getText('experience.timeline.2017.description', '27 años de practica terapéutica en consultorio privado')
     },
     {
       year: "2012 - 2013",
-      title: "Gestora Programa Liderazgo Ardyss",
+      title: getText('experience.timeline.2012.title', 'Gestora Programa Liderazgo Ardyss'),
       description: "Desarrollo y diseño de Escuelas de Liderazgo y Negocios con manuales propios"
     },
     {
@@ -96,9 +97,9 @@ const Experience: React.FC = () => {
       description: "Inicio de talleres propios y docencia en instituciones especializadas"
     },
     {
-      year: "2003 - 2012",
+      year: getText('experience.timeline.2003.year', '2017 - Actual y 2003 - 2012'),
       title: "Facilitadora Internacional Omnilife",
-      description: "Primera etapa como facilitadora en empresa multinacional México-Colombia"
+      description: getText('experience.timeline.2003.description', 'Conducción de seminarios y talleres internacionales para el desarrollo personal y de liderazgo en diferentes países de América')
     },
     {
       year: "1997 - 2002",
@@ -117,7 +118,7 @@ const Experience: React.FC = () => {
     },
     {
       year: "1990 - 1996",
-      title: "Psicóloga Clínica y Educativa",
+      title: getText('experience.timeline.1990.title', 'Psicóloga Clínica y Educativa'),
       description: "Inicio profesional en colegios y empresas de Bogotá"
     }
   ]
@@ -163,9 +164,9 @@ const Experience: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-5xl font-bold text-neutral-900 mb-6"
+            className="text-4xl md:text-5xl font-bold mb-6"
           >
-            Más de <span className="text-gradient">37 Años de Experiencia Profesional</span>
+            <span className="text-primary-600">Más de 37 Años de Experiencia</span> <span className="text-gradient">Profesional</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -174,10 +175,7 @@ const Experience: React.FC = () => {
             viewport={{ once: true }}
             className="text-xl text-neutral-600 max-w-4xl mx-auto"
           >
-            Una trayectoria excepcional en <strong>psicología clínica</strong>, <strong>desarrollo empresarial</strong>,{' '}
-            <strong>facilitación internacional</strong> y <strong>programas de transformación humana</strong>.{' '}
-            Desde <strong>Naciones Unidas</strong> hasta <strong>empresas multinacionales</strong>,{' '}
-            creando programas propios y transformando vidas en <strong>Colombia</strong>, <strong>España</strong> y <strong>México</strong>.
+            Una trayectoria excepcional en <strong>psicología clínica, desarrollo empresarial, facilitación internacional</strong> y programas de <strong>transformación humana</strong>. Desde <strong>Naciones Unidas</strong> hasta empresas multinacionales, <strong>creando programas propios</strong> y transformando vidas en <strong>Colombia, España, México</strong> y más países de Latinoamérica.
           </motion.p>
         </div>
 
@@ -206,8 +204,8 @@ const Experience: React.FC = () => {
           viewport={{ once: true }}
           className="mb-20"
         >
-          <h3 className="text-3xl font-bold text-neutral-900 text-center mb-12">
-            Logros y <span className="text-gradient">Experiencias Destacadas</span>
+          <h3 className="text-3xl font-bold text-center mb-12">
+            <span className="text-primary-600">Logros y experiencias</span> <span className="text-gradient">destacadas</span>
           </h3>
           
           <div className="grid lg:grid-cols-2 gap-8">
@@ -263,8 +261,8 @@ const Experience: React.FC = () => {
           viewport={{ once: true }}
           className="mb-20"
         >
-          <h3 className="text-3xl font-bold text-neutral-900 text-center mb-12">
-            Timeline de <span className="text-gradient">Carrera Profesional</span>
+          <h3 className="text-3xl font-bold text-center mb-12">
+            <span className="text-primary-600">Trayectoria</span> <span className="text-gradient">profesional</span>
           </h3>
 
           <div className="relative">
@@ -310,8 +308,8 @@ const Experience: React.FC = () => {
           viewport={{ once: true }}
           className="bg-gradient-to-r from-primary-50 to-secondary-50 rounded-2xl p-8 md:p-12"
         >
-          <h3 className="text-3xl font-bold text-neutral-900 text-center mb-12">
-            Instituciones y <span className="text-gradient">Organizaciones Principales</span>
+          <h3 className="text-3xl font-bold text-center mb-12">
+            <span className="text-primary-600">Instituciones y Organizaciones</span> <span className="text-gradient">Principales</span>
           </h3>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">

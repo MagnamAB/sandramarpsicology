@@ -91,7 +91,7 @@ const FAQ: React.FC = () => {
         },
         {
           question: "¿Cuáles son los horarios de atención?",
-          answer: "Los horarios son: Lunes, Martes, Jueves y Viernes de 7:30 AM a 8:00 PM; Miércoles y Sábados de 7:30 AM a 12:00 PM. La última cita de pareja puede iniciar a las 6:00 PM (120 min) y la individual a las 6:45 PM (75 min). Para consultantes internacionales se adaptan horarios según zona horaria. Se recomienda agendar con anticipación.",
+          answer: "Los horarios son: Lunes, Miércoles, Jueves y Viernes de 7:30 AM a 7:30 PM; Martes y Sábados de 7:30 AM a 12:00 PM. La última cita de pareja puede iniciar a las 5:30 PM (120 min) y la individual a las 6:15 PM (75 min). Para consultantes internacionales se adaptan horarios según zona horaria. Se recomienda agendar con anticipación.",
           keywords: "horarios psicóloga Bogotá, disponibilidad citas psicología"
         },
         {

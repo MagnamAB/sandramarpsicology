@@ -1,9 +1,10 @@
 import React from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { FaPlay, FaCalendarAlt, FaWhatsapp, FaHeart, FaUsers, FaAward, FaCertificate, FaUserGraduate, FaMapMarkerAlt, FaChevronDown, FaStar, FaGlobe } from 'react-icons/fa'
+import { FaPlay, FaCalendarAlt, FaWhatsapp, FaHeart, FaUsers, FaAward, FaCertificate, FaUserGraduate, FaMapMarkerAlt, FaChevronDown, FaStar, FaGlobe, FaBrain } from 'react-icons/fa'
 import Image from 'next/image'
 import { generateWhatsAppLink } from '../lib/api'
+import { getText } from '../lib/texts'
 
 const Hero: React.FC = () => {
   return (
@@ -33,7 +34,7 @@ const Hero: React.FC = () => {
               className="inline-flex items-center gap-2 bg-gradient-to-r from-primary-100 to-secondary-100 text-primary-700 px-4 py-2 rounded-full text-sm font-bold mb-6 shadow-lg"
             >
               <FaCertificate className="w-4 h-4" />
-              Psicóloga Clínica Especializada
+              {getText('hero.badge', 'Psicóloga Clínica Especializada')}
             </motion.div>
 
             <motion.h1 
@@ -42,9 +43,9 @@ const Hero: React.FC = () => {
               transition={{ duration: 0.8, delay: 0.3 }}
               className="text-4xl md:text-5xl lg:text-6xl font-bold text-neutral-900 leading-tight mb-8 py-2"
             >
-              <span className="block pb-1">Sandra M. Vargas</span>
-              <span className="text-gradient block mt-2 pb-2">Psicóloga Clínica en Bogotá</span>
-              <span className="text-lg md:text-xl font-medium text-neutral-600 block mt-4">Enfoque Integrativo • Online Global + Presencial Bogotá</span>
+              <span className="block pb-1">{getText('hero.title', 'Sandra Margarita Vargas')}</span>
+              <span className="text-gradient block mt-2 pb-2">{getText('hero.subtitle', 'Psicóloga Clínica en Bogotá')}</span>
+              <span className="text-lg md:text-xl font-medium text-neutral-600 block mt-4">{getText('hero.subtitle2', 'Enfoque Integrativo • Online Global + Presencial Bogotá')}</span>
             </motion.h1>
 
             <motion.p
@@ -53,12 +54,7 @@ const Hero: React.FC = () => {
               transition={{ duration: 0.6, delay: 0.5 }}
               className="text-xl md:text-2xl text-neutral-600 mb-8 leading-relaxed"
             >
-              <strong>Psicóloga clínica especializada en adultos</strong> con{' '}
-              <strong>enfoque integrativo holístico</strong> que combina{' '}
-              <strong>Gestalt, sistémico y transpersonal</strong>.{' '}
-              <strong>Transformando vidas a través de un proceso personal profundo</strong> con{' '}
-              <strong>atención online global en español</strong> y presencial en{' '}
-              <strong>consultorio privado en Bogotá</strong>.
+              <strong>Psicóloga clínica</strong> que aplica un <strong>enfoque integrativo</strong> considerando a sus consultantes desde todos los aspectos: a nivel físico, emocional, mental, espiritual y social ofreciendo un <strong>abordaje profundo y transformador</strong>. Ofrece <strong>atención online global, en Español</strong> y <strong>presencial en consultorio privado en Bogotá</strong>.
             </motion.p>
 
             <motion.div
@@ -71,7 +67,7 @@ const Hero: React.FC = () => {
                 href="#agendar-cita"
                 className="btn-primary text-lg px-8 py-4 inline-flex items-center justify-center group"
               >
-                Agendar Cita Online o Presencial
+                {getText('hero.cta.primary', 'Agendar Cita Online o Presencial')}
                 <FaCalendarAlt className="ml-2 w-5 h-5 group-hover:scale-110 transition-transform" />
               </Link>
               
@@ -82,7 +78,7 @@ const Hero: React.FC = () => {
                 className="btn-secondary text-lg px-8 py-4 inline-flex items-center justify-center group"
               >
                 <FaWhatsapp className="mr-2 w-5 h-5 text-green-500 group-hover:scale-110 transition-transform" />
-                Consulta WhatsApp
+                {getText('hero.cta.secondary', 'Consulta WhatsApp')}
               </a>
             </motion.div>
 
@@ -124,7 +120,7 @@ const Hero: React.FC = () => {
                   <FaMapMarkerAlt className="w-5 h-5 text-secondary-600" />
                   <div className="text-left">
                     <div className="font-semibold text-secondary-800 text-sm">Consultorio Privado Bogotá</div>
-                    <div className="text-xs text-secondary-600">Máxima confidencialidad</div>
+                    <div className="text-xs text-secondary-600">Ambiente privado</div>
                   </div>
                 </div>
               </div>
@@ -172,8 +168,8 @@ const Hero: React.FC = () => {
                 {/* Specialization badge */}
                 <div className="absolute -top-4 -left-4 bg-white rounded-xl shadow-lg p-3 border border-neutral-100">
                   <div className="flex items-center gap-2">
-                    <FaUserGraduate className="w-4 h-4 text-secondary-600" />
-                    <span className="text-sm font-medium text-neutral-700">Enfoque Integrativo Holístico</span>
+                    <FaBrain className="w-4 h-4 text-green-600" />
+                    <span className="text-sm font-medium text-neutral-700">{getText('hero.badge.integrative.title', 'Enfoque Integrativo')}</span>
                   </div>
                 </div>
 
@@ -181,7 +177,7 @@ const Hero: React.FC = () => {
                 <div className="absolute top-16 -left-6 bg-gradient-to-r from-secondary-500 to-secondary-600 text-white rounded-xl shadow-lg p-3">
                   <div className="flex items-center gap-2">
                     <FaHeart className="w-4 h-4" />
-                    <span className="text-sm font-medium">Especializada en Adultos</span>
+                    <span className="text-sm font-medium">{getText('hero.badge.specialized.title', 'Atiende adultos desde los 19 años')}</span>
                   </div>
                 </div>
               </div>

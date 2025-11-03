@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { FaPhone, FaMapMarkerAlt, FaClock, FaWhatsapp, FaEnvelope, FaCalendarAlt } from 'react-icons/fa'
 import AppointmentScheduler from './AppointmentScheduler'
 import { generateWhatsAppLink } from '../lib/api'
+import { getText } from '../lib/texts'
 
 const Contact: React.FC = () => {
   return (
@@ -15,9 +16,9 @@ const Contact: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="text-4xl lg:text-5xl font-bold text-neutral-900 mb-6"
+            className="text-4xl lg:text-5xl font-bold mb-6"
           >
-            Agendar Cita <span className="text-gradient">Psicóloga Bogotá</span>
+            <span className="text-primary-600">Agendar Cita</span> <span className="text-gradient">Psicóloga Bogotá</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -83,15 +84,15 @@ const Contact: React.FC = () => {
             <div className="w-16 h-16 bg-accent-100 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-accent-200 transition-colors">
               <FaClock className="text-accent-600 text-xl" />
             </div>
-            <h3 className="font-semibold text-neutral-900 mb-3">Horarios de Atención</h3>
+            <h3 className="font-semibold text-neutral-900 mb-3">Horario de Atención</h3>
             <div className="space-y-2">
-              <p className="text-neutral-600 text-sm font-medium">Lun, Mar, Jue, Vie: 7:30 AM - 8:00 PM</p>
-              <p className="text-neutral-600 text-sm font-medium">Mié, Sáb: 7:30 AM - 12:00 PM</p>
+              <p className="text-neutral-600 text-sm font-medium">Lun, Mié, Jue, Vie: 7:30 AM - 7:30 PM</p>
+              <p className="text-neutral-600 text-sm font-medium">Mar, Sáb: 7:30 AM - 12:00 PM</p>
               <p className="text-neutral-600 text-sm">
                 <strong>Horarios de citas:</strong><br />
-                • Individual (75 min): Última cita 6:45 PM<br />
-                • Pareja (120 min): Última cita 6:00 PM<br />
-                • Mié/Sáb: Citas deben terminar antes 12:00 PM
+                • Individual (75 min): Última cita 6:15 PM<br />
+                • Pareja (120 min): Última cita 5:30 PM<br />
+                • Mar/Sáb: Citas deben terminar antes 12:00 PM
               </p>
               <p className="text-neutral-600 text-sm">
                 <strong>Consultas internacionales:</strong> Horarios flexibles
@@ -117,7 +118,7 @@ const Contact: React.FC = () => {
               <li>• <strong>Terapia individual adultos en consultorio</strong></li>
               <li>• <strong>Terapia de pareja presencial en Bogotá</strong></li>
               <li>• Ubicado en Santa Bárbara, zona norte de Bogotá</li>
-              <li>• Ambiente cómodo y privado para máxima confidencialidad</li>
+              <li>• Ambiente cómodo y privado</li>
               <li>• Parqueadero privado disponible</li>
             </ul>
           </div>

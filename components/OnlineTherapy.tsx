@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { FaGlobe, FaVideo, FaClock, FaShieldAlt, FaCreditCard, FaComments, FaCalendarAlt, FaWhatsapp, FaCheck, FaUser, FaHeart, FaUsers, FaLightbulb, FaPlay } from 'react-icons/fa'
 import Link from 'next/link'
 import { generateWhatsAppLink } from '../lib/api'
+import { getText } from '../lib/texts'
 
 const OnlineTherapy: React.FC = () => {
   const advantages = [
@@ -29,7 +30,7 @@ const OnlineTherapy: React.FC = () => {
     {
       icon: FaCreditCard,
       title: "Pagos Internacionales",
-      description: "Métodos de pago adaptados a diferentes países: transferencias, PayPal, Wise, y otros sistemas internacionales."
+      description: "Métodos de pago adaptados a diferentes países: transferencias, Western Union, y otros sistemas internacionales."
     },
     {
       icon: FaComments,
@@ -45,8 +46,8 @@ const OnlineTherapy: React.FC = () => {
       service: "Terapia Individual Online"
     },
     {
-      name: "Carlos y Ana - México",
-      text: "Como pareja mexicana viviendo en EE.UU., encontrar terapia en español de calidad era difícil. Sandra nos ayudó a sanar nuestra relación.",
+      name: "Carlos y Ana - Colombia",
+      text: getText('online.testimonial.mexico.text', 'Como pareja colombiana viviendo en EE.UU., encontrar terapia en español de calidad era difícil. Sandra nos ayudó a encontrar herramientas para manejar diferentes soluciones.'),
       service: "Terapia de Pareja Online"
     },
     {
@@ -66,9 +67,9 @@ const OnlineTherapy: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-5xl font-bold text-neutral-900 mb-6"
+            className="text-4xl md:text-5xl font-bold mb-6"
           >
-            <span className="text-gradient">Terapia Online Global</span> en Español
+            <span className="text-primary-600">Terapia Online Global</span> <span className="text-gradient">en Español</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -77,10 +78,7 @@ const OnlineTherapy: React.FC = () => {
             viewport={{ once: true }}
             className="text-xl text-neutral-600 max-w-4xl mx-auto"
           >
-            <strong>Tu transformación personal no tiene fronteras</strong>. Accede a terapia especializada{' '}
-            <strong>desde cualquier país del mundo</strong>, con la comodidad de tu hogar y{' '}
-            <strong>horarios adaptados a tu zona horaria</strong>. La misma calidad y profundidad{' '}
-            del consultorio presencial, ahora <strong>disponible globalmente para hispanohablantes</strong>.
+            Tu <strong>transformación personal</strong> no tiene fronteras. Accede a <strong>terapia especializada</strong> desde cualquier país del mundo, en la comodidad de tu hogar y <strong>horarios adaptados a tu zona horaria</strong>. La misma <strong>calidad y profundidad del consultorio presencial</strong>, ahora disponible de manera global para hispanohablantes.
           </motion.p>
         </div>
 
@@ -92,8 +90,8 @@ const OnlineTherapy: React.FC = () => {
           viewport={{ once: true }}
           className="bg-gradient-to-r from-primary-50 to-secondary-50 rounded-2xl p-8 md:p-12 mb-20"
         >
-          <h2 className="text-3xl font-bold text-neutral-900 text-center mb-12">
-            Ventajas de la <span className="text-gradient">Terapia Psicológica Online</span>
+          <h2 className="text-3xl font-bold text-center mb-12">
+            <span className="text-primary-600">Ventajas de la Terapia</span> <span className="text-gradient">Psicológica Online</span>
           </h2>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -128,8 +126,8 @@ const OnlineTherapy: React.FC = () => {
           viewport={{ once: true }}
           className="mb-20"
         >
-          <h2 className="text-3xl font-bold text-neutral-900 text-center mb-12">
-            Testimonios de <span className="text-gradient">Consultantes Internacionales</span>
+          <h2 className="text-3xl font-bold text-center mb-12">
+            <span className="text-primary-600">Testimonios de Consultantes</span> <span className="text-gradient">Internacionales</span>
           </h2>
 
           <div className="grid md:grid-cols-3 gap-8">

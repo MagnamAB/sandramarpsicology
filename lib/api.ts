@@ -252,17 +252,36 @@ export const isValidColombianPhone = (phone: string): boolean => {
   return phoneRegex.test(phone.replace(/\s/g, ''))
 }
 
+// Función para validar teléfono internacional (cualquier país)
+export const isValidInternationalPhone = (phone: string): boolean => {
+  // Acepta números con indicativo internacional (+XX) seguido de al menos 8 dígitos
+  // Formato: +XX XXXXXXXXX (donde XX es el código de país)
+  const phoneRegex = /^\+[1-9][0-9]{0,3}[0-9]{8,14}$/
+  return phoneRegex.test(phone.replace(/\s/g, ''))
+}
+
 // Función para formatear teléfono
 export const formatPhone = (phone: string): string => {
+  // Limpiar espacios pero mantener el símbolo +
+  const trimmed = phone.trim()
+  
+  // Si ya tiene el + al inicio, solo limpiar espacios internos
+  if (trimmed.startsWith('+')) {
+    return trimmed.replace(/\s/g, '')
+  }
+  
+  // Si no tiene +, limpiar todo excepto números
   const cleaned = phone.replace(/\D/g, '')
   
+  // Para números colombianos sin indicador
   if (cleaned.startsWith('57')) {
     return `+${cleaned}`
-  } else if (cleaned.startsWith('3')) {
+  } else if (cleaned.startsWith('3') && cleaned.length === 10) {
     return `+57${cleaned}`
   }
   
-  return phone
+  // Para cualquier otro caso, agregar + si no lo tiene
+  return `+${cleaned}`
 }
 
 // =============================================================================
@@ -493,6 +512,16 @@ export const submitAppointmentWithAvailability = async (appointmentData: Appoint
         indicaciones: 'Se enviará enlace de videollamada 30 minutos antes'
       }
     }
+
+    // Debug: Log del payload antes de enviar al webhook
+    console.log('DEBUG - Payload enviado a n8n webhook:', {
+      telefono: payload.telefono,
+      modalidad: payload.modalidad,
+      nombre: payload.nombre,
+      servicio: payload.servicio,
+      fecha: payload.fecha,
+      hora: payload.hora
+    })
 
     const response = await axios.post(webhookUrl, payload, {
       headers: {
