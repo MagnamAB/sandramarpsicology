@@ -13,19 +13,19 @@ import { getText } from '../lib/texts'
 
 const TerapiaIndividualAdultos: React.FC = () => {
   const seoConfig = {
-    title: "Terapia Individual Adultos Online | Sandra Vargas | 37 Años Experiencia | Gestalt",
-    description: "Terapia individual para adultos con 37 años de experiencia. Supera ansiedad, baja autoestima, encuentra propósito de vida. Psicoterapia Gestalt online global en español y presencial privada Bogotá.",
-    canonical: "https://sandravargas.co/terapia-individual-adultos",
+    title: "Terapia Individual Adultos Online | Sandra Vargas | 38 Años Experiencia | Gestalt",
+    description: "Terapia individual para adultos con 38 años de experiencia. Supera ansiedad, baja autoestima, encuentra propósito de vida. Psicoterapia Gestalt online global en español y presencial privada Bogotá.",
+    canonical: "https://sandravargaspsicologa.com/terapia-individual-adultos",
     openGraph: {
-      title: "Terapia Individual Adultos | Sandra Vargas 37 Años Experiencia | Gestalt Online",
-      description: "Psicoterapia Gestalt individual para adultos. Supera ansiedad, desarrolla autoestima, encuentra propósito. 37 años experiencia. Online global español + presencial privado Bogotá.",
-      url: "https://sandravargas.co/terapia-individual-adultos",
+      title: "Terapia Individual Adultos | Sandra Vargas 38 Años Experiencia | Gestalt Online",
+      description: "Psicoterapia Gestalt individual para adultos. Supera ansiedad, desarrolla autoestima, encuentra propósito. 38 años experiencia. Online global español + presencial privado Bogotá.",
+      url: "https://sandravargaspsicologa.com/terapia-individual-adultos",
       images: [
         {
           url: '/images/dra-sandra-vargas.jpg',
           width: 1200,
           height: 630,
-          alt: "Sandra Vargas - Terapia individual adultos 37 años experiencia psicoterapia Gestalt online global presencial Bogotá"
+          alt: "Sandra Vargas - Terapia individual adultos 38 años experiencia psicoterapia Gestalt online global presencial Bogotá"
         }
       ]
     },
@@ -109,11 +109,11 @@ const TerapiaIndividualAdultos: React.FC = () => {
               "@context": "https://schema.org",
               "@type": "Service",
               "name": "Terapia Individual Adultos",
-              "description": "Psicoterapia Gestalt individual para adultos con 37 años de experiencia. Supera ansiedad, desarrolla autoestima, encuentra propósito de vida.",
+              "description": "Psicoterapia Gestalt individual para adultos con 38 años de experiencia. Supera ansiedad, desarrolla autoestima, encuentra propósito de vida.",
               "provider": {
                 "@type": "Psychologist",
                 "name": "Sandra Margarita Vargas",
-                "image": "https://sandravargas.co/images/dra-sandra-vargas.jpg"
+                "image": "https://sandravargaspsicologa.com/images/dra-sandra-vargas.jpg"
               },
               "areaServed": ["Global", "Internacional", "Bogotá", "Colombia"],
               "availableLanguage": "Spanish",
@@ -209,7 +209,7 @@ const TerapiaIndividualAdultos: React.FC = () => {
                   <div className="relative w-full h-[400px] md:h-[500px]">
                     <Image
                       src="/images/dra-sandra-vargas.jpg"
-                      alt="Sandra Vargas - Psicóloga especialista en terapia individual adultos con 37 años experiencia, psicoterapia Gestalt, autoconocimiento desarrollo personal"
+                      alt="Sandra Vargas - Psicóloga especialista en terapia individual adultos con 38 años experiencia, psicoterapia Gestalt, autoconocimiento desarrollo personal"
                       fill
                       className="rounded-xl object-cover"
                       style={{ objectPosition: '60% center' }}

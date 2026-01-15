@@ -54,7 +54,7 @@ const Hero: React.FC = () => {
               transition={{ duration: 0.6, delay: 0.5 }}
               className="text-xl md:text-2xl text-neutral-600 mb-8 leading-relaxed"
             >
-              <strong>Psicóloga clínica</strong> que aplica un <strong>enfoque integrativo</strong> considerando a sus consultantes desde todos los aspectos: a nivel físico, emocional, mental, espiritual y social ofreciendo un <strong>abordaje profundo y transformador</strong>. Ofrece <strong>atención online global, en Español</strong> y <strong>presencial en consultorio privado en Bogotá</strong>.
+              Trabajo como <strong>psicóloga clínica</strong> aplicando un <strong>enfoque integrativo</strong> considerando a mis consultantes desde todas sus dimensiones: a nivel físico, emocional, mental, espiritual y social ofreciendo un <strong>abordaje profundo y transformador</strong>. Ofrezco <strong>atención online global, en Español</strong> y <strong>presencial en consultorio privado en Bogotá</strong>.
             </motion.p>
 
             <motion.div
@@ -72,7 +72,7 @@ const Hero: React.FC = () => {
               </Link>
               
               <a
-                href={generateWhatsAppLink("Hola Sandra, me interesa conocer más sobre terapia individual adultos o terapia de pareja. ¿Podrías contarme sobre tu enfoque con 37 años de experiencia?")}
+                href={generateWhatsAppLink("Hola Sandra, me interesa conocer más sobre terapia individual adultos o terapia de pareja. ¿Podrías contarme sobre tu enfoque con 38 años de experiencia?")}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-secondary text-lg px-8 py-4 inline-flex items-center justify-center group"
@@ -145,7 +145,7 @@ const Hero: React.FC = () => {
                 <div className="relative w-full h-[450px] md:h-[550px] lg:h-[650px]">
                   <Image
                     src="/images/dra-sandra-vargas.jpg"
-                    alt="Sandra Vargas - Psicóloga clínica Bogotá 37 años experiencia terapia individual adultos, terapia de pareja, Gestalt, atención online global y presencial consultorio privado"
+                    alt="Sandra Vargas - Psicóloga clínica Bogotá 38 años experiencia terapia individual adultos, terapia de pareja, Gestalt, atención online global y presencial consultorio privado"
                     fill
                     className="rounded-xl object-cover"
                     style={{ objectPosition: '60% center' }}

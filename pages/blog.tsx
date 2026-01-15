@@ -9,16 +9,16 @@ import WhatsAppBubble from '../components/WhatsAppBubble'
 const BlogPage: React.FC = () => {
   const blogSEO = {
     title: "Blog de Psicología - Dra. Sandra Margarita Vargas | Artículos y Consejos",
-    description: "Blog especializado en psicología, terapia de pareja, desarrollo personal y bienestar emocional. Artículos escritos por la Dra. Sandra Vargas con +37 años de experiencia en Bogotá.",
-    canonical: "https://drasandravargas.com/blog",
+    description: "Blog especializado en psicología, terapia de pareja, desarrollo personal y bienestar emocional. Artículos escritos por la Dra. Sandra Vargas con +38 años de experiencia en Bogotá.",
+    canonical: "https://sandravargaspsicologa.com/blog",
     openGraph: {
       title: "Blog de Psicología - Dra. Sandra Margarita Vargas",
       description: "Artículos especializados en psicología clínica, terapia de pareja, desarrollo personal y bienestar emocional desde Bogotá.",
-      url: "https://drasandravargas.com/blog",
+      url: "https://sandravargaspsicologa.com/blog",
       type: 'website',
       images: [
         {
-          url: "https://drasandravargas.com/images/blog-psicologia-bogota.jpg",
+          url: "https://sandravargaspsicologa.com/images/blog-psicologia-bogota.jpg",
           width: 1200,
           height: 630,
           alt: "Blog de Psicología - Dra. Sandra Margarita Vargas"
@@ -54,7 +54,7 @@ const BlogPage: React.FC = () => {
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Blog",
-              "url": "https://drasandravargas.com/blog",
+              "url": "https://sandravargaspsicologa.com/blog",
               "name": "Blog de Psicología - Dra. Sandra Margarita Vargas",
               "description": "Blog especializado en psicología clínica, terapia de pareja, desarrollo personal y bienestar emocional.",
               "author": {
@@ -82,7 +82,7 @@ const BlogPage: React.FC = () => {
           }}
         />
         
-        <link rel="canonical" href="https://drasandravargas.com/blog" />
+        <link rel="canonical" href="https://sandravargaspsicologa.com/blog" />
       </Head>
 
       <div className="min-h-screen bg-white">

@@ -45,7 +45,7 @@ const About: React.FC = () => {
                 <div className="relative w-full h-80 md:h-96 lg:h-[500px]">
                   <Image
                     src="/images/dra-sandra-vargas-2.JPG"
-                    alt="Sandra Margarita Vargas - Psicóloga clínica con 37 años experiencia especializada en terapia individual adultos, terapia de pareja, Gestalt, atención online global y presencial en consultorio privado Bogotá"
+                    alt="Sandra Margarita Vargas - Psicóloga clínica con 38 años experiencia especializada en terapia individual adultos, terapia de pareja, Gestalt, atención online global y presencial en consultorio privado Bogotá"
                     fill
                     className="rounded-2xl object-cover shadow-2xl"
                     style={{ objectPosition: 'center center' }}
@@ -57,7 +57,7 @@ const About: React.FC = () => {
               {/* Enhanced achievement badges */}
               <div className="absolute -top-4 -right-4 bg-gradient-to-br from-primary-600 to-primary-700 text-white rounded-xl shadow-lg p-4 border border-primary-500 z-20">
                 <div className="text-center">
-                  <div className="text-3xl font-bold">37+</div>
+                  <div className="text-3xl font-bold">38+</div>
                   <div className="text-xs opacity-90">Años Experiencia</div>
                   <div className="text-xs opacity-75">Psicología Clínica</div>
                 </div>

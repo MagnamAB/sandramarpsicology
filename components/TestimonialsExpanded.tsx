@@ -60,7 +60,7 @@ const TestimonialsExpanded: React.FC = () => {
       location: "Miami, Estados Unidos",
       service: "Terapia de Pareja Internacional",
       rating: 5,
-      text: "Como pareja colombiana viviendo en Estados Unidos, necesitábamos terapia en español. La Dra. Sandra nos ofreció terapia de pareja internacional excepcional. Su experiencia de 37 años se nota en cada sesión. Nos ayudó a superar una crisis matrimonial importante.",
+      text: "Como pareja colombiana viviendo en Estados Unidos, necesitábamos terapia en español. La Dra. Sandra nos ofreció terapia de pareja internacional excepcional. Su experiencia de 38 años se nota en cada sesión. Nos ayudó a superar una crisis matrimonial importante.",
       date: "2023-10-15",
       image: "/images/testimonials/claudia-miguel.jpg",
       keywords: "terapia pareja internacional, terapia pareja español, psicóloga pareja online"
@@ -131,7 +131,7 @@ const TestimonialsExpanded: React.FC = () => {
             viewport={{ once: true }}
             className="text-xl text-neutral-600 max-w-3xl mx-auto"
           >
-            Más de 37 años transformando vidas a través de <strong>terapia psicológica en Bogotá</strong> y{' '}
+            Más de 38 años transformando vidas a través de <strong>terapia psicológica en Bogotá</strong> y{' '}
             <strong>atención virtual internacional</strong>. Estas son las experiencias reales de personas que{' '}
             han encontrado sanación y crecimiento personal con nuestros servicios especializados.
           </motion.p>

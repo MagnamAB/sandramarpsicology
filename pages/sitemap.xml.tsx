@@ -5,7 +5,7 @@ const Sitemap = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ res }) => {
-  const baseUrl = 'https://sandravargas.co'
+  const baseUrl = 'https://sandravargaspsicologa.com'
   
   const staticPages = [
     '',

@@ -2,8 +2,8 @@ import { NextSeoProps } from 'next-seo'
 
 export const siteConfig = {
   name: 'Sandra Margarita Vargas - Psicóloga',
-  description: 'Psicóloga con más de 37 años de experiencia en terapia familiar, de parejas e individual. Especializada en Gestalt, Constelaciones Familiares y desarrollo personal.',
-  url: 'https://sandravargas.co',
+  description: 'Psicóloga con más de 38 años de experiencia en terapia familiar, de parejas e individual. Especializada en Gestalt, Constelaciones Familiares y desarrollo personal.',
+  url: 'https://sandravargaspsicologa.com',
   ogImage: '/images/og-image.jpg',
   links: {
     whatsapp: 'https://wa.me/573106983385',
@@ -24,15 +24,15 @@ export const siteConfig = {
 
 export const defaultSEO: NextSeoProps = {
   title: 'Sandra Margarita Vargas - Psicóloga Internacional | Terapia Virtual Global',
-  description: 'Psicóloga especialista con +37 años de experiencia internacional. Terapia de pareja, familiar sistémica, Gestalt y constelaciones familiares. Atención virtual global desde Colombia. ⭐ Agende su consulta hoy.',
-  canonical: 'https://sandravargas.co',
+  description: 'Psicóloga especialista con +38 años de experiencia internacional. Terapia de pareja, familiar sistémica, Gestalt y constelaciones familiares. Atención virtual global desde Colombia. ⭐ Agende su consulta hoy.',
+  canonical: 'https://sandravargaspsicologa.com',
   openGraph: {
     type: 'website',
     locale: 'es_CO',
-    url: 'https://sandravargas.co',
+    url: 'https://sandravargaspsicologa.com',
     siteName: 'Sandra Margarita Vargas - Psicóloga Internacional',
     title: 'Psicóloga Internacional | Terapia Virtual Global | Sandra Vargas',
-    description: 'Terapeuta Gestalt especialista con +37 años de experiencia internacional. Terapia de pareja, constelaciones familiares sistémicas y desarrollo personal. Atención virtual a consultantes de todo el mundo desde Colombia. ⭐ Reserve su sesión.',
+    description: 'Terapeuta Gestalt especialista con +38 años de experiencia internacional. Terapia de pareja, constelaciones familiares sistémicas y desarrollo personal. Atención virtual a consultantes de todo el mundo desde Colombia. ⭐ Reserve su sesión.',
     images: [
       {
         url: '/images/dra-sandra-vargas.jpg',
@@ -73,18 +73,18 @@ export const defaultSEO: NextSeoProps = {
   additionalLinkTags: [
     {
       rel: 'canonical',
-      href: 'https://sandravargas.co'
+      href: 'https://sandravargaspsicologa.com'
     }
   ]
 }
 
 export const internationalSEO: NextSeoProps = {
   title: 'Sandra Margarita Vargas - Psicóloga Internacional | Terapia Virtual Global',
-  description: 'Psicóloga con +37 años de experiencia internacional. Terapia online en español para consultantes de todo el mundo. Especialista en terapia de pareja, familiar y desarrollo personal.',
+  description: 'Psicóloga con +38 años de experiencia internacional. Terapia online en español para consultantes de todo el mundo. Especialista en terapia de pareja, familiar y desarrollo personal.',
   openGraph: {
     siteName: 'Sandra Margarita Vargas - Psicóloga Internacional',
     title: 'Psicóloga Internacional | Terapia Virtual Global | Sandra Vargas',
-    description: 'Psicóloga con +37 años de experiencia. Terapia online en español para consultantes internacionales. Especialista en terapia de pareja y desarrollo personal.',
+    description: 'Psicóloga con +38 años de experiencia. Terapia online en español para consultantes internacionales. Especialista en terapia de pareja y desarrollo personal.',
     images: [
       {
         url: '/images/dra-sandra-vargas.jpg',
@@ -111,10 +111,10 @@ export const internationalSEO: NextSeoProps = {
 
 export const bogotaSEO: NextSeoProps = {
   title: 'Psicóloga en Bogotá | Terapia de Pareja y Familiar | Sandra Vargas',
-  description: 'Psicóloga en Bogotá con +37 años de experiencia. Especialista en terapia de pareja, terapia familiar y desarrollo personal. Consulta presencial en Santa Bárbara.',
+  description: 'Psicóloga en Bogotá con +38 años de experiencia. Especialista en terapia de pareja, terapia familiar y desarrollo personal. Consulta presencial en Santa Bárbara.',
   openGraph: {
     title: 'Sobre Mí - Psicóloga con 37+ Años de Experiencia Internacional | Sandra Vargas',
-    description: 'Conozca la trayectoria de Sandra Vargas, psicóloga con formación en Gestalt, constelaciones familiares y desarrollo personal. Más de 37 años transformando vidas internacionalmente.',
+    description: 'Conozca la trayectoria de Sandra Vargas, psicóloga con formación en Gestalt, constelaciones familiares y desarrollo personal. Más de 38 años transformando vidas internacionalmente.',
     images: [
       {
         url: '/images/dra-sandra-vargas-2.JPG',
@@ -137,7 +137,7 @@ export const bogotaSEO: NextSeoProps = {
 export const pageSEO = {
   about: {
     title: 'Sobre Mí - Psicóloga con 37+ Años de Experiencia Internacional | Sandra Vargas',
-    description: 'Conozca la trayectoria de Sandra Vargas, psicóloga con formación en Gestalt, constelaciones familiares y desarrollo personal. Más de 37 años transformando vidas internacionalmente.',
+    description: 'Conozca la trayectoria de Sandra Vargas, psicóloga con formación en Gestalt, constelaciones familiares y desarrollo personal. Más de 38 años transformando vidas internacionalmente.',
     keywords: 'psicóloga experiencia internacional, formación Claudio Naranjo SAT Colombia, sanación condicionamientos infantiles Fischer Hoffman, eneagrama estudio del carácter, psicología transpersonal internacional'
   },
   
@@ -167,7 +167,7 @@ export const structuredData = {
     "@type": "ProfessionalService",
     "name": "Sandra Margarita Vargas - Psicóloga",
     "description": "Psicóloga especialista en terapia de pareja, terapia familiar sistémica, Gestalt y constelaciones familiares. Atención virtual internacional y presencial en Colombia.",
-    "url": "https://sandravargas.co",
+    "url": "https://sandravargaspsicologa.com",
     "telephone": "+57-310-698-3385",
     "email": "sandramar.v@hotmail.com",
     "address": {
@@ -204,8 +204,8 @@ export const structuredData = {
     "@type": "Person",
     "name": "Sandra Margarita Vargas",
     "jobTitle": "Psicóloga Clínica",
-    "description": "Psicóloga con 37+ años de experiencia internacional en psicología clínica, educativa y organizacional. Especialista en terapia de pareja, Gestalt y constelaciones familiares con consultantes de todo el mundo.",
-    "url": "https://sandravargas.co",
+    "description": "Psicóloga con 38+ años de experiencia internacional en psicología clínica, educativa y organizacional. Especialista en terapia de pareja, Gestalt y constelaciones familiares con consultantes de todo el mundo.",
+    "url": "https://sandravargaspsicologa.com",
     "email": "sandramar.v@hotmail.com",
     "telephone": "+57-310-698-3385",
     "address": {

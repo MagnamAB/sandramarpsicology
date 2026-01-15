@@ -9,16 +9,16 @@ import WhatsAppBubble from '../components/WhatsAppBubble'
 const TestimoniosPage: React.FC = () => {
   const testimoniosSEO = {
     title: "Testimonios - Dra. Sandra Margarita Vargas | Experiencias Reales de Pacientes",
-    description: "Testimonios reales de pacientes de la Dra. Sandra Vargas. Más de 37 años transformando vidas a través de terapia de pareja, psicología clínica y terapia online internacional desde Bogotá.",
-    canonical: "https://drasandravargas.com/testimonios",
+    description: "Testimonios reales de pacientes de la Dra. Sandra Vargas. Más de 38 años transformando vidas a través de terapia de pareja, psicología clínica y terapia online internacional desde Bogotá.",
+    canonical: "https://sandravargaspsicologa.com/testimonios",
     openGraph: {
       title: "Testimonios - Dra. Sandra Margarita Vargas",
       description: "Experiencias reales de pacientes transformados a través de terapia psicológica especializada en Bogotá y online internacional.",
-      url: "https://drasandravargas.com/testimonios",
+      url: "https://sandravargaspsicologa.com/testimonios",
       type: 'website',
       images: [
         {
-          url: "https://drasandravargas.com/images/testimonios-psicologia-bogota.jpg",
+          url: "https://sandravargaspsicologa.com/images/testimonios-psicologia-bogota.jpg",
           width: 1200,
           height: 630,
           alt: "Testimonios - Dra. Sandra Margarita Vargas Psicóloga"
@@ -54,7 +54,7 @@ const TestimoniosPage: React.FC = () => {
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "WebPage",
-              "url": "https://drasandravargas.com/testimonios",
+              "url": "https://sandravargaspsicologa.com/testimonios",
               "name": "Testimonios - Dra. Sandra Margarita Vargas",
               "description": "Testimonios reales de pacientes transformados a través de terapia psicológica especializada.",
               "mainEntity": {
@@ -89,7 +89,7 @@ const TestimoniosPage: React.FC = () => {
           }}
         />
         
-        <link rel="canonical" href="https://drasandravargas.com/testimonios" />
+        <link rel="canonical" href="https://sandravargaspsicologa.com/testimonios" />
       </Head>
 
       <div className="min-h-screen bg-white">

@@ -10,15 +10,15 @@ const PreguntasFrecuentesPage: React.FC = () => {
   const faqSEO = {
     title: "Preguntas Frecuentes - Dra. Sandra Margarita Vargas | FAQ Psicología Bogotá",
     description: "Respuestas a preguntas frecuentes sobre terapia psicológica, terapia de pareja, terapia online, constelaciones familiares y servicios de la Dra. Sandra Vargas en Bogotá.",
-    canonical: "https://drasandravargas.com/preguntas-frecuentes",
+    canonical: "https://sandravargaspsicologa.com/preguntas-frecuentes",
     openGraph: {
       title: "Preguntas Frecuentes - Dra. Sandra Margarita Vargas",
       description: "Respuestas completas sobre terapia psicológica, terapia de pareja, servicios online y presenciales en Bogotá.",
-      url: "https://drasandravargas.com/preguntas-frecuentes",
+      url: "https://sandravargaspsicologa.com/preguntas-frecuentes",
       type: 'website',
       images: [
         {
-          url: "https://drasandravargas.com/images/faq-psicologia-bogota.jpg",
+          url: "https://sandravargaspsicologa.com/images/faq-psicologia-bogota.jpg",
           width: 1200,
           height: 630,
           alt: "Preguntas Frecuentes - Dra. Sandra Margarita Vargas Psicóloga"
@@ -54,7 +54,7 @@ const PreguntasFrecuentesPage: React.FC = () => {
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "WebPage",
-              "url": "https://drasandravargas.com/preguntas-frecuentes",
+              "url": "https://sandravargaspsicologa.com/preguntas-frecuentes",
               "name": "Preguntas Frecuentes - Dra. Sandra Margarita Vargas",
               "description": "Respuestas a preguntas frecuentes sobre terapia psicológica, terapia de pareja y servicios especializados.",
               "mainEntity": {
@@ -69,13 +69,13 @@ const PreguntasFrecuentesPage: React.FC = () => {
                     "@type": "ListItem",
                     "position": 1,
                     "name": "Inicio",
-                    "item": "https://drasandravargas.com"
+                    "item": "https://sandravargaspsicologa.com"
                   },
                   {
                     "@type": "ListItem",
                     "position": 2,
                     "name": "Preguntas Frecuentes",
-                    "item": "https://drasandravargas.com/preguntas-frecuentes"
+                    "item": "https://sandravargaspsicologa.com/preguntas-frecuentes"
                   }
                 ]
               },
@@ -92,7 +92,7 @@ const PreguntasFrecuentesPage: React.FC = () => {
           }}
         />
         
-        <link rel="canonical" href="https://drasandravargas.com/preguntas-frecuentes" />
+        <link rel="canonical" href="https://sandravargaspsicologa.com/preguntas-frecuentes" />
       </Head>
 
       <div className="min-h-screen bg-white">

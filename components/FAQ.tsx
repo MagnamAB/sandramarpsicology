@@ -11,7 +11,7 @@ const FAQ: React.FC = () => {
       questions: [
         {
           question: "¿Cómo elegir al mejor psicólogo en Bogotá para mi caso?",
-          answer: "Al elegir psicólogo en Bogotá, es importante considerar: formación académica (verificar que esté registrado), experiencia en tu problemática específica, enfoque terapéutico que resuene contigo, modalidad de atención (presencial u online), y comodidad personal. Sandra cuenta con más de 37 años de experiencia, formación especializada en terapia Gestalt y constelaciones familiares, y atiende tanto presencial como virtualmente.",
+          answer: "Al elegir psicólogo en Bogotá, es importante considerar: formación académica (verificar que esté registrado), experiencia en tu problemática específica, enfoque terapéutico que resuene contigo, modalidad de atención (presencial u online), y comodidad personal. Sandra cuenta con más de 38 años de experiencia, formación especializada en terapia Gestalt y constelaciones familiares, y atiende tanto presencial como virtualmente.",
           keywords: "elegir psicólogo Bogotá, mejor psicólogo Bogotá, cómo encontrar terapeuta"
         },
         {

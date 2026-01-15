@@ -17,33 +17,33 @@ const HomePage: React.FC = () => {
   const enhancedSEO = {
     ...defaultSEO,
     title: "Psicóloga Sandra Vargas | Terapia Individual • Pareja • Enfoque Integrativo | Bogotá",
-    description: "Sandra Vargas: 37 años de experiencia en psicología clínica. Terapia individual adultos y terapia de pareja con enfoque integrativo holístico (Gestalt, sistémico, transpersonal). Atención online global y presencial en consultorio privado Bogotá.",
-    canonical: "https://sandravargas.co",
+    description: "Sandra Vargas: 38 años de experiencia en psicología clínica. Terapia individual adultos y terapia de pareja con enfoque integrativo holístico (Gestalt, sistémico, transpersonal). Atención online global y presencial en consultorio privado Bogotá.",
+    canonical: "https://sandravargaspsicologa.com",
     openGraph: {
       ...defaultSEO.openGraph,
       title: "Psicóloga Sandra Vargas | Terapia Individual, Pareja, Enfoque Integrativo | Online",
-      description: "Sandra Vargas, psicóloga clínica: 37 años de experiencia, enfoque integrativo holístico. Terapia individual adultos, terapia de pareja. Combina Gestalt, sistémico y transpersonal. Atención online global en español y presencial en consultorio privado Bogotá.",
+      description: "Sandra Vargas, psicóloga clínica: 38 años de experiencia, enfoque integrativo holístico. Terapia individual adultos, terapia de pareja. Combina Gestalt, sistémico y transpersonal. Atención online global en español y presencial en consultorio privado Bogotá.",
       images: [
         {
           url: '/images/dra-sandra-vargas.jpg',
           width: 1200,
           height: 630,
-          alt: "Sandra Vargas - Psicóloga clínica Bogotá 37 años experiencia especialista terapia individual adultos, terapia de pareja, Gestalt, constelaciones familiares"
+          alt: "Sandra Vargas - Psicóloga clínica Bogotá 38 años experiencia especialista terapia individual adultos, terapia de pareja, Gestalt, constelaciones familiares"
         }
       ],
-      url: "https://sandravargas.co",
+      url: "https://sandravargaspsicologa.com",
     },
     twitter: {
       ...defaultSEO.twitter,
-      title: "Psicóloga Sandra Vargas Bogotá | 37 Años Experiencia",
-      description: "Psicóloga clínica con 37 años de experiencia y enfoque integrativo holístico. Terapia individual adultos, terapia de pareja. Combina Gestalt, sistémico y transpersonal. Online global y presencial Bogotá.",
+      title: "Psicóloga Sandra Vargas Bogotá | 38 Años Experiencia",
+      description: "Psicóloga clínica con 38 años de experiencia y enfoque integrativo holístico. Terapia individual adultos, terapia de pareja. Combina Gestalt, sistémico y transpersonal. Online global y presencial Bogotá.",
       images: ['/images/dra-sandra-vargas.jpg'],
       content: 'psicóloga Sandra Vargas, enfoque integrativo, terapia individual adultos, terapia de pareja online, psicoterapia integrativa Bogotá, metodología integrativa, terapia online español, consultorio privado psicóloga Bogotá, autoconocimiento desarrollo personal, psicólogo online internacional, terapia pareja sistémica'
     },
     additionalMetaTags: [
       {
         name: 'keywords',
-        content: 'psicóloga Sandra Vargas Bogotá, 37 años experiencia psicología, terapia individual adultos, terapia de pareja online, psicoterapia Gestalt Bogotá, terapia online español, consultorio privado psicóloga Bogotá, autoconocimiento desarrollo personal, psicólogo online internacional, terapia pareja sistémica, enfoque integrativo, psicoterapia integrativa, Gestalt sistémico transpersonal'
+        content: 'psicóloga Sandra Vargas Bogotá, 38 años experiencia psicología, terapia individual adultos, terapia de pareja online, psicoterapia Gestalt Bogotá, terapia online español, consultorio privado psicóloga Bogotá, autoconocimiento desarrollo personal, psicólogo online internacional, terapia pareja sistémica, enfoque integrativo, psicoterapia integrativa, Gestalt sistémico transpersonal'
       },
       {
         name: 'author',
@@ -99,13 +99,13 @@ const HomePage: React.FC = () => {
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Psychologist",
-              "@id": "https://sandravargas.co",
-              "name": "Sandra Margarita Vargas - Psicóloga Clínica 37 Años Experiencia",
+              "@id": "https://sandravargaspsicologa.com",
+              "name": "Sandra Margarita Vargas - Psicóloga Clínica 38 Años Experiencia",
               "alternateName": "Psicóloga Sandra Vargas Bogotá",
-              "url": "https://sandravargas.co",
-              "logo": "https://sandravargas.co/images/logo-dra-sandra-vargas.png",
-              "image": "https://sandravargas.co/images/dra-sandra-vargas.jpg",
-              "description": "Psicóloga clínica Sandra Margarita Vargas con 37 años de experiencia especializada en terapia individual adultos, terapia de pareja, terapia Gestalt. Atención online internacional en español y presencial en consultorio privado Bogotá.",
+              "url": "https://sandravargaspsicologa.com",
+              "logo": "https://sandravargaspsicologa.com/images/logo-dra-sandra-vargas.png",
+              "image": "https://sandravargaspsicologa.com/images/dra-sandra-vargas.jpg",
+              "description": "Psicóloga clínica Sandra Margarita Vargas con 38 años de experiencia especializada en terapia individual adultos, terapia de pareja, terapia Gestalt. Atención online internacional en español y presencial en consultorio privado Bogotá.",
               "telephone": "+57-310-698-3385",
               "email": "sandramar.v@hotmail.com",
               "priceRange": "$$",
@@ -164,7 +164,7 @@ const HomePage: React.FC = () => {
                 "Consultorio Privado Bogotá"
               ],
               "specialty": [
-                "37 Años Experiencia Psicología Clínica",
+                "38 Años Experiencia Psicología Clínica",
                 "Terapia Individual Adultos Online",
                 "Terapia de Pareja Sistémica Global",
                 "Psicoterapia Gestalt Claudio Naranjo SAT",
@@ -178,14 +178,14 @@ const HomePage: React.FC = () => {
               "knowsLanguage": ["Spanish"],
               "hasOfferCatalog": {
                 "@type": "OfferCatalog",
-                "name": "Servicios Psicoterapia Especializada 37 Años Experiencia",
+                "name": "Servicios Psicoterapia Especializada 38 Años Experiencia",
                 "itemListElement": [
                   {
                     "@type": "Offer",
                     "itemOffered": {
                       "@type": "Service",
                       "name": "Terapia Individual Adultos Online",
-                      "description": "Psicoterapia con enfoque integrativo para adultos con 37 años de experiencia. Proceso profundo de autoconocimiento y desarrollo personal. Metodología que integra Gestalt, sistémico y transpersonal. Atención online global en español.",
+                      "description": "Psicoterapia con enfoque integrativo para adultos con 38 años de experiencia. Proceso profundo de autoconocimiento y desarrollo personal. Metodología que integra Gestalt, sistémico y transpersonal. Atención online global en español.",
                       "provider": {
                         "@type": "Psychologist",
                         "name": "Sandra Margarita Vargas"
@@ -198,7 +198,7 @@ const HomePage: React.FC = () => {
                     "itemOffered": {
                       "@type": "Service",
                       "name": "Terapia de Pareja Online Internacional",
-                      "description": "Terapia de pareja sistémica especializada con 37 años de experiencia. Sanación heridas emocionales y fortalecimiento vínculos amorosos. Online global y presencial Bogotá.",
+                      "description": "Terapia de pareja sistémica especializada con 38 años de experiencia. Sanación heridas emocionales y fortalecimiento vínculos amorosos. Online global y presencial Bogotá.",
                       "provider": {
                         "@type": "Psychologist",
                         "name": "Sandra Margarita Vargas"
@@ -211,7 +211,7 @@ const HomePage: React.FC = () => {
                     "itemOffered": {
                       "@type": "Service", 
                       "name": "Consultorio Privado Bogotá",
-                      "description": "Sesiones presenciales en ambiente privado y discreto para mayor confidencialidad. 37 años de experiencia en acompañamiento terapéutico integral.",
+                      "description": "Sesiones presenciales en ambiente privado y discreto para mayor confidencialidad. 38 años de experiencia en acompañamiento terapéutico integral.",
                       "provider": {
                         "@type": "Psychologist",
                         "name": "Sandra Margarita Vargas"
@@ -223,7 +223,7 @@ const HomePage: React.FC = () => {
               },
               "makesOffer": {
                 "@type": "Offer",
-                "description": "Consulta psicológica especializada con 37 años de experiencia",
+                "description": "Consulta psicológica especializada con 38 años de experiencia",
                 "priceRange": "$$"
               }
             }),
@@ -243,7 +243,7 @@ const HomePage: React.FC = () => {
                   "name": "¿Cuántos años de experiencia tiene la psicóloga Sandra Vargas?",
                   "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "La Dra. Sandra Margarita Vargas tiene más de 37 años de experiencia en psicología clínica y acompañamiento terapéutico integral con enfoque sistémico, gestáltico y holístico."
+                    "text": "La Dra. Sandra Margarita Vargas tiene más de 38 años de experiencia en psicología clínica y acompañamiento terapéutico integral con enfoque sistémico, gestáltico y holístico."
                   }
                 },
                 {

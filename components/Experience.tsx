@@ -8,7 +8,7 @@ const Experience: React.FC = () => {
 
   const stats = [
     {
-      number: "+37",
+      number: "+38",
       label: "Años de Experiencia",
       description: "Transformando vidas profesionalmente"
     },
@@ -18,7 +18,7 @@ const Experience: React.FC = () => {
       description: "Terapia online internacional"
     },
     {
-      number: getText('experience.stats.facilitating.number', '+30'),
+      number: getText('experience.stats.facilitating.number', '+25'),
       label: "Años Facilitando",
       description: getText('experience.stats.facilitating.description', 'Talleres propios desde 2000')
     },
@@ -51,7 +51,7 @@ const Experience: React.FC = () => {
       achievements: [
         '"Ser Adulto: Un logro de autonomía y bienestar"',
         '"Mis Relaciones Inconclusas"',
-        "Más de 15 años facilitando estos programas"
+        "Más de 17 años facilitando estos programas"
       ]
     },
     {
@@ -84,7 +84,7 @@ const Experience: React.FC = () => {
     {
       year: getText('experience.timeline.2017.year', '1998 - Actual'),
       title: getText('experience.timeline.2017.title', 'Terapeuta integrativa'),
-      description: getText('experience.timeline.2017.description', '27 años de practica terapéutica en consultorio privado')
+      description: getText('experience.timeline.2017.description', '28 años de practica terapéutica en consultorio privado')
     },
     {
       year: "2012 - 2013",
@@ -128,7 +128,7 @@ const Experience: React.FC = () => {
       name: "Omnilife Internacional",
       role: "Facilitadora de Desarrollo Personal",
       logo: "🌟",
-      years: "15+ años"
+      years: "23+ años"
     },
     {
       name: "Naciones Unidas - ICBF",
@@ -166,7 +166,7 @@ const Experience: React.FC = () => {
             viewport={{ once: true }}
             className="text-4xl md:text-5xl font-bold mb-6"
           >
-            <span className="text-primary-600">Más de 37 Años de Experiencia</span> <span className="text-gradient">Profesional</span>
+            <span className="text-primary-600">Más de 38 Años de Experiencia</span> <span className="text-gradient">Profesional</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}

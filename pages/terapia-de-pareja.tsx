@@ -13,19 +13,19 @@ import { getText } from '../lib/texts'
 
 const TerapiaDePareja: React.FC = () => {
   const seoConfig = {
-    title: "Terapia de Pareja Online | Sandra Vargas | 37 Años Experiencia | Enfoque Integrativo Holístico",
-    description: "Terapia de pareja con 37 años de experiencia. Supera problemas comunicación, infidelidad, celos. Enfoque integrativo holístico especializado. Online internacional español y presencial consultorio privado Bogotá.",
-    canonical: "https://sandravargas.co/terapia-de-pareja",
+    title: "Terapia de Pareja Online | Sandra Vargas | 38 Años Experiencia | Enfoque Integrativo Holístico",
+    description: "Terapia de pareja con 38 años de experiencia. Supera problemas comunicación, infidelidad, celos. Enfoque integrativo holístico especializado. Online internacional español y presencial consultorio privado Bogotá.",
+    canonical: "https://sandravargaspsicologa.com/terapia-de-pareja",
     openGraph: {
-      title: "Terapia de Pareja | Sandra Vargas 37 Años Experiencia | Enfoque Integrativo Holístico Online",
-      description: "Terapia de pareja integrativa holística especializada. Supera problemas comunicación, infidelidad, crisis. 37 años experiencia. Online internacional español + consultorio privado Bogotá.",
-      url: "https://sandravargas.co/terapia-de-pareja",
+      title: "Terapia de Pareja | Sandra Vargas 38 Años Experiencia | Enfoque Integrativo Holístico Online",
+      description: "Terapia de pareja integrativa holística especializada. Supera problemas comunicación, infidelidad, crisis. 38 años experiencia. Online internacional español + consultorio privado Bogotá.",
+      url: "https://sandravargaspsicologa.com/terapia-de-pareja",
       images: [
         {
           url: '/images/dra-sandra-vargas.jpg',
           width: 1200,
           height: 630,
-          alt: "Sandra Vargas - Terapia de pareja 37 años experiencia enfoque integrativo holístico online internacional presencial Bogotá"
+          alt: "Sandra Vargas - Terapia de pareja 38 años experiencia enfoque integrativo holístico online internacional presencial Bogotá"
         }
       ]
     },
@@ -109,11 +109,11 @@ const TerapiaDePareja: React.FC = () => {
               "@context": "https://schema.org",
               "@type": "Service",
               "name": "Terapia de Pareja",
-              "description": "Terapia de pareja integrativa holística con 37 años de experiencia. Supera problemas comunicación, infidelidad, celos. Fortalece vínculo amoroso.",
+              "description": "Terapia de pareja integrativa holística con 38 años de experiencia. Supera problemas comunicación, infidelidad, celos. Fortalece vínculo amoroso.",
               "provider": {
                 "@type": "Psychologist",
                 "name": "Sandra Margarita Vargas",
-                "image": "https://sandravargas.co/images/dra-sandra-vargas.jpg"
+                "image": "https://sandravargaspsicologa.com/images/dra-sandra-vargas.jpg"
               },
               "areaServed": ["Global", "Internacional", "Bogotá", "Colombia"],
               "availableLanguage": "Spanish",
@@ -210,7 +210,7 @@ const TerapiaDePareja: React.FC = () => {
                   <div className="relative w-full h-[400px] md:h-[500px]">
                     <Image
                       src="/images/dra-sandra-vargas.jpg"
-                      alt="Sandra Vargas - Psicóloga especialista en terapia de pareja con 37 años experiencia, enfoque sistémico, comunicación, infidelidad, fortalecimiento vínculos"
+                      alt="Sandra Vargas - Psicóloga especialista en terapia de pareja con 38 años experiencia, enfoque sistémico, comunicación, infidelidad, fortalecimiento vínculos"
                       fill
                       className="rounded-xl object-cover"
                       style={{ objectPosition: '60% center' }}
@@ -221,7 +221,7 @@ const TerapiaDePareja: React.FC = () => {
                   
                   <div className="absolute -bottom-4 -right-4 bg-gradient-to-br from-secondary-600 to-secondary-700 text-white rounded-xl shadow-lg p-4">
                     <div className="text-center">
-                      <div className="text-2xl font-bold">37+</div>
+                      <div className="text-2xl font-bold">38+</div>
                       <div className="text-xs opacity-90">Años</div>
                       <div className="text-xs opacity-75">Parejas</div>
                     </div>

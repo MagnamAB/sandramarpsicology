@@ -10,14 +10,14 @@ const Footer: React.FC = () => {
           <p className="text-neutral-600 mb-6">
             Psicóloga clínica con <strong>enfoque integrativo</strong> que combina{' '}
             <strong>Gestalt, sistémico y transpersonal</strong>.{' '}
-            Acompañamiento terapéutico a personas, familias y grupos con más de 37 años de experiencia.
+            Acompañamiento terapéutico a personas, familias y grupos con más de 38 años de experiencia.
           </p>
           <div className="flex justify-center space-x-6 text-sm text-neutral-400">
             <span>📞 +57 310 698 3385</span>
             <span>📧 sandramar.v@hotmail.com</span>
           </div>
           <div className="mt-8 pt-8 border-t border-neutral-800 text-sm text-neutral-500">
-            {getText('footer-copyright', '© 2025 Sandra Vargas Psicóloga. Todos los derechos reservados. Psicóloga especializada en terapia individual y de pareja con 37 años de experiencia en Bogotá.')}
+            {getText('footer-copyright', '© 2026 Sandra Vargas Psicóloga. Todos los derechos reservados. Psicóloga especializada en terapia individual y de pareja con 38 años de experiencia en Bogotá.')}
           </div>
         </div>
       </div>

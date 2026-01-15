@@ -138,7 +138,7 @@ const Blog: React.FC = () => {
           >
             Encuentra artículos sobre <strong>terapia psicológica</strong>, <strong>manejo de emociones</strong>,{' '}
             <strong>relaciones de pareja</strong> y <strong>desarrollo personal</strong>. Este blog comparte la experiencia{' '}
-            de más de 37 años en <strong>psicología clínica en Bogotá</strong>, brindando consejos y reflexiones{' '}
+            de más de 38 años en <strong>psicología clínica en Bogotá</strong>, brindando consejos y reflexiones{' '}
             para tu <strong>bienestar emocional</strong> y <strong>crecimiento personal</strong>.
           </motion.p>
         </div>

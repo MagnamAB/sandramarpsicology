@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://sandravargas.co/sitemap.xml
+Sitemap: https://sandravargaspsicologa.com/sitemap.xml
 
 # Disallow admin pages (if any in the future)
 Disallow: /admin/
