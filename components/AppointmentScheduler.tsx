@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { FaCalendarAlt, FaClock, FaUser, FaEnvelope, FaPhone, FaChevronLeft, FaChevronRight, FaCheck, FaGlobe } from 'react-icons/fa'
+import { FaCalendarAlt, FaClock, FaUser, FaEnvelope, FaPhone, FaChevronLeft, FaChevronRight, FaCheck, FaGlobe, FaCreditCard } from 'react-icons/fa'
 import { 
   submitAppointmentWithAvailability, 
   getAvailableSlots,
@@ -10,6 +10,13 @@ import {
   formatPhone, 
   type AppointmentData 
 } from '../lib/api'
+
+// Declaración global para el Widget de Wompi
+declare global {
+  interface Window {
+    WidgetCheckout: any
+  }
+}
 
 interface TimeSlot {
   time: string // Tiempo en zona horaria local del usuario
@@ -79,8 +86,20 @@ const AppointmentScheduler: React.FC = () => {
   }>({ type: null, message: '' })
 
   const services = [
-    { id: 'individual', name: 'Terapia Individual', duration: '75 min', durationMinutes: 75 },
-    { id: 'parejas', name: 'Terapia de Parejas', duration: '120 min', durationMinutes: 120 }
+    { 
+      id: 'individual', 
+      name: 'Terapia Individual', 
+      duration: '75 min', 
+      durationMinutes: 75,
+      precio: parseInt(process.env.NEXT_PUBLIC_PRECIO_INDIVIDUAL || '150000')
+    },
+    { 
+      id: 'parejas', 
+      name: 'Terapia de Parejas', 
+      duration: '120 min', 
+      durationMinutes: 120,
+      precio: parseInt(process.env.NEXT_PUBLIC_PRECIO_PAREJAS || '200000')
+    }
   ]
 
   // Detectar zona horaria del usuario al cargar el componente
@@ -478,45 +497,92 @@ const AppointmentScheduler: React.FC = () => {
     }
 
     try {
+      // Preparar datos de la cita para guardar temporalmente
       const appointmentData: AppointmentData = {
         ...formData,
         telefono: formatPhone(formData.telefono),
         fecha: `${appointment.date.getFullYear()}-${String(appointment.date.getMonth() + 1).padStart(2, '0')}-${String(appointment.date.getDate()).padStart(2, '0')}`,
-        hora: appointment.bogotaTime || appointment.time, // Usar tiempo de Bogotá para el backend
+        hora: appointment.bogotaTime || appointment.time,
         servicio: appointment.service,
         duracion: services.find(s => s.id === appointment.service)?.duration || '75 min',
         modalidad: appointment.modalidad
       }
 
-      // Debug: verificar datos antes de enviar
-      console.log('DEBUG - Datos de la cita a enviar:', {
-        fechaOriginal: appointment.date,
-        fechaEnviada: appointmentData.fecha,
-        horaUsuario: appointment.time,
-        horaBogota: appointmentData.hora,
-        telefonoOriginal: formData.telefono,
-        telefonoFormateado: appointmentData.telefono,
-        modalidad: appointmentData.modalidad
+      // Guardar datos en localStorage para recuperarlos después del pago
+      localStorage.setItem('cita_pendiente', JSON.stringify(appointmentData))
+
+      // Obtener precio del servicio seleccionado
+      const selectedService = services.find(s => s.id === appointment.service)
+      if (!selectedService) {
+        throw new Error('Servicio no encontrado')
+      }
+
+      const precioEnCentavos = selectedService.precio * 100 // Wompi usa centavos
+
+      // Generar referencia única para la transacción
+      const referencia = `CITA-${Date.now()}-${appointment.service.toUpperCase()}`
+
+      console.log('Solicitando firma para pago:', { referencia, precioEnCentavos })
+
+      // Solicitar firma al backend
+      const firmaResponse = await fetch('/api/firmar-wompi', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          reference: referencia,
+          amountInCents: precioEnCentavos
+        }),
       })
 
-      const result = await submitAppointmentWithAvailability(appointmentData)
-
-      if (result.success) {
-        setCurrentStep('confirmation')
-      } else {
-        setSubmitStatus({
-          type: 'error',
-          message: result.message
-        })
+      if (!firmaResponse.ok) {
+        throw new Error('Error al generar firma de pago')
       }
+
+      const { signature } = await firmaResponse.json()
+
+      console.log('Firma recibida, abriendo widget de Wompi...')
+
+      // Verificar que el script de Wompi esté cargado
+      if (typeof window.WidgetCheckout === 'undefined') {
+        throw new Error('Widget de Wompi no está disponible. Por favor recarga la página.')
+      }
+
+      // Abrir Widget de Wompi
+      const checkout = new window.WidgetCheckout({
+        currency: 'COP',
+        amountInCents: precioEnCentavos,
+        reference: referencia,
+        publicKey: process.env.NEXT_PUBLIC_WOMPI_PUBLIC_KEY || 'pub_prod_Nmluj5t0JTW6R27aezi121tlem0N41xt',
+        signature: {
+          integrity: signature
+        },
+        redirectUrl: process.env.NEXT_PUBLIC_REDIRECT_URL || 'http://localhost:3000/confirmacion-cita',
+        customerData: {
+          email: appointmentData.email,
+          fullName: appointmentData.nombre,
+          phoneNumber: appointmentData.telefono.replace(/\+/g, ''),
+          phoneNumberPrefix: '+57'
+        }
+      })
+
+      checkout.open((result: any) => {
+        const transaction = result.transaction
+        console.log('Widget cerrado:', transaction)
+        // Wompi redirigirá automáticamente según el resultado
+      })
+
+      setIsLoading(false)
+
     } catch (error) {
+      console.error('Error al procesar pago:', error)
       setSubmitStatus({
         type: 'error',
-        message: 'Error inesperado. Por favor contacta directamente por WhatsApp.'
+        message: error instanceof Error ? error.message : 'Error al procesar el pago. Por favor intenta nuevamente.'
       })
+      setIsLoading(false)
     }
-
-    setIsLoading(false)
   }
 
   const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -905,6 +971,26 @@ const AppointmentScheduler: React.FC = () => {
                 />
               </div>
 
+              {/* Mostrar precio antes de pagar */}
+              {appointment && (
+                <div className="bg-primary-50 border-2 border-primary-200 rounded-lg p-4 mb-6">
+                  <div className="flex justify-between items-center">
+                    <span className="text-primary-800 font-medium">Total a pagar:</span>
+                    <span className="text-primary-900 text-2xl font-bold">
+                      {new Intl.NumberFormat('es-CO', {
+                        style: 'currency',
+                        currency: 'COP',
+                        minimumFractionDigits: 0
+                      }).format(services.find(s => s.id === appointment.service)?.precio || 0)}
+                    </span>
+                  </div>
+                  <p className="text-primary-700 text-sm mt-2">
+                    <FaCreditCard className="inline w-4 h-4 mr-1" />
+                    Pago seguro procesado por Wompi
+                  </p>
+                </div>
+              )}
+
               <div className="flex gap-4">
                 <button
                   type="button"
@@ -917,13 +1003,23 @@ const AppointmentScheduler: React.FC = () => {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className={`flex-1 py-3 rounded-lg font-semibold transition-all duration-300 ${
+                  className={`flex-1 py-3 rounded-lg font-semibold transition-all duration-300 inline-flex items-center justify-center gap-2 ${
                     isLoading
                       ? 'bg-neutral-400 text-neutral-600 cursor-not-allowed'
                       : 'btn-primary'
                   }`}
                 >
-                  {isLoading ? 'Agendando...' : 'Confirmar Cita'}
+                  {isLoading ? (
+                    <>
+                      <FaCreditCard className="w-5 h-5 animate-pulse" />
+                      Procesando...
+                    </>
+                  ) : (
+                    <>
+                      <FaCreditCard className="w-5 h-5" />
+                      Pagar y Confirmar Cita
+                    </>
+                  )}
                 </button>
               </div>
             </form>
