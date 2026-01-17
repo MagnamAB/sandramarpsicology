@@ -18,6 +18,7 @@ export interface AppointmentData {
   duracion: string
   modalidad: string
   mensaje?: string
+  timezone?: string // Zona horaria del usuario (ej: 'Europe/Berlin', 'America/Bogota')
 }
 
 // Nueva interfaz para gestión de disponibilidad

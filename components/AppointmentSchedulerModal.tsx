@@ -442,7 +442,8 @@ const AppointmentSchedulerModal: React.FC<AppointmentSchedulerModalProps> = ({
         hora: finalBogotaTime,
         servicio: selectedService,
         duracion: services.find(s => s.id === selectedService)?.duration || '75 min',
-        modalidad: selectedModalidad
+        modalidad: selectedModalidad,
+        timezone: userTimezone // Zona horaria del usuario para el email de confirmación
       }
 
       localStorage.setItem('cita_pendiente', JSON.stringify(appointmentData))

@@ -25,6 +25,7 @@ interface AgendarConPagoRequest {
   duracion: string
   modalidad: 'presencial' | 'virtual'
   mensaje?: string
+  timezone?: string // Zona horaria del usuario (ej: 'Europe/Berlin')
   
   // Datos del pago
   transactionId: string
@@ -123,6 +124,18 @@ export default async function handler(
     }
 
     // Preparar payload para N8N
+    // IMPORTANTE: La hora viene en formato Colombia (GMT-5)
+    // Debemos agregar el offset -05:00 para que JavaScript lo interprete correctamente
+    // Ejemplo: 09:45 Colombia = 14:45 UTC → ISO: 2026-01-19T14:45:00.000Z
+    const fechaHoraColombia = `${appointmentData.fecha}T${appointmentData.hora}:00-05:00`
+    const fechaCompletaISO = new Date(fechaHoraColombia).toISOString()
+    
+    console.log('Conversión de fecha:', {
+      entrada: `${appointmentData.fecha} ${appointmentData.hora} (Colombia)`,
+      conOffset: fechaHoraColombia,
+      isoUTC: fechaCompletaISO
+    })
+    
     const payload = {
       // Datos principales de la cita
       nombre: appointmentData.nombre,
@@ -147,7 +160,7 @@ export default async function handler(
       
       // Metadatos para procesamiento en n8n
       timestamp: new Date().toISOString(),
-      fechaCompleta: new Date(appointmentData.fecha + 'T' + appointmentData.hora).toISOString(),
+      fechaCompleta: fechaCompletaISO, // Ahora correctamente en UTC
       source: 'website_scheduler_with_payment',
       type: 'appointment',
       action: 'create_with_payment',
@@ -155,7 +168,7 @@ export default async function handler(
       
       // Información adicional del sistema
       userAgent: req.headers['user-agent'] || 'unknown',
-      timezone: 'America/Bogota',
+      timezone: appointmentData.timezone || 'America/Bogota', // Usa el timezone del usuario si está disponible
       
       // Información para el procesamiento
       servicioDetalle: getServiceDetails(appointmentData.servicio),
