@@ -1,11 +1,13 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { FaPhone, FaMapMarkerAlt, FaClock, FaWhatsapp, FaEnvelope, FaCalendarAlt } from 'react-icons/fa'
-import AppointmentScheduler from './AppointmentScheduler'
+import { FaPhone, FaMapMarkerAlt, FaClock, FaWhatsapp, FaEnvelope, FaCalendarAlt, FaArrowRight } from 'react-icons/fa'
 import { generateWhatsAppLink } from '../lib/api'
 import { getText } from '../lib/texts'
+import { useAppointmentModal } from '../contexts/AppointmentModalContext'
 
 const Contact: React.FC = () => {
+  const { openModal } = useAppointmentModal()
+
   return (
     <section id="contacto" className="section-padding bg-neutral-50">
       <div id="agendar-cita"></div>
@@ -33,7 +35,75 @@ const Contact: React.FC = () => {
           </motion.p>
         </div>
 
-        <AppointmentScheduler />
+        {/* CTA Principal para abrir el modal */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="max-w-3xl mx-auto mb-16"
+        >
+          <div className="bg-gradient-to-br from-primary-600 to-primary-700 rounded-3xl p-8 md:p-12 text-white text-center shadow-2xl relative overflow-hidden">
+            {/* Decorative elements */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+            <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/2"></div>
+            
+            <div className="relative z-10">
+              <div className="w-20 h-20 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <FaCalendarAlt className="w-10 h-10 text-white" />
+              </div>
+              
+              <h3 className="text-3xl md:text-4xl font-bold mb-4">
+                Agenda tu Cita Ahora
+              </h3>
+              
+              <p className="text-primary-100 text-lg mb-8 max-w-xl mx-auto">
+                Reserva tu sesión en menos de 2 minutos. 
+                Elige entre atención presencial en Bogotá o sesión virtual desde cualquier lugar.
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <button
+                  onClick={openModal}
+                  className="group bg-white text-primary-700 px-8 py-4 rounded-xl font-bold text-lg hover:bg-primary-50 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center gap-3"
+                >
+                  <FaCalendarAlt className="w-5 h-5" />
+                  Agendar Cita
+                  <FaArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </button>
+                
+                <a
+                  href={generateWhatsAppLink("Hola Sandra, me interesa agendar una cita para terapia psicológica")}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-white/90 hover:text-white transition-colors"
+                >
+                  <FaWhatsapp className="w-5 h-5" />
+                  <span>o escríbeme por WhatsApp</span>
+                </a>
+              </div>
+
+              <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                <div className="bg-white/10 rounded-xl p-3">
+                  <div className="font-bold text-xl">75 min</div>
+                  <div className="text-primary-200">Sesión individual</div>
+                </div>
+                <div className="bg-white/10 rounded-xl p-3">
+                  <div className="font-bold text-xl">120 min</div>
+                  <div className="text-primary-200">Sesión de parejas</div>
+                </div>
+                <div className="bg-white/10 rounded-xl p-3">
+                  <div className="font-bold text-xl">24h</div>
+                  <div className="text-primary-200">Confirmación previa</div>
+                </div>
+                <div className="bg-white/10 rounded-xl p-3">
+                  <div className="font-bold text-xl">100%</div>
+                  <div className="text-primary-200">Pago seguro</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
 
         {/* Información de contacto optimizada para SEO local */}
         <motion.div
@@ -41,7 +111,7 @@ const Contact: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="mt-16 grid md:grid-cols-3 gap-8"
+          className="grid md:grid-cols-3 gap-8"
         >
           <div className="card text-center group hover:shadow-xl transition-all duration-300">
             <div className="w-16 h-16 bg-primary-100 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-primary-200 transition-colors">
@@ -86,16 +156,13 @@ const Contact: React.FC = () => {
             </div>
             <h3 className="font-semibold text-neutral-900 mb-3">Horario de Atención</h3>
             <div className="space-y-2">
-              <p className="text-neutral-600 text-sm font-medium">Lun, Mié, Jue, Vie: 7:30 AM - 7:30 PM</p>
+              <p className="text-neutral-600 text-sm font-medium">Lun, Mié, Jue, Vie: 7:30 AM - 1:00 PM / 3:00 PM - 7:30 PM</p>
               <p className="text-neutral-600 text-sm font-medium">Mar, Sáb: 7:30 AM - 12:00 PM</p>
               <p className="text-neutral-600 text-sm">
-                <strong>Horarios de citas:</strong><br />
-                • Individual (75 min): Última cita 6:15 PM<br />
-                • Pareja (120 min): Última cita 5:30 PM<br />
-                • Mar/Sáb: Citas deben terminar antes 12:00 PM
+                <strong>Hora Colombia (GMT-5)</strong>
               </p>
-              <p className="text-neutral-600 text-sm">
-                <strong>Consultas internacionales:</strong> Horarios flexibles
+              <p className="text-neutral-600 text-xs">
+                Los horarios se adaptan automáticamente a tu zona horaria
               </p>
             </div>
           </div>
@@ -148,28 +215,46 @@ const Contact: React.FC = () => {
           className="mt-12 bg-primary-50 border border-primary-200 rounded-xl p-8 text-center"
         >
           <h4 className="font-bold text-primary-900 mb-4 text-lg">
-            ✨ Proceso de Agendamiento de Cita
+            Proceso de Agendamiento de Cita
           </h4>
-          <div className="grid md:grid-cols-3 gap-6 text-sm">
+          <div className="grid md:grid-cols-4 gap-6 text-sm">
             <div>
-              <h5 className="font-semibold text-primary-800 mb-2">1. Agenda tu Cita</h5>
+              <div className="w-10 h-10 bg-primary-600 text-white rounded-full flex items-center justify-center mx-auto mb-2 font-bold">1</div>
+              <h5 className="font-semibold text-primary-800 mb-1">Selecciona</h5>
               <p className="text-primary-700">
-                Selecciona fecha, hora y modalidad (presencial en Bogotá u online internacional)
+                Tipo de sesión y modalidad
               </p>
             </div>
             <div>
-              <h5 className="font-semibold text-primary-800 mb-2">2. Confirmación</h5>
+              <div className="w-10 h-10 bg-primary-600 text-white rounded-full flex items-center justify-center mx-auto mb-2 font-bold">2</div>
+              <h5 className="font-semibold text-primary-800 mb-1">Elige</h5>
               <p className="text-primary-700">
-                Recibirás confirmación por email y WhatsApp con todos los detalles
+                Fecha y hora disponible
               </p>
             </div>
             <div>
-              <h5 className="font-semibold text-primary-800 mb-2">3. Sesión</h5>
+              <div className="w-10 h-10 bg-primary-600 text-white rounded-full flex items-center justify-center mx-auto mb-2 font-bold">3</div>
+              <h5 className="font-semibold text-primary-800 mb-1">Paga</h5>
               <p className="text-primary-700">
-                Te contacto 24h antes para confirmar y enviar indicaciones específicas
+                De forma segura con Wompi
+              </p>
+            </div>
+            <div>
+              <div className="w-10 h-10 bg-primary-600 text-white rounded-full flex items-center justify-center mx-auto mb-2 font-bold">4</div>
+              <h5 className="font-semibold text-primary-800 mb-1">Confirmación</h5>
+              <p className="text-primary-700">
+                Recibes email y WhatsApp
               </p>
             </div>
           </div>
+          
+          <button
+            onClick={openModal}
+            className="mt-8 btn-primary inline-flex items-center gap-2"
+          >
+            <FaCalendarAlt className="w-5 h-5" />
+            Comenzar Agendamiento
+          </button>
         </motion.div>
 
         {/* Call to Action adicional */}
@@ -207,4 +292,4 @@ const Contact: React.FC = () => {
   )
 }
 
-export default Contact 
+export default Contact

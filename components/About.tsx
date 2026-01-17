@@ -2,11 +2,12 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import { FaGraduationCap, FaHeart, FaUsers, FaAward, FaBookOpen, FaHandshake, FaUserGraduate, FaBrain, FaStar, FaLightbulb, FaGlobe, FaHome } from 'react-icons/fa'
 import Image from 'next/image'
-import Link from 'next/link'
 import { FaCalendarAlt } from 'react-icons/fa'
 import { getText } from '../lib/texts'
+import { useAppointmentModal } from '../contexts/AppointmentModalContext'
 
 const About: React.FC = () => {
+  const { openModal } = useAppointmentModal()
   return (
     <section id="sobre-mi" className="section-padding bg-white">
       <div className="container-responsive">
@@ -280,13 +281,13 @@ const About: React.FC = () => {
             <p className="text-lg opacity-90 mb-6">
               de <strong>sanación auténtica y evolución consciente</strong> que honra tu historia y despierta tu poder personal
             </p>
-            <Link 
-              href="#agendar-cita"
+            <button 
+              onClick={openModal}
               className="inline-flex items-center gap-2 bg-white text-primary-600 px-8 py-4 rounded-full font-semibold hover:bg-neutral-50 transition-colors"
             >
               <FaCalendarAlt className="w-5 h-5" />
               Agenda tu Primera Sesión Transformadora
-            </Link>
+            </button>
             <div className="text-white/80 text-sm mt-4">
               {getText('about.cta.footer', 'Online internacional • Presencial en Bogotá •')}
             </div>

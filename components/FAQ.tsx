@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FaPlus, FaMinus, FaQuestionCircle } from 'react-icons/fa'
+import { useAppointmentModal } from '../contexts/AppointmentModalContext'
 
 const FAQ: React.FC = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(0)
+  const { openModal } = useAppointmentModal()
 
   const faqData = [
     {
@@ -91,7 +93,7 @@ const FAQ: React.FC = () => {
         },
         {
           question: "¿Cuáles son los horarios de atención?",
-          answer: "Los horarios son: Lunes, Miércoles, Jueves y Viernes de 7:30 AM a 7:30 PM; Martes y Sábados de 7:30 AM a 12:00 PM. La última cita de pareja puede iniciar a las 5:30 PM (120 min) y la individual a las 6:15 PM (75 min). Para consultantes internacionales se adaptan horarios según zona horaria. Se recomienda agendar con anticipación.",
+          answer: "Los horarios en hora de Colombia (GMT-5) son: Lunes, Miércoles, Jueves y Viernes de 7:30 AM a 1:00 PM y de 3:00 PM a 7:30 PM; Martes y Sábados de 7:30 AM a 12:00 PM. La última cita de la mañana debe finalizar a la 1:00 PM (individual inicia máx. 11:45 AM, pareja máx. 11:00 AM). La última cita de la tarde debe finalizar a las 7:30 PM (individual inicia máx. 6:15 PM, pareja máx. 5:30 PM). Para consultantes internacionales, el sistema muestra automáticamente los horarios disponibles convertidos a tu zona horaria local.",
           keywords: "horarios psicóloga Bogotá, disponibilidad citas psicología"
         },
         {
@@ -252,12 +254,12 @@ const FAQ: React.FC = () => {
               >
                 Contactar por WhatsApp
               </a>
-              <a
-                href="#agendar-cita"
+              <button
+                onClick={openModal}
                 className="btn-secondary inline-flex items-center justify-center"
               >
                 Agendar Consulta Inicial
-              </a>
+              </button>
             </div>
           </div>
         </motion.div>

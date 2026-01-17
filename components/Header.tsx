@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { FaBars, FaTimes, FaWhatsapp, FaCalendarAlt, FaChevronDown, FaUser, FaHeart, FaUsers } from 'react-icons/fa'
 import { generateWhatsAppLink } from '../lib/api'
 import { trackWhatsAppClick, trackScheduleClick } from '../lib/analytics'
+import { useAppointmentModal } from '../contexts/AppointmentModalContext'
 
 interface DropdownItem {
   name: string
@@ -18,6 +19,7 @@ interface NavItem {
   name: string
   href: string
   dropdown?: DropdownItem[]
+  isModal?: boolean
 }
 
 const Header: React.FC = () => {
@@ -25,6 +27,7 @@ const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false)
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
   const [pathname, setPathname] = useState('/')
+  const { openModal } = useAppointmentModal()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -137,7 +140,7 @@ const Header: React.FC = () => {
         { name: 'Preguntas Frecuentes', href: '/preguntas-frecuentes' },
       ]
     },
-    { name: 'Agendar Cita', href: '/#contacto' },
+    { name: 'Agendar Cita', href: '#agendar', isModal: true },
   ]
 
   const handleDropdownToggle = (itemName: string) => {
@@ -281,6 +284,16 @@ const Header: React.FC = () => {
                     </div>
                   </div>
                 </div>
+              ) : item.isModal ? (
+                <button
+                  onClick={() => {
+                    openModal()
+                    trackScheduleClick('header_nav_desktop')
+                  }}
+                  className="nav-link"
+                >
+                  {item.name}
+                </button>
               ) : (
                 <Link
                   href={item.href}
@@ -311,17 +324,16 @@ const Header: React.FC = () => {
             <span className="relative z-10 font-semibold">Escribir</span>
             <div className="w-2 h-2 bg-green-300 rounded-full animate-pulse relative z-10"></div>
           </a>
-          <Link
-            href="/#contacto"
-            className="btn-primary flex items-center space-x-2 text-sm"
-            onClick={(e) => {
-              handleNavigationClick(e, '/#contacto')
+          <button
+            onClick={() => {
+              openModal()
               trackScheduleClick('header_desktop')
             }}
+            className="btn-primary flex items-center space-x-2 text-sm"
           >
             <FaCalendarAlt className="w-4 h-4" />
             <span>Agendar Cita</span>
-          </Link>
+          </button>
         </div>
 
         {/* Mobile Menu Button */}
@@ -447,6 +459,17 @@ const Header: React.FC = () => {
                           )}
                         </AnimatePresence>
                       </>
+                    ) : item.isModal ? (
+                      <button
+                        onClick={() => {
+                          setIsMenuOpen(false)
+                          openModal()
+                          trackScheduleClick('header_nav_mobile')
+                        }}
+                        className="block text-neutral-700 hover:text-primary-600 font-medium py-2 transition-colors w-full text-left"
+                      >
+                        {item.name}
+                      </button>
                     ) : (
                       <Link
                         href={item.href}
@@ -477,17 +500,17 @@ const Header: React.FC = () => {
                   <span className="relative z-10">Escribir por WhatsApp</span>
                   <div className="w-2 h-2 bg-green-300 rounded-full animate-pulse relative z-10"></div>
                 </a>
-                <Link
-                  href="/#contacto"
-                  className="btn-primary flex items-center justify-center space-x-2 w-full"
-                  onClick={(e) => {
-                    handleNavigationClick(e, '/#contacto')
+                <button
+                  onClick={() => {
+                    setIsMenuOpen(false)
+                    openModal()
                     trackScheduleClick('header_mobile')
                   }}
+                  className="btn-primary flex items-center justify-center space-x-2 w-full"
                 >
                   <FaCalendarAlt className="w-4 h-4" />
                   <span>Agendar Cita</span>
-                </Link>
+                </button>
               </div>
             </div>
           </motion.div>

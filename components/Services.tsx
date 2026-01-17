@@ -4,8 +4,10 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { generateWhatsAppLink } from '../lib/api'
 import { getText } from '../lib/texts'
+import { useAppointmentModal } from '../contexts/AppointmentModalContext'
 
 const Services: React.FC = () => {
+  const { openModal } = useAppointmentModal()
   const mainServices = [
     {
       icon: FaUser,
@@ -162,13 +164,13 @@ const Services: React.FC = () => {
                   
                   <div className="space-y-4">
                     <div className="flex gap-3">
-                      <Link 
-                        href="#agendar-cita"
+                      <button 
+                        onClick={openModal}
                         className="btn-primary flex-1 text-center py-3 px-6 inline-flex items-center justify-center gap-2"
                       >
                         <FaCalendarAlt className="w-4 h-4" />
                         Agendar Sesión
-                      </Link>
+                      </button>
                       
                       <a
                         href={generateWhatsAppLink(`Hola Sandra, me interesa conocer más sobre ${service.title.toLowerCase()}. Tengo algunas de las situaciones que mencionas y me gustaría saber cómo puedes ayudarme con tu enfoque de 38 años de experiencia.`)}

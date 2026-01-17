@@ -36,21 +36,27 @@ interface SelectedAppointment {
 }
 
 // Configuración de horarios de la psicóloga por día de la semana
+interface TimeRange {
+  start: string
+  end: string
+}
+
 interface DaySchedule {
-  startTime: string // En formato HH:MM
-  endTime: string   // En formato HH:MM
+  ranges: TimeRange[]
   available: boolean
 }
 
-// Configuración de la psicóloga - Actualizar según necesidades
+// Configuración de horarios de la psicóloga
+// Martes y Sábado: 7:30 AM - 12:00 PM (sin almuerzo)
+// Otros días: 7:30 AM - 1:00 PM, luego 3:00 PM - 7:30 PM (con almuerzo)
 const PSICOLOGA_SCHEDULE: Record<number, DaySchedule> = {
-  0: { startTime: '07:30', endTime: '00:00', available: false }, // Domingo - No disponible
-  1: { startTime: '07:30', endTime: '19:30', available: true },  // Lunes
-  2: { startTime: '07:30', endTime: '12:00', available: true },  // Martes  
-  3: { startTime: '07:30', endTime: '19:30', available: true },  // Miércoles
-  4: { startTime: '07:30', endTime: '19:30', available: true },  // Jueves
-  5: { startTime: '07:30', endTime: '19:30', available: true },  // Viernes
-  6: { startTime: '07:30', endTime: '12:00', available: true },  // Sábado
+  0: { ranges: [], available: false }, // Domingo - No disponible
+  1: { ranges: [{ start: '07:30', end: '13:00' }, { start: '15:00', end: '19:30' }], available: true },  // Lunes
+  2: { ranges: [{ start: '07:30', end: '12:00' }], available: true },  // Martes
+  3: { ranges: [{ start: '07:30', end: '13:00' }, { start: '15:00', end: '19:30' }], available: true },  // Miércoles
+  4: { ranges: [{ start: '07:30', end: '13:00' }, { start: '15:00', end: '19:30' }], available: true },  // Jueves
+  5: { ranges: [{ start: '07:30', end: '13:00' }, { start: '15:00', end: '19:30' }], available: true },  // Viernes
+  6: { ranges: [{ start: '07:30', end: '12:00' }], available: true },  // Sábado
 }
 
 const AppointmentScheduler: React.FC = () => {
@@ -181,52 +187,44 @@ const AppointmentScheduler: React.FC = () => {
     const schedule = PSICOLOGA_SCHEDULE[dayOfWeek]
     
     // Si no hay horario disponible para ese día
-    if (!schedule.available) {
+    if (!schedule.available || schedule.ranges.length === 0) {
       return []
     }
 
     // Primero generar slots teóricos basados en horarios (en tiempo de Bogotá)
     const theoreticalSlots: TimeSlot[] = []
-    const startMinutes = timeToMinutes(schedule.startTime)
-    const endMinutes = timeToMinutes(schedule.endTime)
     
-    // Últimas horas según el tipo de cita y el día de la semana
-    let lastAppointmentMinutes: number
-    
-    // Para martes y sábado que terminan a las 12:00 PM
-    if (dayOfWeek === 2 || dayOfWeek === 6) { // Martes o Sábado
-      // La última cita debe terminar antes de las 12:00 PM
-      lastAppointmentMinutes = timeToMinutes('12:00') - serviceDuration
-    } else {
-      // Para días normales (Lun, Mié, Jue, Vie), usar las restricciones regulares
-      if (serviceDuration === 75) { // Individual
-        lastAppointmentMinutes = timeToMinutes('18:15') // 6:15 PM
-      } else { // Pareja (120 min)
-        lastAppointmentMinutes = timeToMinutes('17:30') // 5:30 PM  
-      }
-    }
-    
-    // Generar slots cada 15 minutos
-    for (let currentMinutes = startMinutes; currentMinutes <= lastAppointmentMinutes; currentMinutes += 15) {
-      const slotEndMinutes = currentMinutes + serviceDuration
+    // Iterar sobre cada rango de horario del día
+    for (const range of schedule.ranges) {
+      const rangeStartMinutes = timeToMinutes(range.start)
+      const rangeEndMinutes = timeToMinutes(range.end)
       
-      // Verificar que la cita completa quepa en el horario del día
-      if (slotEndMinutes <= endMinutes) {
-        const bogotaStartTime = minutesToTime(currentMinutes)
-        const bogotaEndTime = minutesToTime(slotEndMinutes)
+      // Calcular última cita posible para este rango
+      // La cita debe TERMINAR antes o igual al fin del rango
+      const lastAppointmentMinutes = rangeEndMinutes - serviceDuration
+      
+      // Generar slots cada 15 minutos dentro del rango
+      for (let currentMinutes = rangeStartMinutes; currentMinutes <= lastAppointmentMinutes; currentMinutes += 15) {
+        const slotEndMinutes = currentMinutes + serviceDuration
         
-        // Convertir a zona horaria del usuario para mostrar
-        const userStartTime = convertBogotaToUserTime(bogotaStartTime, date)
-        const userEndTime = convertBogotaToUserTime(bogotaEndTime, date)
-        
-        theoreticalSlots.push({
-          time: userStartTime, // Tiempo mostrado al usuario en su zona horaria
-          endTime: userEndTime, // Tiempo mostrado al usuario en su zona horaria
-          available: true, // Se verificará contra la base de datos
-          id: `${bogotaStartTime}-${bogotaEndTime}`,
-          bogotaTime: bogotaStartTime, // Tiempo original en Bogotá
-          bogotaEndTime: bogotaEndTime // Tiempo final en Bogotá
-        })
+        // Verificar que la cita completa cabe en el rango
+        if (slotEndMinutes <= rangeEndMinutes) {
+          const bogotaStartTime = minutesToTime(currentMinutes)
+          const bogotaEndTime = minutesToTime(slotEndMinutes)
+          
+          // Convertir a zona horaria del usuario para mostrar
+          const userStartTime = convertBogotaToUserTime(bogotaStartTime, date)
+          const userEndTime = convertBogotaToUserTime(bogotaEndTime, date)
+          
+          theoreticalSlots.push({
+            time: userStartTime, // Tiempo mostrado al usuario en su zona horaria
+            endTime: userEndTime, // Tiempo mostrado al usuario en su zona horaria
+            available: true, // Se verificará contra la base de datos
+            id: `${bogotaStartTime}-${bogotaEndTime}`,
+            bogotaTime: bogotaStartTime, // Tiempo original en Bogotá
+            bogotaEndTime: bogotaEndTime // Tiempo final en Bogotá
+          })
+        }
       }
     }
 
@@ -758,11 +756,13 @@ const AppointmentScheduler: React.FC = () => {
                             {(() => {
                               const dayOfWeek = selectedDate.getDay()
                               const schedule = PSICOLOGA_SCHEDULE[dayOfWeek]
-                              return schedule.available ? (
+                              if (!schedule.available || schedule.ranges.length === 0) return null
+                              const horariosStr = schedule.ranges.map(r => `${r.start} - ${r.end}`).join(' / ')
+                              return (
                                 <span className="ml-2">
-                                  • Horarios disponibles: {schedule.startTime} - {schedule.endTime} (Colombia)
+                                  • Horarios disponibles: {horariosStr} (Colombia)
                                 </span>
-                              ) : null
+                              )
                             })()}
                           </p>
                         </div>

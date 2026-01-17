@@ -4,8 +4,10 @@ import { FaGlobe, FaVideo, FaClock, FaShieldAlt, FaCreditCard, FaComments, FaCal
 import Link from 'next/link'
 import { generateWhatsAppLink } from '../lib/api'
 import { getText } from '../lib/texts'
+import { useAppointmentModal } from '../contexts/AppointmentModalContext'
 
 const OnlineTherapy: React.FC = () => {
+  const { openModal } = useAppointmentModal()
   const advantages = [
     {
       icon: FaGlobe,
@@ -14,8 +16,8 @@ const OnlineTherapy: React.FC = () => {
     },
     {
       icon: FaClock,
-      title: "Horarios Flexibles",
-      description: "Adaptamos los horarios de sesión a tu zona horaria. Disponibilidad para diferentes husos horarios internacionales."
+      title: "Horarios Adaptados",
+      description: "Los horarios se muestran automáticamente en tu zona horaria local. Atención en horario Colombia (GMT-5) convertido a tu huso horario."
     },
     {
       icon: FaShieldAlt,
@@ -29,8 +31,8 @@ const OnlineTherapy: React.FC = () => {
     },
     {
       icon: FaCreditCard,
-      title: "Pagos Internacionales",
-      description: "Métodos de pago adaptados a diferentes países: transferencias, Western Union, y otros sistemas internacionales."
+      title: "Pago Seguro Online",
+      description: "Paga directamente en la página web con Wompi: tarjetas internacionales, PSE, Nequi. Proceso 100% seguro y certificado."
     },
     {
       icon: FaComments,
@@ -176,8 +178,8 @@ const OnlineTherapy: React.FC = () => {
               },
               {
                 step: "2", 
-                title: "Agenda tu Cita",
-                description: "Coordinamos horario según tu zona horaria y preferencias de plataforma digital."
+                title: "Agenda y Paga",
+                description: "Selecciona fecha y hora en el sistema web. Paga de forma segura con Wompi (tarjeta, PSE, Nequi)."
               },
               {
                 step: "3",
@@ -239,13 +241,13 @@ const OnlineTherapy: React.FC = () => {
               Iniciar Consulta Online
             </a>
             
-            <Link 
-              href="#agendar-cita"
+            <button 
+              onClick={openModal}
               className="btn-secondary text-lg px-8 py-4 inline-flex items-center justify-center group"
             >
               Agendar Sesión Virtual
               <FaCalendarAlt className="ml-2 w-5 h-5 group-hover:scale-110 transition-transform" />
-            </Link>
+            </button>
           </div>
         </motion.div>
       </div>

@@ -5,8 +5,10 @@ import { FaPlay, FaCalendarAlt, FaWhatsapp, FaHeart, FaUsers, FaAward, FaCertifi
 import Image from 'next/image'
 import { generateWhatsAppLink } from '../lib/api'
 import { getText } from '../lib/texts'
+import { useAppointmentModal } from '../contexts/AppointmentModalContext'
 
 const Hero: React.FC = () => {
+  const { openModal } = useAppointmentModal()
   return (
     <section id="inicio" className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-primary-50 via-neutral-50 to-secondary-50 pt-20">
       {/* Background Pattern */}
@@ -63,13 +65,13 @@ const Hero: React.FC = () => {
               transition={{ duration: 0.6, delay: 0.7 }}
               className="flex flex-col sm:flex-row gap-4 mb-8"
             >
-              <Link 
-                href="#agendar-cita"
+              <button 
+                onClick={openModal}
                 className="btn-primary text-lg px-8 py-4 inline-flex items-center justify-center group"
               >
                 {getText('hero.cta.primary', 'Agendar Cita Online o Presencial')}
                 <FaCalendarAlt className="ml-2 w-5 h-5 group-hover:scale-110 transition-transform" />
-              </Link>
+              </button>
               
               <a
                 href={generateWhatsAppLink("Hola Sandra, me interesa conocer más sobre terapia individual adultos o terapia de pareja. ¿Podrías contarme sobre tu enfoque con 38 años de experiencia?")}

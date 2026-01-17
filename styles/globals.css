@@ -84,4 +84,55 @@
 .lazyloaded {
   opacity: 1;
   transition: opacity 300ms;
+}
+
+/* Custom Scrollbar Styles - Tema Azul para el Modal */
+/* Webkit browsers (Chrome, Safari, Edge) */
+.custom-scrollbar::-webkit-scrollbar,
+[class*="z-[101]"]::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track,
+[class*="z-[101]"]::-webkit-scrollbar-track {
+  background: #e0e7ff;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb,
+[class*="z-[101]"]::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%);
+  border-radius: 10px;
+  border: 2px solid #e0e7ff;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover,
+[class*="z-[101]"]::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #2563eb 0%, #1e40af 100%);
+}
+
+/* Global Modal Scrollbar */
+.modal-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal-scrollbar::-webkit-scrollbar-track {
+  background: #dbeafe;
+  border-radius: 8px;
+}
+
+.modal-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #3b82f6 0%, #2563eb 100%);
+  border-radius: 8px;
+}
+
+.modal-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%);
+}
+
+/* Firefox scrollbar */
+.modal-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #3b82f6 #dbeafe;
 } 

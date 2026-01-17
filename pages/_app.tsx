@@ -6,6 +6,8 @@ import { Inter, Merriweather } from 'next/font/google'
 import { useRouter } from 'next/router'
 import GoogleAnalytics from '../components/GoogleAnalytics'
 import { pageview } from '../lib/analytics'
+import { AppointmentModalProvider } from '../contexts/AppointmentModalContext'
+import CookieBanner from '../components/CookieBanner'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -35,7 +37,7 @@ export default function App({ Component, pageProps }: AppProps) {
   }, [router.events]);
 
   return (
-    <>
+    <AppointmentModalProvider>
       <GoogleAnalytics />
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -46,7 +48,8 @@ export default function App({ Component, pageProps }: AppProps) {
       </Head>
       <div className={`${inter.variable} ${merriweather.variable} font-sans`}>
         <Component {...pageProps} />
+        <CookieBanner />
       </div>
-    </>
+    </AppointmentModalProvider>
   )
 } 
