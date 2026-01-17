@@ -1,0 +1,196 @@
+{
+  "name": "agendar_citas_web_sandramar",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "agendar-citas-sandramar",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -384,
+        -144
+      ],
+      "id": "23c2dde5-be61-4ea5-8e58-35799d009f75",
+      "name": "Webhook",
+      "webhookId": "701e08e2-eb83-4f75-b922-77cdc15b36c4"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = items[0].json.body\n\nif (!data.fechaCompleta || !data.timezone) {\n  throw new Error('Faltan campos: fechaCompleta o timezone')\n}\n\n// Interpretar fecha completa como UTC\nconst userDate = new Date(data.fechaCompleta)\nif (isNaN(userDate.getTime())) {\n  throw new Error('fechaCompleta no es una fecha válida')\n}\n\n// Duración\nconst duracionTexto = data.servicioDetalle?.duracion || '75 minutos'\nconst minutos = parseInt(duracionTexto.match(/\\d+/)?.[0] || '75')\nconst endDate = new Date(userDate.getTime() + minutos * 60000)\n\n// Visualización local\nconst options = { timeZone: 'America/Bogota', dateStyle: 'full', timeStyle: 'short' }\nconst start_local = userDate.toLocaleString('es-CO', options)\nconst end_local = endDate.toLocaleString('es-CO', options)\n\nconst whatsappJid = data.telefono.replace(/\\D/g, '') + '@s.whatsapp.net'\n\nreturn [{\n  json: {\n    ...data,\n    start: userDate.toISOString(),\n    end: endDate.toISOString(),\n    start_local,\n    end_local,\n    whatsappJid, // ✅ Agregado aquí\n    title: `${data.servicioDetalle?.nombre || 'Sesión'} - ${data.nombre}`,\n    location: data.modalidad === 'presencial'\n      ? data.modalidadDetalle?.ubicacion\n      : 'Sesión por Zoom',\n    description: [\n      `📍 Modalidad: ${data.modalidadDetalle?.tipo || 'N/A'}`,\n      data.modalidadDetalle?.indicaciones,\n      data.mensaje ? `📝 Mensaje: ${data.mensaje}` : '',\n      `⏱ Duración: ${data.servicioDetalle?.duracion || '75 minutos'}`\n    ].filter(Boolean).join('\\n')\n  }\n}]"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -160,
+        -144
+      ],
+      "id": "e4ab3525-5093-41fb-a97a-c9898d842163",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "sandramarpsicology@gmail.com",
+          "mode": "list",
+          "cachedResultName": "sandramarpsicology@gmail.com"
+        },
+        "start": "={{ $json.start }}",
+        "end": "={{ $json.end }}",
+        "useDefaultReminders": false,
+        "additionalFields": {
+          "description": "={{ $json.description }}",
+          "location": "={{ $json.location }}",
+          "summary": "={{ $json.title }}"
+        },
+        "remindersUi": {
+          "remindersValues": [
+            {
+              "method": "popup",
+              "minutes": 1440
+            },
+            {
+              "method": "popup",
+              "minutes": 30
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        64,
+        -144
+      ],
+      "id": "4717a6d2-0cb6-47f0-8159-b8b746c16b19",
+      "name": "Google Calendar",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "WwOHVvCLmsGrsVji",
+          "name": "SandraMar Google Calendar"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "collection": "appointment_slots",
+        "fields": "date, startTime, endTime, serviceType, isBooked, nombre, email, telefono, whatsappJid, modalidad, mensaje, timezone, servicioDetalle, modalidadDetalle, title, location, description, calendarEventId, calendarLink, timestamp, fechaCompleta, source, createdAt, pagado, pagoEstado, pagoTransaccionId, pagoReferencia, pagoMonto, pagoMoneda, pagoFecha, pagoMetodo, status",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        512,
+        -144
+      ],
+      "id": "61d3d725-aba0-43c0-beaf-36b62c7ce056",
+      "name": "MongoDB",
+      "credentials": {
+        "mongoDb": {
+          "id": "rnjviiKgauNwn45Z",
+          "name": "SandraMar MongoDB"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const d = $node[\"Code\"].json          // Datos enriquecidos (formato, whatsapp, etc.)\nconst googleCalendar = $json         // Viene directo del nodo Google Calendar\n\n// ✅ USAR DIRECTAMENTE LOS HORARIOS YA CORREGIDOS DEL FRONTEND\n// El frontend ya envía 'd.hora' en formato HH:MM de zona horaria Bogotá\nconst startTime = d.hora // Ya viene en formato HH:MM de Bogotá desde el frontend\n\n// ✅ CALCULAR DURACIÓN SEGÚN TIPO DE SERVICIO\nconst duration = d.servicio === 'individual' ? 75 : 120 // Individual: 75 min, Parejas: 120 min\n\n// ✅ CALCULAR ENDTIME BASADO EN DURACIÓN\nconst [hours, minutes] = startTime.split(':').map(Number)\nconst endMinutes = hours * 60 + minutes + duration\nconst endHours = Math.floor(endMinutes / 60)\nconst endMins = endMinutes % 60\nconst endTime = `${endHours.toString().padStart(2, '0')}:${endMins.toString().padStart(2, '0')}`\n\n// ✅ VALIDACIONES DE SEGURIDAD\nif (!d.fecha || !d.hora || !d.servicio) {\n  throw new Error('Faltan datos esenciales: fecha, hora o servicio')\n}\n\nif (!startTime.match(/^\\d{2}:\\d{2}$/)) {\n  throw new Error(`Formato de hora inválido: ${startTime}. Debe ser HH:MM`)\n}\n\n// ✅ LOGGING PARA DEBUGGING\nconsole.log('📅 Procesando cita:', {\n  fecha: d.fecha,\n  horaInicio: startTime,\n  horaFin: endTime,\n  servicio: d.servicio,\n  duracion: `${duration} minutos`,\n  cliente: d.nombre\n})\n\n// ✅ RETORNAR OBJETO ESTRUCTURADO PARA MONGODB\nreturn [{\n  json: {\n    // 📆 Datos esenciales para disponibilidad en el frontend\n    date: d.fecha,              // Ya viene corregida del frontend (YYYY-MM-DD)\n    startTime: startTime,       // Ya viene en hora de Bogotá (HH:MM)\n    endTime: endTime,          // Calculado correctamente (HH:MM)\n    serviceType: d.servicio,   // 'individual' | 'parejas'\n    isBooked: true,            // Siempre true para citas confirmadas\n\n    // 👤 Datos del cliente\n    nombre: d.nombre,\n    email: d.email,\n    telefono: d.telefono,\n    whatsappJid: d.whatsappJid,\n    modalidad: d.modalidad,\n    mensaje: d.mensaje || '',\n    timezone: d.timezone,\n\n    // 🔍 Detalles del servicio y modalidad\n    servicioDetalle: d.servicioDetalle,\n    modalidadDetalle: d.modalidadDetalle,\n\n    // 📋 Detalles del evento de calendario\n    title: d.title,\n    location: d.location,\n    description: d.description,\n\n    // 🔗 Enlaces de Google Calendar\n    calendarEventId: googleCalendar.id,\n    calendarLink: googleCalendar.htmlLink,\n\n    // ⏰ Timestamps de control\n    timestamp: d.timestamp,\n    fechaCompleta: d.fechaCompleta,\n    source: d.source,\n    createdAt: new Date().toISOString(),\n\n    // 🔧 Metadatos adicionales para depuración\n    processedAt: new Date().toISOString(),\n    n8nExecutionId: $execution.id || 'unknown',\n    version: '2.0'\n  }\n}]"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        288,
+        -144
+      ],
+      "id": "75ca3edb-692b-4456-b986-dccf326cba38",
+      "name": "Code1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.2,
+      "position": [
+        720,
+        -144
+      ],
+      "id": "9e6cbbfc-1035-4d2a-b69d-85860f41a0d7",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Google Calendar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Calendar": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "MongoDB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "e60a234d-2bf9-4f95-b358-210761242eec",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "64a6d002e939d0f8f0a92bd5954057730ba2481393b4d30a87612fc3a2dad1ae"
+  },
+  "id": "mOIpXjWxjSuVE5sH",
+  "tags": []
+}
