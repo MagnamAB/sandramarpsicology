@@ -29,13 +29,17 @@ interface DatosCita {
   telefono: string
   servicio: 'individual' | 'parejas'
   fecha: string
-  hora: string
+  hora: string // Hora Colombia
+  horaLocal?: string // Hora en zona del usuario
   duracion: string
   modalidad: 'presencial' | 'virtual'
   mensaje?: string
+  timezone?: string
   fechaFormateada?: string
   servicioNombre?: string
   precioFormateado?: string
+  horaDisplay?: string // Hora formateada para mostrar
+  zonaHorariaDisplay?: string // Texto de zona horaria
 }
 
 const ConfirmacionCita: React.FC = () => {
@@ -116,6 +120,19 @@ const ConfirmacionCita: React.FC = () => {
         currency: 'COP',
         minimumFractionDigits: 0
       }).format(verificarData.amount || 0)
+
+      // Mostrar hora en la zona horaria del usuario
+      // Usar horaLocal si está disponible, sino usar hora (Colombia)
+      citaData.horaDisplay = citaData.horaLocal || citaData.hora
+      
+      // Determinar texto de zona horaria
+      const userTimezone = citaData.timezone || 'America/Bogota'
+      if (userTimezone === 'America/Bogota') {
+        citaData.zonaHorariaDisplay = 'Hora Colombia'
+      } else {
+        // Extraer nombre legible de la zona (ej: "Europe/Berlin" → "Berlin")
+        citaData.zonaHorariaDisplay = userTimezone.replace('_', ' ').split('/').pop() || userTimezone
+      }
 
       setDatosCita(citaData)
 
@@ -249,7 +266,14 @@ const ConfirmacionCita: React.FC = () => {
                       
                       <div className="flex justify-between items-center border-b border-green-200 pb-2">
                         <span className="text-green-700 font-medium">Hora:</span>
-                        <span className="text-green-900 font-semibold">{datosCita.hora}</span>
+                        <span className="text-green-900 font-semibold text-right">
+                          {datosCita.horaDisplay}
+                          {datosCita.zonaHorariaDisplay && (
+                            <span className="block text-xs text-green-600 font-normal">
+                              ({datosCita.zonaHorariaDisplay})
+                            </span>
+                          )}
+                        </span>
                       </div>
                       
                       <div className="flex justify-between items-center border-b border-green-200 pb-2">

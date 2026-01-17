@@ -435,11 +435,14 @@ const AppointmentSchedulerModal: React.FC<AppointmentSchedulerModalProps> = ({
       const selectedSlot = availableTimeSlots.find(slot => slot.time === selectedTime)
       const finalBogotaTime = selectedSlot?.bogotaTime || convertUserTimeToBogota(selectedTime, selectedDate)
       
+      // La hora local del usuario es la que seleccionó en el modal (selectedTime)
+      // La hora Bogotá es la convertida para N8N/MongoDB
       const appointmentData: AppointmentData = {
         ...formData,
         telefono: formatPhone(formData.telefono),
         fecha: `${selectedDate.getFullYear()}-${String(selectedDate.getMonth() + 1).padStart(2, '0')}-${String(selectedDate.getDate()).padStart(2, '0')}`,
-        hora: finalBogotaTime,
+        hora: finalBogotaTime, // Hora Colombia para N8N/MongoDB
+        horaLocal: selectedTime, // Hora que el usuario seleccionó (su zona horaria)
         servicio: selectedService,
         duracion: services.find(s => s.id === selectedService)?.duration || '75 min',
         modalidad: selectedModalidad,

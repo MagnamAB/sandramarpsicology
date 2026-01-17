@@ -14,7 +14,8 @@ export interface AppointmentData {
   telefono: string
   servicio: string
   fecha: string
-  hora: string
+  hora: string // Hora Colombia (para N8N/MongoDB)
+  horaLocal?: string // Hora en la zona del usuario (para mostrar)
   duracion: string
   modalidad: string
   mensaje?: string
