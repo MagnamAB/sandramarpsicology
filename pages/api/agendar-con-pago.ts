@@ -80,7 +80,13 @@ export default async function handler(
     // Double-check: Verificar que el pago sea válido
     console.log(`Verificando pago antes de agendar: ${appointmentData.transactionId}`)
     
-    const wompiApiUrl = `https://production.wompi.co/v1/transactions/${appointmentData.transactionId}`
+    // Detectar si estamos en modo sandbox basado en la llave pública
+    const publicKey = process.env.NEXT_PUBLIC_WOMPI_PUBLIC_KEY || ''
+    const isSandbox = publicKey.startsWith('pub_test_')
+    const wompiBaseUrl = isSandbox ? 'https://sandbox.wompi.co' : 'https://production.wompi.co'
+    const wompiApiUrl = `${wompiBaseUrl}/v1/transactions/${appointmentData.transactionId}`
+    
+    console.log(`Ambiente Wompi: ${isSandbox ? 'SANDBOX' : 'PRODUCCIÓN'}`)
     const wompiResponse = await axios.get(wompiApiUrl, { timeout: 5000 })
     const transaction = wompiResponse.data.data
 

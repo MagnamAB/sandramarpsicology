@@ -63,7 +63,13 @@ export default async function handler(
 
     // Consultar API de Wompi
     // Documentación: https://docs.wompi.co/docs/consulta-de-transacciones
-    const wompiApiUrl = `https://production.wompi.co/v1/transactions/${id}`
+    // Detectar si estamos en modo sandbox basado en la llave pública
+    const publicKey = process.env.NEXT_PUBLIC_WOMPI_PUBLIC_KEY || ''
+    const isSandbox = publicKey.startsWith('pub_test_')
+    const wompiBaseUrl = isSandbox ? 'https://sandbox.wompi.co' : 'https://production.wompi.co'
+    const wompiApiUrl = `${wompiBaseUrl}/v1/transactions/${id}`
+    
+    console.log(`Ambiente Wompi: ${isSandbox ? 'SANDBOX' : 'PRODUCCIÓN'}`)
 
     console.log(`Consultando transacción Wompi: ${id}`)
 
