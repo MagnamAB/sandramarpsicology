@@ -971,6 +971,31 @@ const AppointmentSchedulerModal: React.FC<AppointmentSchedulerModalProps> = ({
                             <p className="text-xl font-bold text-primary-700">{formatPrice(currentService?.precio || 0)}</p>
                           </div>
                         </div>
+                        
+                        {/* Sección de confianza - Pago seguro (móvil) */}
+                        <div className="mt-3 pt-3 border-t border-primary-100">
+                          <div className="flex items-center gap-1.5 mb-1.5">
+                            <FaLock className="w-3 h-3 text-green-600" />
+                            <span className="text-xs font-semibold text-green-700">Pago 100% Seguro</span>
+                          </div>
+                          <p className="text-[10px] text-neutral-600 leading-relaxed">
+                            Procesado por <strong>Wompi</strong>, certificada por la <strong>Superintendencia Financiera de Colombia</strong>. Estándares <strong>PCI DSS</strong>.
+                          </p>
+                          <div className="mt-2 flex flex-wrap gap-2 text-[10px] text-neutral-500">
+                            <span className="flex items-center gap-0.5">
+                              <FaCheck className="w-2.5 h-2.5 text-green-500" />
+                              SSL
+                            </span>
+                            <span className="flex items-center gap-0.5">
+                              <FaCheck className="w-2.5 h-2.5 text-green-500" />
+                              Datos protegidos
+                            </span>
+                            <span className="flex items-center gap-0.5">
+                              <FaCheck className="w-2.5 h-2.5 text-green-500" />
+                              Sin guardar tarjetas
+                            </span>
+                          </div>
+                        </div>
                       </div>
                     </div>
 
