@@ -294,8 +294,11 @@ const ConfirmacionCita: React.FC = () => {
                     </h3>
                     <p className="text-blue-800 text-sm">
                       Te hemos enviado un email a <strong>{datosCita.email}</strong> con todos los detalles de tu cita.
-                      <br />
-                      <br />
+                    </p>
+                    <p className="text-blue-700 text-xs mt-2 bg-blue-100 rounded-lg p-3">
+                      <strong>¿No lo encuentras?</strong> Revisa tu carpeta de <strong>spam</strong> o <strong>correo no deseado</strong>. A veces los correos pueden llegar allí.
+                    </p>
+                    <p className="text-blue-800 text-sm mt-3">
                       <strong>Me pondré en contacto contigo 24 horas antes</strong> de la cita para confirmar y enviar las indicaciones específicas.
                     </p>
                   </div>
