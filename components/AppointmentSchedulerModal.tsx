@@ -487,8 +487,14 @@ const AppointmentSchedulerModal: React.FC<AppointmentSchedulerModalProps> = ({
 
       checkout.open((result: any) => {
         console.log('Widget cerrado:', result.transaction)
-        // Si el usuario cierra el widget sin completar el pago, mostrar el modal de nuevo
-        if (!result.transaction || result.transaction.status !== 'APPROVED') {
+        
+        // Si el pago fue exitoso, redirigir a la página de confirmación
+        if (result.transaction && result.transaction.status === 'APPROVED') {
+          console.log('Pago exitoso, redirigiendo a confirmación...')
+          // Redirigir con el ID de la transacción
+          window.location.href = `/confirmacion-cita?id=${result.transaction.id}`
+        } else {
+          // Si el usuario cierra el widget sin completar el pago, mostrar el modal de nuevo
           if (onShow) onShow()
         }
       })
