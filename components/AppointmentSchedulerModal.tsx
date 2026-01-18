@@ -47,6 +47,160 @@ interface DaySchedule {
   available: boolean
 }
 
+// ============= FESTIVOS COLOMBIA =============
+// Calcula la fecha de Pascua usando el algoritmo de Butcher/Meeus
+const calcularPascua = (year: number): Date => {
+  const a = year % 19
+  const b = Math.floor(year / 100)
+  const c = year % 100
+  const d = Math.floor(b / 4)
+  const e = b % 4
+  const f = Math.floor((b + 8) / 25)
+  const g = Math.floor((b - f + 1) / 3)
+  const h = (19 * a + b - d - g + 15) % 30
+  const i = Math.floor(c / 4)
+  const k = c % 4
+  const l = (32 + 2 * e + 2 * i - h - k) % 7
+  const m = Math.floor((a + 11 * h + 22 * l) / 451)
+  const month = Math.floor((h + l - 7 * m + 114) / 31) - 1
+  const day = ((h + l - 7 * m + 114) % 31) + 1
+  return new Date(year, month, day)
+}
+
+// Aplica la Ley Emiliani: mueve el festivo al lunes siguiente si no cae en lunes
+const aplicarLeyEmiliani = (date: Date): Date => {
+  const dayOfWeek = date.getDay()
+  if (dayOfWeek === 1) return date // Ya es lunes
+  const daysUntilMonday = dayOfWeek === 0 ? 1 : 8 - dayOfWeek
+  const monday = new Date(date)
+  monday.setDate(date.getDate() + daysUntilMonday)
+  return monday
+}
+
+// Genera todos los festivos de Colombia para un año dado
+const getFestivosColombiaAno = (year: number): Date[] => {
+  const festivos: Date[] = []
+  const pascua = calcularPascua(year)
+
+  // FESTIVOS FIJOS (no se mueven)
+  festivos.push(new Date(year, 0, 1))   // 1 Enero - Año Nuevo
+  festivos.push(new Date(year, 4, 1))   // 1 Mayo - Día del Trabajo
+  festivos.push(new Date(year, 6, 20))  // 20 Julio - Independencia
+  festivos.push(new Date(year, 7, 7))   // 7 Agosto - Batalla de Boyacá
+  festivos.push(new Date(year, 11, 8))  // 8 Diciembre - Inmaculada Concepción
+  festivos.push(new Date(year, 11, 25)) // 25 Diciembre - Navidad
+
+  // FESTIVOS LEY EMILIANI (se mueven al lunes siguiente)
+  festivos.push(aplicarLeyEmiliani(new Date(year, 0, 6)))   // 6 Enero - Reyes Magos
+  festivos.push(aplicarLeyEmiliani(new Date(year, 2, 19)))  // 19 Marzo - San José
+  festivos.push(aplicarLeyEmiliani(new Date(year, 5, 29)))  // 29 Junio - San Pedro y San Pablo
+  festivos.push(aplicarLeyEmiliani(new Date(year, 7, 15)))  // 15 Agosto - Asunción
+  festivos.push(aplicarLeyEmiliani(new Date(year, 9, 12)))  // 12 Octubre - Día de la Raza
+  festivos.push(aplicarLeyEmiliani(new Date(year, 10, 1)))  // 1 Noviembre - Todos los Santos
+  festivos.push(aplicarLeyEmiliani(new Date(year, 10, 11))) // 11 Noviembre - Independencia Cartagena
+
+  // FESTIVOS MÓVILES (dependen de Semana Santa)
+  const jueveSanto = new Date(pascua)
+  jueveSanto.setDate(pascua.getDate() - 3)
+  festivos.push(jueveSanto)
+
+  const viernesSanto = new Date(pascua)
+  viernesSanto.setDate(pascua.getDate() - 2)
+  festivos.push(viernesSanto)
+
+  const ascension = new Date(pascua)
+  ascension.setDate(pascua.getDate() + 39)
+  festivos.push(aplicarLeyEmiliani(ascension)) // Ascensión del Señor
+
+  const corpusChristi = new Date(pascua)
+  corpusChristi.setDate(pascua.getDate() + 60)
+  festivos.push(aplicarLeyEmiliani(corpusChristi)) // Corpus Christi
+
+  const sagradoCorazon = new Date(pascua)
+  sagradoCorazon.setDate(pascua.getDate() + 68)
+  festivos.push(aplicarLeyEmiliani(sagradoCorazon)) // Sagrado Corazón
+
+  return festivos
+}
+
+// Verifica si una fecha es festivo en Colombia
+const esFestivoColombia = (date: Date, festivosCache: Map<number, Date[]>): boolean => {
+  const year = date.getFullYear()
+  
+  // Cachear festivos por año para mejor rendimiento
+  if (!festivosCache.has(year)) {
+    festivosCache.set(year, getFestivosColombiaAno(year))
+  }
+  
+  const festivos = festivosCache.get(year)!
+  return festivos.some(festivo => 
+    festivo.getDate() === date.getDate() &&
+    festivo.getMonth() === date.getMonth() &&
+    festivo.getFullYear() === date.getFullYear()
+  )
+}
+
+// Obtiene el nombre del festivo (para mostrar tooltip)
+const getNombreFestivo = (date: Date): string | null => {
+  const year = date.getFullYear()
+  const month = date.getMonth()
+  const day = date.getDate()
+  const pascua = calcularPascua(year)
+  
+  // Festivos fijos
+  if (month === 0 && day === 1) return 'Año Nuevo'
+  if (month === 4 && day === 1) return 'Día del Trabajo'
+  if (month === 6 && day === 20) return 'Día de la Independencia'
+  if (month === 7 && day === 7) return 'Batalla de Boyacá'
+  if (month === 11 && day === 8) return 'Inmaculada Concepción'
+  if (month === 11 && day === 25) return 'Navidad'
+  
+  // Verificar festivos Ley Emiliani
+  const reyes = aplicarLeyEmiliani(new Date(year, 0, 6))
+  if (date.getTime() === reyes.getTime()) return 'Día de los Reyes Magos'
+  
+  const sanJose = aplicarLeyEmiliani(new Date(year, 2, 19))
+  if (date.getTime() === sanJose.getTime()) return 'Día de San José'
+  
+  const sanPedro = aplicarLeyEmiliani(new Date(year, 5, 29))
+  if (date.getTime() === sanPedro.getTime()) return 'San Pedro y San Pablo'
+  
+  const asuncion = aplicarLeyEmiliani(new Date(year, 7, 15))
+  if (date.getTime() === asuncion.getTime()) return 'Asunción de la Virgen'
+  
+  const raza = aplicarLeyEmiliani(new Date(year, 9, 12))
+  if (date.getTime() === raza.getTime()) return 'Día de la Raza'
+  
+  const santos = aplicarLeyEmiliani(new Date(year, 10, 1))
+  if (date.getTime() === santos.getTime()) return 'Todos los Santos'
+  
+  const cartagena = aplicarLeyEmiliani(new Date(year, 10, 11))
+  if (date.getTime() === cartagena.getTime()) return 'Independencia de Cartagena'
+  
+  // Verificar Semana Santa y móviles
+  const jueves = new Date(pascua)
+  jueves.setDate(pascua.getDate() - 3)
+  if (date.getDate() === jueves.getDate() && date.getMonth() === jueves.getMonth()) return 'Jueves Santo'
+  
+  const viernes = new Date(pascua)
+  viernes.setDate(pascua.getDate() - 2)
+  if (date.getDate() === viernes.getDate() && date.getMonth() === viernes.getMonth()) return 'Viernes Santo'
+  
+  const ascension = aplicarLeyEmiliani(new Date(pascua.getTime() + 39 * 24 * 60 * 60 * 1000))
+  if (date.getTime() === ascension.getTime()) return 'Ascensión del Señor'
+  
+  const corpus = aplicarLeyEmiliani(new Date(pascua.getTime() + 60 * 24 * 60 * 60 * 1000))
+  if (date.getTime() === corpus.getTime()) return 'Corpus Christi'
+  
+  const sagrado = aplicarLeyEmiliani(new Date(pascua.getTime() + 68 * 24 * 60 * 60 * 1000))
+  if (date.getTime() === sagrado.getTime()) return 'Sagrado Corazón'
+  
+  return null
+}
+
+// Cache global de festivos
+const festivosCache = new Map<number, Date[]>()
+
 // Configuración de horarios de la psicóloga
 // Martes y Sábado: 7:30 AM - 12:00 PM (sin almuerzo)
 // Otros días: 7:30 AM - 1:00 PM, luego 3:00 PM - 7:30 PM (con almuerzo)
@@ -315,6 +469,8 @@ const AppointmentSchedulerModal: React.FC<AppointmentSchedulerModalProps> = ({
       isAvailable: boolean
       isPast: boolean
       isSelected: boolean
+      isFestivo: boolean
+      nombreFestivo: string | null
     }> = []
     
     const today = new Date()
@@ -323,12 +479,19 @@ const AppointmentSchedulerModal: React.FC<AppointmentSchedulerModalProps> = ({
     for (let i = 0; i < 42; i++) {
       const date = new Date(startDate)
       date.setDate(startDate.getDate() + i)
+      date.setHours(0, 0, 0, 0)
       
       const isCurrentMonth = date.getMonth() === month
       const isPast = date < today
       const dayOfWeek = date.getDay()
       const scheduleForDay = PSICOLOGA_SCHEDULE[dayOfWeek]
-      const isAvailable = isCurrentMonth && !isPast && scheduleForDay.available
+      
+      // Verificar si es festivo en Colombia
+      const isFestivo = esFestivoColombia(date, festivosCache)
+      const nombreFestivo = isFestivo ? getNombreFestivo(date) : null
+      
+      // No disponible si: no es mes actual, es pasado, no hay horario, o es festivo
+      const isAvailable = isCurrentMonth && !isPast && scheduleForDay.available && !isFestivo
 
       days.push({
         date,
@@ -338,7 +501,9 @@ const AppointmentSchedulerModal: React.FC<AppointmentSchedulerModalProps> = ({
         isSelected: selectedDate ? 
           date.getDate() === selectedDate.getDate() &&
           date.getMonth() === selectedDate.getMonth() &&
-          date.getFullYear() === selectedDate.getFullYear() : false
+          date.getFullYear() === selectedDate.getFullYear() : false,
+        isFestivo,
+        nombreFestivo
       })
     }
 
@@ -828,15 +993,21 @@ const AppointmentSchedulerModal: React.FC<AppointmentSchedulerModalProps> = ({
                             key={index}
                             onClick={() => handleDateSelect(day.date)}
                             disabled={!day.isAvailable}
-                            className={`p-1.5 sm:p-2 text-xs sm:text-sm rounded-md sm:rounded-lg transition-all ${
+                            title={day.isFestivo && day.nombreFestivo ? `Festivo: ${day.nombreFestivo}` : undefined}
+                            className={`p-1.5 sm:p-2 text-xs sm:text-sm rounded-md sm:rounded-lg transition-all relative ${
                               day.isSelected
                                 ? 'bg-primary-600 text-white font-bold'
+                                : day.isFestivo && day.isCurrentMonth
+                                ? 'bg-red-100 text-red-400 cursor-not-allowed font-medium'
                                 : day.isAvailable
                                 ? 'hover:bg-primary-100 text-neutral-900 font-medium'
                                 : 'text-neutral-300 cursor-not-allowed'
                             } ${!day.isCurrentMonth ? 'opacity-30' : ''}`}
                           >
                             {day.date.getDate()}
+                            {day.isFestivo && day.isCurrentMonth && (
+                              <span className="absolute bottom-0.5 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-red-400 rounded-full"></span>
+                            )}
                           </button>
                         ))}
                       </div>
