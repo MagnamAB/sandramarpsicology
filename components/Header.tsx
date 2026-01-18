@@ -131,15 +131,16 @@ const Header: React.FC = () => {
       ]
     },
     { name: 'Experiencia', href: '/#experiencia' },
-    { 
-      name: 'Recursos', 
-      href: '/blog',
-      dropdown: [
-        { name: 'Blog', href: '/blog' },
-        { name: 'Testimonios', href: '/testimonios' },
-        { name: 'Preguntas Frecuentes', href: '/preguntas-frecuentes' },
-      ]
-    },
+    // Recursos temporalmente oculto - descomentar cuando esté listo
+    // { 
+    //   name: 'Recursos', 
+    //   href: '/blog',
+    //   dropdown: [
+    //     { name: 'Blog', href: '/blog' },
+    //     { name: 'Testimonios', href: '/testimonios' },
+    //     { name: 'Preguntas Frecuentes', href: '/preguntas-frecuentes' },
+    //   ]
+    // },
     { name: 'Agendar Cita', href: '#agendar', isModal: true },
   ]
 
