@@ -171,7 +171,7 @@ const TerapiaDePareja: React.FC = () => {
                   </Link>
                   
                   <a
-                    href={generateWhatsAppLink("Hola Sandra, mi pareja y yo estamos atravesando dificultades en nuestra relación. Nos interesa la terapia de pareja con tu metodología que combina Gestalt, sistémico y transpersonal. ¿Podrías contarnos cómo trabajas?")}
+                    href={generateWhatsAppLink()}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="btn-primary text-lg px-8 py-4 inline-flex items-center justify-center group"
@@ -375,7 +375,7 @@ const TerapiaDePareja: React.FC = () => {
               </Link>
               
               <a
-                href={generateWhatsAppLink("Hola Sandra, mi pareja y yo queremos fortalecer nuestra relación. Después de leer sobre tu trabajo sistémico en terapia de pareja, nos gustaría iniciar un proceso terapéutico. ¿Podemos conversar?")}
+                href={generateWhatsAppLink()}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-green-500 text-white px-8 py-4 rounded-full font-semibold hover:bg-green-600 transition-colors"

@@ -235,7 +235,7 @@ const getServiceDetails = (serviceId: string) => {
 // Función para generar enlace de WhatsApp con mensaje personalizado
 export const generateWhatsAppLink = (message?: string): string => {
   const phoneNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '573106983385'
-  const defaultMessage = 'Hola Sandra, me interesa agendar una cita de psicología. ¿Cuándo tendría disponibilidad?'
+  const defaultMessage = 'Hola Dra. Sandra, estuve revisando tu página web y me gustaría agendar una cita. ¿Cuándo tendrías disponibilidad?'
   const finalMessage = message || defaultMessage
   
   return `https://wa.me/${phoneNumber}?text=${encodeURIComponent(finalMessage)}`

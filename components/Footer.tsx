@@ -2,6 +2,7 @@ import React from 'react'
 import Link from 'next/link'
 import { getText } from '../lib/texts'
 import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaWhatsapp, FaLock, FaCreditCard } from 'react-icons/fa'
+import { generateWhatsAppLink } from '../lib/api'
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear()
@@ -78,7 +79,7 @@ const Footer: React.FC = () => {
             {/* WhatsApp CTA */}
             <div className="mt-6">
               <a
-                href="https://wa.me/573106983385"
+                href={generateWhatsAppLink()}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"

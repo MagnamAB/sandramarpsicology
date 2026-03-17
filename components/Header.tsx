@@ -313,7 +313,7 @@ const Header: React.FC = () => {
         {/* CTA Buttons Desktop */}
         <div className="hidden lg:flex items-center space-x-4">
           <a
-            href={generateWhatsAppLink("Hola Sandra, me gustaría obtener más información sobre sus servicios de psicoterapia. ¿Podríamos coordinar una consulta?")}
+            href={generateWhatsAppLink()}
             target="_blank"
             rel="noopener noreferrer"
             className="group relative bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white px-4 py-2.5 rounded-full font-medium text-sm transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center space-x-2"
@@ -490,7 +490,7 @@ const Header: React.FC = () => {
               {/* Mobile CTA Buttons */}
               <div className="space-y-3">
                 <a
-                  href={generateWhatsAppLink("Hola Sandra, me gustaría obtener más información sobre sus servicios de psicoterapia. ¿Podríamos coordinar una consulta?")}
+                  href={generateWhatsAppLink()}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group relative bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white w-full py-3 rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] flex items-center justify-center space-x-3"

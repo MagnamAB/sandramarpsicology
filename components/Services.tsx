@@ -173,7 +173,7 @@ const Services: React.FC = () => {
                       </button>
                       
                       <a
-                        href={generateWhatsAppLink(`Hola Sandra, me interesa conocer más sobre ${service.title.toLowerCase()}. Tengo algunas de las situaciones que mencionas y me gustaría saber cómo puedes ayudarme con tu enfoque de 38 años de experiencia.`)}
+                        href={generateWhatsAppLink()}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="border-2 border-green-500 text-green-600 hover:bg-green-500 hover:text-white transition-colors flex-1 text-center py-3 px-6 inline-flex items-center justify-center gap-2 rounded-full font-semibold"

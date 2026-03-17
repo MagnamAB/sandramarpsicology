@@ -346,7 +346,7 @@ const ConfirmacionCita: React.FC = () => {
                     </a>
                     
                     <a
-                      href={generateWhatsAppLink(`Hola Sandra, acabo de agendar una cita ${datosCita.modalidad} de ${datosCita.servicioNombre} para el ${datosCita.fechaFormateada}. Transacción: ${transactionId}`)}
+                      href={generateWhatsAppLink(`Hola Dra. Sandra, estuve revisando tu página web y acabo de agendar una cita ${datosCita.modalidad} de ${datosCita.servicioNombre} para el ${datosCita.fechaFormateada}. Transacción: ${transactionId}`)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="btn-secondary w-full inline-flex items-center justify-center gap-2"
@@ -383,7 +383,7 @@ const ConfirmacionCita: React.FC = () => {
                     </a>
                     
                     <a
-                      href={generateWhatsAppLink('Hola Sandra, tuve problemas con el pago. ¿Puedo agendar mi cita por WhatsApp?')}
+                      href={generateWhatsAppLink('Hola Dra. Sandra, estuve revisando tu página web e intenté agendar una cita pero tuve problemas con el pago. ¿Podría agendarla por este medio?')}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="btn-secondary w-full inline-flex items-center justify-center gap-2"
@@ -418,7 +418,7 @@ const ConfirmacionCita: React.FC = () => {
 
                   <div className="space-y-4">
                     <a
-                      href={generateWhatsAppLink(`Hola Sandra, tuve un problema al agendar mi cita. ID de transacción: ${transactionId}`)}
+                      href={generateWhatsAppLink(`Hola Dra. Sandra, estuve revisando tu página web e intenté agendar una cita pero ocurrió un error. ID de transacción: ${transactionId}`)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="btn-primary w-full inline-flex items-center justify-center gap-2"

@@ -170,7 +170,7 @@ const TerapiaIndividualAdultos: React.FC = () => {
                   </Link>
                   
                   <a
-                    href={generateWhatsAppLink("Hola Sandra, me interesa la terapia individual para adultos. Tengo algunas dificultades emocionales y me gustaría conocer tu metodología que combina Gestalt, sistémico y transpersonal.")}
+                    href={generateWhatsAppLink()}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="btn-secondary text-lg px-8 py-4 inline-flex items-center justify-center group"
@@ -375,7 +375,7 @@ const TerapiaIndividualAdultos: React.FC = () => {
               </Link>
               
               <a
-                href={generateWhatsAppLink("Hola Sandra, después de leer sobre la terapia individual para adultos, me siento identificado con varias situaciones que mencionas. Me gustaría iniciar un proceso terapéutico contigo. ¿Podemos conversar?")}
+                href={generateWhatsAppLink()}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-green-500 text-white px-8 py-4 rounded-full font-semibold hover:bg-green-600 transition-colors"

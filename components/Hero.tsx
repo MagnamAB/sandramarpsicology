@@ -74,7 +74,7 @@ const Hero: React.FC = () => {
               </button>
               
               <a
-                href={generateWhatsAppLink("Hola Sandra, me interesa conocer más sobre terapia individual adultos o terapia de pareja. ¿Podrías contarme sobre tu enfoque con 38 años de experiencia?")}
+                href={generateWhatsAppLink()}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-secondary text-lg px-8 py-4 inline-flex items-center justify-center group"

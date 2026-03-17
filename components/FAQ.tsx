@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FaPlus, FaMinus, FaQuestionCircle } from 'react-icons/fa'
 import { useAppointmentModal } from '../contexts/AppointmentModalContext'
+import { generateWhatsAppLink } from '../lib/api'
 
 const FAQ: React.FC = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(0)
@@ -247,7 +248,7 @@ const FAQ: React.FC = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href="https://wa.me/573106983385?text=Hola%20Sandra,%20tengo%20una%20consulta%20sobre%20sus%20servicios%20de%20psicoterapia"
+                href={generateWhatsAppLink()}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-primary inline-flex items-center justify-center"

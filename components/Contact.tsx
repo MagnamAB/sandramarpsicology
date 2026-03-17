@@ -73,7 +73,7 @@ const Contact: React.FC = () => {
                 </button>
                 
                 <a
-                  href={generateWhatsAppLink("Hola Sandra, me interesa agendar una cita para terapia psicológica")}
+                  href={generateWhatsAppLink()}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 text-white/90 hover:text-white transition-colors"
@@ -122,7 +122,7 @@ const Contact: React.FC = () => {
               <p className="text-neutral-600 text-sm font-medium">+57 310 698 3385</p>
             <p className="text-neutral-600 text-sm">sandramar.v@hotmail.com</p>
               <a
-                href={generateWhatsAppLink("Hola Sandra, me interesa agendar una cita para terapia psicológica en Bogotá")}
+                href={generateWhatsAppLink()}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 text-green-600 hover:text-green-700 text-sm font-medium mt-2"
@@ -270,7 +270,7 @@ const Contact: React.FC = () => {
           </h4>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
-              href={generateWhatsAppLink("Hola Sandra, me gustaría agendar una cita para consulta psicológica. ¿Cuál sería la mejor modalidad para mi caso?")}
+              href={generateWhatsAppLink()}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-primary inline-flex items-center justify-center gap-2"
